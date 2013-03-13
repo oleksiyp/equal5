@@ -46,9 +46,9 @@ public class UseCasesTest {
     }
 
     private static class EqualUseCase {
-        private int number;
-        private String description;
-        private String equations;
+        private final int number;
+        private final String description;
+        private final String equations;
 
         private EqualUseCase(int number, String description, String equations) {
             this.number = number;
@@ -77,7 +77,7 @@ public class UseCasesTest {
                     return new EqualUseCase[0];
                 }
 
-                List<EqualUseCase> useCaseList = new ArrayList();
+                List<EqualUseCase> useCaseList = new ArrayList<EqualUseCase>();
                 for (int i = 1; scanner.hasNext(); i++) {
                     String str = scanner.next("\\d+[!\\.]");
                     boolean skip = false;

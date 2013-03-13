@@ -30,9 +30,8 @@ public class Constant extends AbstractFunction {
 
         Constant constant = (Constant) o;
 
-        if (Double.compare(constant.value, value) != 0) return false;
+        return Double.compare(constant.value, value) == 0;
 
-        return true;
     }
 
     @Override

@@ -24,10 +24,6 @@ public class ExpressionWriter {
         writer.write(text);
     }
 
-    public void writeSpaces(int count) {
-        for (int i = 0; i < count; i++) writer.print(' ');
-    }
-
     public void outputOpenBracket() {
         writer.write("(");
     }

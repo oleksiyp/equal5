@@ -19,10 +19,8 @@ public class Addition extends BinaryOperator {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Addition)) return false;
+        return this == o || o instanceof Addition && super.equals(o);
 
-        return super.equals(o);
     }
 
     public static Addition sequence(Function ...addends) {

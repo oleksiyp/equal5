@@ -5,7 +5,10 @@ package engine.locus;
  * At: 2/8/13  1:14 PM
  */
 public class RectRange {
-    int minX, minY, width, height;
+    private final int minX;
+    private final int minY;
+    private final int width;
+    private final int height;
 
     public RectRange(int minX, int minY, int width, int height) {
         this.minX = minX;
@@ -37,12 +40,11 @@ public class RectRange {
 
         RectRange rectRange = (RectRange) o;
 
-        if (height != rectRange.height) return false;
-        if (minX != rectRange.minX) return false;
-        if (minY != rectRange.minY) return false;
-        if (width != rectRange.width) return false;
+        return height == rectRange.height &&
+                minX == rectRange.minX &&
+                minY == rectRange.minY &&
+                width == rectRange.width;
 
-        return true;
     }
 
     @Override

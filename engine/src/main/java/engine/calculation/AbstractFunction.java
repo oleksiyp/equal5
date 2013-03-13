@@ -18,7 +18,7 @@ public abstract class AbstractFunction implements Function {
         return toString(this);
     }
 
-    public static String toString(Function function) {
+    private static String toString(Function function) {
         StringWriter strWriter = new StringWriter();
         PrintWriter prnWriter = new PrintWriter(strWriter);
         ExpressionWriter exprWriter = new ExpressionWriter(prnWriter);

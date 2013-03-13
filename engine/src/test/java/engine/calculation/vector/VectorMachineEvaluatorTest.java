@@ -21,10 +21,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class VectorMachineEvaluatorTest {
     private ConcurrentVectorEvaluator ve;
-    public static final int NSAMPLES = 100;
-    public static final int SIZE = 2000 * 2000; // 4 Megapixels
+    private static final int N_SAMPLES = 100;
+    private static final int SIZE = 2000 * 2000; // 4 mega-pixels
     private static final Random RND = new Random(232);
-    public static final double EPSILON = 1e-6;
+    private static final double EPSILON = 1e-6;
 
     @Before
     public void setUp() throws Exception {
@@ -122,9 +122,9 @@ public class VectorMachineEvaluatorTest {
             System.out.println();
         }
 
-        ImmediateFunctionEvaluator eval = new ImmediateFunctionEvaluator();
+        ImmediateFunctionEvaluator evaluator = new ImmediateFunctionEvaluator();
 
-        for (int i = 0; i < NSAMPLES; i++) {
+        for (int i = 0; i < N_SAMPLES; i++) {
             int nVal = RND.nextInt(SIZE);
 
             args.setOffset(nVal);
@@ -132,7 +132,7 @@ public class VectorMachineEvaluatorTest {
             for (int j = 0; j < functions.length; j++)
             {
                 double actual = results[j][nVal];
-                double expected = eval.calculate(functions[j], args);
+                double expected = evaluator.calculate(functions[j], args);
 
                 assertEquals("Sample #" + nVal + " in vector calculation of '" + functions[j] + "'",
                         expected, actual, EPSILON);
@@ -145,7 +145,7 @@ public class VectorMachineEvaluatorTest {
     private SomeKindOfArguments arguments(Object ...args) {
         final Map<String, Double> map = new HashMap<String, Double>();
         for (int i = 0; i+1 < args.length; i+=2) {
-            String name = new String((String) args[i]);
+            String name = (String) args[i];
             Double val = ((Number) args[i+1]).doubleValue();
             map.put(name, val);
         }

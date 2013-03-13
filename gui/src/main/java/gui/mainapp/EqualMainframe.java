@@ -27,7 +27,7 @@ public class EqualMainframe {
     public static void main(String[] args) {
         JFrame frame = new JFrame("equal5");
         frame.setContentPane(new EqualMainframe().root);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(1000, 600);
         frame.setVisible(true);

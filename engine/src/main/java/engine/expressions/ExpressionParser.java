@@ -1,7 +1,7 @@
 package engine.expressions;
 
 /**
- * Syntax passed to this methods should be ssfollowing:
+ * Syntax passed to this methods should be following:
  *
  * Number <- Constant | Variable
  * Parents <- '(' Function ')'

@@ -30,15 +30,15 @@ public class BasicCalculationEngine implements CalculationEngine {
             Function diff = new Subtraction(equation.getLeftPart(),
                     equation.getRightPart());
 
-            final double []coords = new double[2];
-            Arguments arguments = new XYArguments(coords);
+            final double []coordinates = new double[2];
+            Arguments arguments = new XYArguments(coordinates);
 
             int [][]locusData = new int[height][];
 
             for (int y = 0; y <= height; y++) {
-                coords[1] = ((double)y) / (height + 1);
+                coordinates[1] = ((double)y) / (height + 1);
                 for (int x = 0; x <= width; x++) {
-                    coords[0] = ((double)x) / (width + 1);
+                    coordinates[0] = ((double)x) / (width + 1);
                     row[x] = evaluator.calculate(diff, arguments);
                 }
 
@@ -59,10 +59,10 @@ public class BasicCalculationEngine implements CalculationEngine {
     }
 
     private static class XYArguments implements Arguments {
-        private final double[] coords;
+        private final double[] coordinates;
 
-        public XYArguments(double[] coords) {
-            this.coords = coords;
+        public XYArguments(double[] coordinates) {
+            this.coordinates = coordinates;
         }
 
         @Override
@@ -76,9 +76,9 @@ public class BasicCalculationEngine implements CalculationEngine {
         @Override
         public double getValue(String name) {
             if ("x".equals(name)) {
-                return coords[0];
+                return coordinates[0];
             } else if ("y".equals(name)) {
-                return coords[1];
+                return coordinates[1];
             }
             throw new UnknownArgumentUsedException(name);
         }

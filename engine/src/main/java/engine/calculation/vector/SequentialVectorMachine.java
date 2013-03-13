@@ -53,7 +53,7 @@ public final class SequentialVectorMachine implements VectorMachine {
 
     public final class StateImpl implements State {
         private final double [][] vectors;
-        private int size;
+        private final int size;
 
         public StateImpl(int size) {
             this.size = size;

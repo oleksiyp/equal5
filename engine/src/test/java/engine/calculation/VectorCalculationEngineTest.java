@@ -35,12 +35,14 @@ public class VectorCalculationEngineTest {
     public void testCalculate() throws Exception {
         Equation eq1 = eq("y", "1-(x/2-0.5)*(x/2-0.5)");
         Equation eq2 = eq("(x-0.5)*(x-0.5)+(y-0.5)*(y-0.5)", "0.1");
+        Equation eq3 = eq("(x-0.5)*(x-0.5)*2+(y-0.5)*(y-0.5)", "0.1");
         draw("test1.png", eq1);
         draw("test2.png", eq2);
+        draw("test3.png", eq3);
     }
 
 
-    public void draw(String file, Equation ...eqs) {
+    void draw(String file, Equation... eqs) {
         RectRange size = new RectRange(0, 0, 1000, 1000);
 
         PixelDrawable []drawables = eng.calculate(size.getWidth(), size.getHeight(), eqs);

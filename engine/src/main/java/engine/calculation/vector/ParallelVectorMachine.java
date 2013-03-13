@@ -64,7 +64,7 @@ public class ParallelVectorMachine implements VectorMachine {
 
     public final class StateImpl implements VectorMachine.State {
         private final double [][] vectors;
-        private int size;
+        private final int size;
 
         public StateImpl(int size) {
             this.size = size;
@@ -130,7 +130,7 @@ public class ParallelVectorMachine implements VectorMachine {
             private final boolean [] calculatedSlots = new boolean[slotCount];
             private final boolean [] calculating = new boolean[operations.length];
 
-            private int nCaclulated = 0;
+            private int nCalculated = 0;
 
             public VectorOperationPool() {
                 for (int slot : constantSlots.keySet()) {
@@ -140,19 +140,19 @@ public class ParallelVectorMachine implements VectorMachine {
                     calculatedSlots[slot] = true;
                 }
 
-                recalcNCalculated();
+                updateNCalculated();
             }
 
             public int next() throws InterruptedException {
                 lock.lock();
                 try {
                     int applicable = -1;
-                    while (nCaclulated < slotCount &&
+                    while (nCalculated < slotCount &&
                             (applicable = getApplicable()) == -1)
                     {
                         condition.await();
                     }
-                    if (nCaclulated < slotCount) {
+                    if (nCalculated < slotCount) {
                         calculating[applicable] = true;
 
                         condition.signalAll();
@@ -185,16 +185,16 @@ public class ParallelVectorMachine implements VectorMachine {
                 try {
                     operations[operation].markCalculated(calculatedSlots);
 
-                    recalcNCalculated();
+                    updateNCalculated();
                 } finally {
                     lock.unlock();
                 }
             }
 
-            private void recalcNCalculated() {
-                nCaclulated = 0;
+            private void updateNCalculated() {
+                nCalculated = 0;
                 for (boolean b : calculatedSlots) {
-                    if (b) nCaclulated++;
+                    if (b) nCalculated++;
                 }
             }
         }

@@ -19,9 +19,7 @@ public class Multiplication extends BinaryOperator {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Multiplication)) return false;
+        return this == o || o instanceof Multiplication && super.equals(o);
 
-        return super.equals(o);
     }
 }

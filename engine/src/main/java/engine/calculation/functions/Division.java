@@ -19,9 +19,7 @@ public class Division extends BinaryOperator {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Division)) return false;
+        return this == o || o instanceof Division && super.equals(o);
 
-        return super.equals(o);
     }
 }

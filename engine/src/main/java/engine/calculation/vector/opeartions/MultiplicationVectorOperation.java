@@ -5,9 +5,9 @@ package engine.calculation.vector.opeartions;
  * At: 3/12/13  7:23 PM
  */
 public class MultiplicationVectorOperation extends VectorOperation {
-    private int leftSlot;
-    private int rightSlot;
-    private int resultSlot;
+    private final int leftSlot;
+    private final int rightSlot;
+    private final int resultSlot;
 
     public MultiplicationVectorOperation(int leftSlot,
                                          int rightSlot,

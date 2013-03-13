@@ -91,7 +91,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         public Rule Variable() {
             return Sequence(
                     OneOrMore(CharRange('a','z')),
-                    push(new Variable(new String(matchOrDefault("")))));
+                    push(new Variable(matchOrDefault(""))));
         }
 
         @SuppressSubnodes
@@ -121,8 +121,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
     }
 
-    private static Parser parser = Parboiled.createParser(Parser.class);
-    private static Map<ClauseType, Rule> ruleMap = new HashMap<ClauseType, Rule>();
+    private static final Parser parser = Parboiled.createParser(Parser.class);
+    private static final Map<ClauseType, Rule> ruleMap = new HashMap<ClauseType, Rule>();
     static {
 
         for (Method method : Parser.class.getMethods()) {

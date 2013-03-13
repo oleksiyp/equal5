@@ -47,29 +47,27 @@ public class VectorCalculationEngine implements CalculationEngine {
         double [][]prevMatrix = null;
         for (int y = 0; y <= height; y++) {
             double[][] matrix = null;
-            try {
-                arguments.setY(((double)y) / (height + 1));
 
-                matrix = evaluator.calculate(arguments);
+            arguments.setY(((double)y) / (height + 1));
 
-                if (y == 0) {
-                    continue;
-                }
+            matrix = evaluator.calculate(arguments);
 
-                for (int i = 0; i < nEq; i++) {
-                    Equation.Type eqType = equations[i].getType();
-
-                    double []row = matrix[i];
-                    double []prevRow = prevMatrix[i];
-
-                    locusData[i][y - 1] = eqType
-                            .accept(new LocusRowDiffVisitor(row, prevRow));
-                }
-            }finally {
-                if (matrix != null) {
-                    prevMatrix = copy(matrix);
-                }
+            if (prevMatrix == null) {
+                prevMatrix = copy(matrix);
+                continue;
             }
+
+            for (int i = 0; i < nEq; i++) {
+                Equation.Type eqType = equations[i].getType();
+
+                double []row = matrix[i];
+                double []prevRow = prevMatrix[i];
+
+                locusData[i][y - 1] = eqType
+                        .accept(new LocusRowDiffVisitor(row, prevRow));
+            }
+
+            prevMatrix = copy(matrix);
         }
 
         for (int i = 0; i < nEq; i++) {

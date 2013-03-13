@@ -33,9 +33,8 @@ public class Variable extends AbstractFunction {
 
         Variable variable = (Variable) o;
 
-        if (!name.equals(variable.name)) return false;
+        return name.equals(variable.name);
 
-        return true;
     }
 
     @Override

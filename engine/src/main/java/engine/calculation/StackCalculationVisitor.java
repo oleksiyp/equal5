@@ -6,8 +6,8 @@ import engine.expressions.Function;
 import java.util.Stack;
 
 class StackCalculationVisitor implements FunctionVisitor {
-    private Arguments arguments;
-    final Stack<Double> stack = new Stack<Double>();
+    private final Arguments arguments;
+    private final Stack<Double> stack = new Stack<Double>();
 
     public StackCalculationVisitor(Arguments arguments) {
         this.arguments = arguments;

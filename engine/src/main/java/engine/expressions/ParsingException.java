@@ -71,10 +71,13 @@ public class ParsingException extends Exception {
             }
             int count = err.getEndIndex() - err.getStartIndex();
 
-            builder.append(count + " symbol(s) on " +
-                    (!err.isOneLiner() ? "line " + err.getLine()
-                            + " and " : "") + "column " + err.getColumn()
-                    + ": " + message);
+            builder.append(count)
+                    .append(" symbol(s) on ")
+                    .append(err.isOneLiner() ? "" : "line " + err.getLine() + " and ")
+                    .append("column ")
+                    .append(err.getColumn())
+                    .append(": ")
+                    .append(message);
         }
         return builder.toString();
     }

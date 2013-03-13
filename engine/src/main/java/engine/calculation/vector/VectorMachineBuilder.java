@@ -28,26 +28,26 @@ public class VectorMachineBuilder {
     }
 
     public VectorMachine build() {
-        ConstructingVisitor vistor = new ConstructingVisitor();
+        ConstructingVisitor visitor = new ConstructingVisitor();
         int []resultSlots = new int[functions.length];
         for (int i = 0; i < functions.length; i++) {
-            resultSlots[i] = vistor.build(functions[i]);
+            resultSlots[i] = visitor.build(functions[i]);
         }
 
-        List<VectorOperation> op = vistor.operations;
+        List<VectorOperation> op = visitor.operations;
         VectorOperation[] operationsArray = op.toArray(new VectorOperation[op.size()]);
         if (concurrency <= 1) {
-            return new SequentialVectorMachine(vistor.nSlots,
+            return new SequentialVectorMachine(visitor.nSlots,
                     resultSlots,
                     operationsArray,
-                    vistor.variables,
-                    vistor.constants);
+                    visitor.variables,
+                    visitor.constants);
         } else {
-            return new ParallelVectorMachine(vistor.nSlots,
+            return new ParallelVectorMachine(visitor.nSlots,
                     resultSlots,
                     operationsArray,
-                    vistor.variables,
-                    vistor.constants,
+                    visitor.variables,
+                    visitor.constants,
                     concurrency);
         }
     }

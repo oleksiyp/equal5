@@ -11,9 +11,9 @@ public abstract class BinaryOperator extends AbstractFunction {
     protected final Type type;
     protected final Function leftSide, rightSide;
 
-    protected BinaryOperator(Function leftSide,
-                             Type type,
-                             Function rightSide) {
+    BinaryOperator(Function leftSide,
+                   Type type,
+                   Function rightSide) {
         this.type = type;
         if (leftSide == null) {
             throw new NullPointerException("leftSide");
@@ -43,11 +43,8 @@ public abstract class BinaryOperator extends AbstractFunction {
 
         BinaryOperator that = (BinaryOperator) o;
 
-        if (!leftSide.equals(that.leftSide)) return false;
-        if (type != that.type) return false;
-        if (!rightSide.equals(that.rightSide)) return false;
+        return leftSide.equals(that.leftSide) && type == that.type && rightSide.equals(that.rightSide);
 
-        return true;
     }
 
     @Override

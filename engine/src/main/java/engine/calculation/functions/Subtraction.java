@@ -19,9 +19,7 @@ public class Subtraction extends BinaryOperator {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Subtraction)) return false;
+        return this == o || o instanceof Subtraction && super.equals(o);
 
-        return super.equals(o);
     }
 }
