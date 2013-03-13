@@ -1,7 +1,5 @@
 package engine.calculation.vector.fillers;
 
-import engine.calculation.vector.VectorFiller;
-
 import java.util.Arrays;
 
 /**

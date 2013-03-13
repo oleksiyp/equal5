@@ -1,5 +1,6 @@
 package engine.calculation.vector;
 
+import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 
 import java.util.Arrays;

@@ -1,7 +1,5 @@
 package engine.calculation.vector.fillers;
 
-import engine.calculation.vector.VectorFiller;
-
 /**
 * User: Oleksiy Pylypenko
 * At: 3/13/13  1:03 PM
