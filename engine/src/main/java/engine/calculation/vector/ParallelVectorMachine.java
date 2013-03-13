@@ -2,7 +2,6 @@ package engine.calculation.vector;
 
 import com.google.common.base.Stopwatch;
 import engine.calculation.vector.opeartions.VectorOperation;
-import engine.expressions.Name;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class ParallelVectorMachine implements VectorMachine {
     private final int slotCount;
 
     private final int[] resultSlots;
-    private final Map<Name, Integer> argumentSlots;
+    private final Map<String, Integer> argumentSlots;
 
     private final Map<Integer, Double> constantSlots;
     private final VectorOperation[]operations;
@@ -29,7 +28,7 @@ public class ParallelVectorMachine implements VectorMachine {
     ParallelVectorMachine(int slotCount,
                             int[] resultSlots,
                             VectorOperation[] operations,
-                            Map<Name, Integer> argumentSlots,
+                            Map<String, Integer> argumentSlots,
                             Map<Integer, Double> constantSlots,
                             int concurrency) {
         if (concurrency < 1) {
@@ -55,7 +54,7 @@ public class ParallelVectorMachine implements VectorMachine {
     }
 
     @Override
-    public Integer getArgumentSlot(Name name) {
+    public Integer getArgumentSlot(String name) {
         return argumentSlots.get(name);
     }
 

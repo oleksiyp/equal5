@@ -28,8 +28,8 @@ public class ParboiledExpressionParserTest {
         two = new Constant(2);
         three = new Constant(3);
         five = new Constant(5);
-        xVar = new Variable(new Name("x"));
-        aVar = new Variable(new Name("a"));
+        xVar = new Variable("x");
+        aVar = new Variable("a");
     }
 
     @Test

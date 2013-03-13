@@ -4,7 +4,6 @@ import engine.calculation.FunctionVisitor;
 import engine.calculation.functions.*;
 import engine.calculation.vector.opeartions.*;
 import engine.expressions.Function;
-import engine.expressions.Name;
 
 import java.util.*;
 
@@ -60,7 +59,7 @@ public class VectorMachineBuilder {
         private final Map<Function, Integer> slotFunctions = new HashMap<Function, Integer>();
 
         private final Map<Integer, Double> constants = new HashMap<Integer, Double>();
-        private final Map<Name, Integer> variables = new HashMap<Name, Integer>();
+        private final Map<String, Integer> variables = new HashMap<String, Integer>();
 
         private int nSlots = 0;
 
@@ -84,7 +83,7 @@ public class VectorMachineBuilder {
 
         @Override
         public void visit(Variable variable) {
-            variables.put(variable.getName(), slotStack.peek());
+            variables.put(variable.getString(), slotStack.peek());
         }
 
         @Override

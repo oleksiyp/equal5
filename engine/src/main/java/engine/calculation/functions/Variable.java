@@ -2,23 +2,22 @@ package engine.calculation.functions;
 
 import engine.calculation.AbstractFunction;
 import engine.calculation.FunctionVisitor;
-import engine.expressions.Name;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:47 PM
  */
 public class Variable extends AbstractFunction {
-    private final Name name;
+    private final String name;
 
-    public Variable(Name name) {
+    public Variable(String name) {
         if (name == null) {
             throw new NullPointerException("name");
         }
         this.name = name;
     }
 
-    public Name getName() {
+    public String getString() {
         return name;
     }
 

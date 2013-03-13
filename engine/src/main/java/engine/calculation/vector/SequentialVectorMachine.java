@@ -2,7 +2,6 @@ package engine.calculation.vector;
 
 import com.google.common.base.Stopwatch;
 import engine.calculation.vector.opeartions.VectorOperation;
-import engine.expressions.Name;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -16,7 +15,7 @@ public final class SequentialVectorMachine implements VectorMachine {
     private final int slotCount;
 
     private final int[] resultSlots;
-    private final Map<Name, Integer> argumentSlots;
+    private final Map<String, Integer> argumentSlots;
 
     private final Map<Integer, Double> constantSlots;
     private final VectorOperation []operations;
@@ -24,7 +23,7 @@ public final class SequentialVectorMachine implements VectorMachine {
     SequentialVectorMachine(int slotCount,
                             int[] resultSlots,
                             VectorOperation[] operations,
-                            Map<Name, Integer> argumentSlots,
+                            Map<String, Integer> argumentSlots,
                             Map<Integer, Double> constantSlots) {
         this.slotCount = slotCount;
         this.resultSlots = resultSlots;
@@ -44,7 +43,7 @@ public final class SequentialVectorMachine implements VectorMachine {
     }
 
     @Override
-    public Integer getArgumentSlot(Name name) {
+    public Integer getArgumentSlot(String name) {
         return argumentSlots.get(name);
     }
 

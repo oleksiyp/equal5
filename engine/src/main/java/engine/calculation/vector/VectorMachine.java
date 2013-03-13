@@ -1,6 +1,5 @@
 package engine.calculation.vector;
 
-import engine.expressions.Name;
 
 /**
  * User: Oleksiy Pylypenko
@@ -12,7 +11,7 @@ public interface VectorMachine {
 
     int[] getResultSlots();
 
-    Integer getArgumentSlot(Name name);
+    Integer getArgumentSlot(String name);
 
     State newState(int size);
 

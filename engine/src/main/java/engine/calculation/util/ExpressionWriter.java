@@ -1,7 +1,6 @@
 package engine.calculation.util;
 
 import engine.calculation.functions.BinaryOperator;
-import engine.expressions.Name;
 
 import java.io.PrintWriter;
 

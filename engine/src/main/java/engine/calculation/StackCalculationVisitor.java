@@ -2,7 +2,6 @@ package engine.calculation;
 
 import engine.calculation.functions.*;
 import engine.expressions.Function;
-import engine.expressions.Name;
 
 import java.util.Stack;
 
@@ -26,7 +25,7 @@ class StackCalculationVisitor implements FunctionVisitor {
 
     @Override
     public void visit(Variable variable) {
-        Name name = variable.getName();
+        String name = variable.getString();
         double value = arguments.getValue(name);
         stack.push(value);
     }

@@ -91,7 +91,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         public Rule Variable() {
             return Sequence(
                     OneOrMore(CharRange('a','z')),
-                    push(new Variable(new Name(matchOrDefault("")))));
+                    push(new Variable(new String(matchOrDefault("")))));
         }
 
         @SuppressSubnodes

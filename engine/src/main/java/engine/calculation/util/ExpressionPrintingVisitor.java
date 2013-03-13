@@ -28,7 +28,7 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
 
     @Override
     public void visit(Variable variable) {
-        writer.write(variable.getName().getSymbols());
+        writer.write(variable.getString());
     }
 
     @Override

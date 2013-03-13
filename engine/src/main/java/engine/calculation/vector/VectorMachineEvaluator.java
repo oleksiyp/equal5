@@ -1,7 +1,6 @@
 package engine.calculation.vector;
 
 import engine.expressions.Function;
-import engine.expressions.Name;
 
 import java.util.Arrays;
 
@@ -77,7 +76,7 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
             throw new IllegalStateException("not prepared");
         }
 
-        for (Name argument : arguments.getArguments()) {
+        for (String argument : arguments.getArguments()) {
             Integer slot = machine.getArgumentSlot(argument);
             if (slot == null) {
                 continue;

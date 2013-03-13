@@ -2,7 +2,6 @@ package engine.calculation;
 
 import engine.calculation.functions.*;
 import engine.expressions.Equation;
-import engine.expressions.Name;
 import engine.locus.PixelDrawable;
 import org.junit.Test;
 
@@ -19,11 +18,11 @@ public class BasicCalculationEngineTest {
         FunctionEvaluator evaluator = new ImmediateFunctionEvaluator();
         BasicCalculationEngine eng = new BasicCalculationEngine(evaluator);
 
-        Equation eq = new Equation(new Variable(new Name("y")),
+        Equation eq = new Equation(new Variable("y"),
                                 Equation.Type.EQUAL,
                                 new Subtraction(new Constant(1),
                                 new Power(
-                                new Addition(new Division(new Variable(new Name("x")), new Constant(2)),
+                                new Addition(new Division(new Variable("x"), new Constant(2)),
                                         new Constant(-0.5)),
                                         new Constant(2))));
 

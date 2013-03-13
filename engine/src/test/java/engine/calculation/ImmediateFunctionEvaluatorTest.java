@@ -1,7 +1,6 @@
 package engine.calculation;
 
 import engine.calculation.functions.*;
-import engine.expressions.Name;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,12 +22,12 @@ public class ImmediateFunctionEvaluatorTest {
     public void testOk() throws Exception {
         Arguments args = new Arguments() {
             @Override
-            public Name[] getArguments() {
-                return new Name[0];
+            public String[] getArguments() {
+                return new String[0];
             }
 
             @Override
-            public double getValue(Name name) {
+            public double getValue(String name) {
                 return 0;
             }
         };
@@ -55,19 +54,19 @@ public class ImmediateFunctionEvaluatorTest {
     public void testFail() throws Exception {
         Arguments args = new Arguments() {
             @Override
-            public Name[] getArguments() {
-                return new Name[] { new Name("y") };
+            public String[] getArguments() {
+                return new String[] { "y" };
             }
 
             @Override
-            public double getValue(Name name) {
-                if (name.getSymbols().equals("y")) {
+            public double getValue(String name) {
+                if (name.equals("y")) {
                     throw new UnknownArgumentUsedException(name);
                 }
                 return 0;
             }
         };
-        asEvaluator.calculate(new Variable(new Name("y")), args);
+        asEvaluator.calculate(new Variable("y"), args);
     }
 
 }

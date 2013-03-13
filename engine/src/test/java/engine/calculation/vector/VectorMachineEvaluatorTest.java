@@ -5,7 +5,6 @@ import engine.calculation.Arguments;
 import engine.calculation.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
 import engine.expressions.Function;
-import engine.expressions.Name;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 import org.junit.Before;
@@ -44,8 +43,8 @@ public class VectorMachineEvaluatorTest {
         // x^2+y^2-25
         check(args, new Subtraction(
                 new Addition(
-                        new Power(new Variable(new Name("x")), new Constant(2)),
-                        new Power(new Variable(new Name("y")), new Constant(2))),
+                        new Power(new Variable("x"), new Constant(2)),
+                        new Power(new Variable("y"), new Constant(2))),
                 new Constant(25))
         );
 
@@ -144,9 +143,9 @@ public class VectorMachineEvaluatorTest {
 
 
     private SomeKindOfArguments arguments(Object ...args) {
-        final Map<Name, Double> map = new HashMap<Name, Double>();
+        final Map<String, Double> map = new HashMap<String, Double>();
         for (int i = 0; i+1 < args.length; i+=2) {
-            Name name = new Name((String) args[i]);
+            String name = new String((String) args[i]);
             Double val = ((Number) args[i+1]).doubleValue();
             map.put(name, val);
         }
@@ -154,16 +153,16 @@ public class VectorMachineEvaluatorTest {
     }
 
     private static class SomeKindOfArguments implements VectorArguments, Arguments {
-        private final Map<Name, Double> map;
+        private final Map<String, Double> map;
 
-        public SomeKindOfArguments(Map<Name, Double> map) {
+        public SomeKindOfArguments(Map<String, Double> map) {
             this.map = map;
         }
 
         @Override
-        public Name[] getArguments() {
-            Set<Name> set = map.keySet();
-            return set.toArray(new Name[set.size()]);
+        public String[] getArguments() {
+            Set<String> set = map.keySet();
+            return set.toArray(new String[set.size()]);
         }
 
         private int offset = 0;
@@ -173,14 +172,14 @@ public class VectorMachineEvaluatorTest {
         }
 
         @Override
-        public double getValue(Name name) {
+        public double getValue(String name) {
             double off = offset;
             off /= 1000;
             return off + map.get(name);
         }
 
         @Override
-        public VectorFiller getVectorFiller(final Name argument) {
+        public VectorFiller getVectorFiller(final String argument) {
             return new VectorFiller() {
                 @Override
                 public void fill(double[] vector) {
