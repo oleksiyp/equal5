@@ -71,4 +71,32 @@ class StackCalculationVisitor implements FunctionVisitor {
 
         stack.push(Math.pow(left, right));
     }
+
+    @Override
+    public void visit(MathFunction mathFunction) {
+        final Function[] args = mathFunction.getArguments();
+        mathFunction
+                .getType()
+                .accept(new MathFunctionCalcVisitor(args));
+    }
+
+    private class MathFunctionCalcVisitor implements MathFunction.TypeVisitor {
+        private final Function[] args;
+
+        public MathFunctionCalcVisitor(Function[] args) {
+            this.args = args;
+        }
+
+        @Override
+        public void sin() {
+            double x = calculate(args[0]);
+            stack.push(Math.sin(x));
+        }
+
+        @Override
+        public void cos() {
+            double x = calculate(args[1]);
+            stack.push(Math.sin(x));
+        }
+    }
 }

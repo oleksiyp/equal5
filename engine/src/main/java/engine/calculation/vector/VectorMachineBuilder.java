@@ -145,5 +145,19 @@ public class VectorMachineBuilder {
                     new PowerVectorOperation(lSlot, rSlot, resultSlot)
             );
         }
+
+        @Override
+        public void visit(MathFunction mathFunction) {
+            Function[] arguments = mathFunction.getArguments();
+            int nArgs = arguments.length;
+            int []slots = new int[nArgs];
+            for (int i = 0; i < nArgs; i++) {
+                slots[i] = build(arguments[i]);
+            }
+
+            int resultSlot = slotStack.peek();
+
+            operations.add(new MathVectorOperation(mathFunction.getType(), slots, resultSlot));
+        }
     }
 }

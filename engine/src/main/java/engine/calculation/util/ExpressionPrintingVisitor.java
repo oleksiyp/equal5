@@ -2,6 +2,7 @@ package engine.calculation.util;
 
 import engine.calculation.FunctionVisitor;
 import engine.calculation.functions.*;
+import engine.expressions.Function;
 
 import java.util.Stack;
 
@@ -56,6 +57,14 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
         visitBinaryOp(power);
     }
 
+    @Override
+    public void visit(final MathFunction mathFunction) {
+        mathFunction
+                .getType()
+                .accept(new MathFunctionPrintingVisitor(
+                        mathFunction.getArguments()));
+    }
+
 
     private void visitBinaryOp(BinaryOperator operator) {
         openBracket(operator.getPriority());
@@ -86,4 +95,34 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
         }
     }
 
+    private class MathFunctionPrintingVisitor implements MathFunction.TypeVisitor {
+        private final Function[] arguments;
+
+        public MathFunctionPrintingVisitor(Function[] arguments) {
+            this.arguments = arguments;
+        }
+
+        @Override
+        public void sin() {
+            writer.write("sin");
+            writeArguments();
+        }
+
+        @Override
+        public void cos() {
+            writer.write("cos");
+            writeArguments();
+        }
+
+        private void writeArguments() {
+            writer.write("(");
+            for (int i = 0; i < arguments.length; i++) {
+                arguments[i].accept(ExpressionPrintingVisitor.this);
+                if (i > 0) {
+                    writer.write(", ");
+                }
+            }
+            writer.write(")");
+        }
+    }
 }

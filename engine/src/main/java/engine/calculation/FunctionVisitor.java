@@ -20,4 +20,6 @@ public interface FunctionVisitor {
     void visit(Division division);
 
     void visit(Power power);
+
+    void visit(MathFunction mathFunction);
 }
