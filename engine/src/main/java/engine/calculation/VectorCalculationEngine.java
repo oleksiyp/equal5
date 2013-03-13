@@ -99,7 +99,7 @@ public class VectorCalculationEngine implements CalculationEngine {
         }
 
         @Override
-        public String[] getArguments() {
+        public String[] getArgumentNames() {
             return new String[] { "x", "y", "t" };
         }
 

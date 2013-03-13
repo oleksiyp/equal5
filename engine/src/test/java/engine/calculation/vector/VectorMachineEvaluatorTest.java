@@ -161,7 +161,7 @@ public class VectorMachineEvaluatorTest {
         }
 
         @Override
-        public String[] getArguments() {
+        public String[] getArgumentNames() {
             Set<String> set = map.keySet();
             return set.toArray(new String[set.size()]);
         }

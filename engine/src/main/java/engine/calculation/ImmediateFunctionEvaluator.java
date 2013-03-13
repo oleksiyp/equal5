@@ -8,6 +8,6 @@ import engine.expressions.Function;
  */
 public class ImmediateFunctionEvaluator implements FunctionEvaluator {
     public double calculate(Function function, Arguments arguments) {
-        return new StackCalculationVisitor(arguments).calculate(function);
+        return new EvaluatingVisitor(arguments).calculate(function);
     }
 }

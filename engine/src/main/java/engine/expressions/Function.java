@@ -1,5 +1,6 @@
 package engine.expressions;
 
+import engine.calculation.Arguments;
 import engine.calculation.FunctionVisitor;
 
 /**
@@ -8,4 +9,6 @@ import engine.calculation.FunctionVisitor;
  */
 public interface Function {
     void accept(FunctionVisitor visitor);
+
+    double eval(Arguments arguments);
 }

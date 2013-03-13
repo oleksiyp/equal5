@@ -5,11 +5,11 @@ import engine.expressions.Function;
 
 import java.util.Stack;
 
-class StackCalculationVisitor implements FunctionVisitor {
+class EvaluatingVisitor implements FunctionVisitor {
     private final Arguments arguments;
     private final Stack<Double> stack = new Stack<Double>();
 
-    public StackCalculationVisitor(Arguments arguments) {
+    public EvaluatingVisitor(Arguments arguments) {
         this.arguments = arguments;
     }
 

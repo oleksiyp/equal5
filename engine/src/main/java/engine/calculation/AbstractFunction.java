@@ -18,6 +18,11 @@ public abstract class AbstractFunction implements Function {
         return toString(this);
     }
 
+    public double eval(Arguments arguments) {
+        EvaluatingVisitor visitor = new EvaluatingVisitor(arguments);
+        return visitor.calculate(this);
+    }
+
     private static String toString(Function function) {
         StringWriter strWriter = new StringWriter();
         PrintWriter prnWriter = new PrintWriter(strWriter);

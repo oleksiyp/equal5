@@ -77,7 +77,7 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
             throw new IllegalStateException("not prepared");
         }
 
-        for (String argument : arguments.getArguments()) {
+        for (String argument : arguments.getArgumentNames()) {
             Integer slot = machine.getArgumentSlot(argument);
             if (slot == null) {
                 continue;

@@ -8,7 +8,7 @@ import engine.calculation.vector.fillers.VectorFiller;
  * At: 3/12/13  6:30 PM
  */
 public interface VectorArguments {
-    String[] getArguments();
+    String[] getArgumentNames();
 
     VectorFiller getVectorFiller(String argument);
 }

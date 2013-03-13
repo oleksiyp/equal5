@@ -66,7 +66,7 @@ public class BasicCalculationEngine implements CalculationEngine {
         }
 
         @Override
-        public String[] getArguments() {
+        public String[] getArgumentNames() {
             return new String[]{
                     "x",
                     "y"

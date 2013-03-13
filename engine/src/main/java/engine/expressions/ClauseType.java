@@ -6,13 +6,13 @@ package engine.expressions;
 * Time: 3:42 PM
 */
 public enum ClauseType {
-    FUNCTION,
-    TERM,
-    FACTOR,
-    PARENTS,
-    CONSTANT,
-    VARIABLE,
-    DECIMAL_FLOAT,
-    EXPONENT,
-    DIGIT
+    FUNCTION, // T
+    TERM, //
+    FACTOR, //
+    PARENTS, // T
+    CONSTANT, // T
+    VARIABLE, // T
+    DECIMAL_FLOAT, // T
+    EXPONENT, // T
+    DIGIT // T
 }

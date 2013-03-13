@@ -2,6 +2,7 @@ package engine.expressions;
 
 import static junit.framework.Assert.*;
 
+import engine.calculation.Arguments;
 import engine.calculation.functions.*;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -205,13 +206,87 @@ public class ParboiledExpressionParserTest {
         Assert.assertEquals(25.25, parseConstant("2525e-2").getValue(), 1e-6);
     }
 
+    @Test(expected = ParsingException.class)
+    public void testConstantFail1() throws Exception {
+        parseConstant("1..1");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail2() throws Exception {
+        parseConstant("1ee1");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail3() throws Exception {
+        parseConstant("1e.e2");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail4() throws Exception {
+        parseConstant("1e1e");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail5() throws Exception {
+        parseConstant("1e.");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail6() throws Exception {
+        parseConstant(".1e.1");
+    }
+    @Test(expected = ParsingException.class)
+    public void testConstantFail7() throws Exception {
+        parseConstant("1e.1");
+    }
+
     private Constant parseConstant(String string) throws ParsingException {
         return (Constant) parse(ClauseType.CONSTANT, string);
     }
 
     @Test
     public void testParents() throws Exception {
-//      Object obj = parse(ClauseType.PARENTS, "(123)");
-//      TODO finnish other 'ClauseType's
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "(123)"), 1e-6);
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "((123))"), 1e-6);
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "(((123)))"), 1e-6);
+        Assert.assertEquals(11, evalExpr(ClauseType.PARENTS, "(((5+6)))"), 1e-6);
+        Assert.assertEquals(76, evalExpr(ClauseType.PARENTS, "(((5+6)+(3+2)*(8+5)))"), 1e-6);
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testParentsFail1() throws Exception {
+        evalExpr(ClauseType.PARENTS, "(");
+    }
+    @Test(expected = ParsingException.class)
+    public void testParentsFail2() throws Exception {
+        evalExpr(ClauseType.PARENTS, ")");
+    }
+    @Test(expected = ParsingException.class)
+    public void testParentsFail3() throws Exception {
+        evalExpr(ClauseType.PARENTS, ")(");
+    }
+    @Test(expected = ParsingException.class)
+    public void testParentsFail4() throws Exception {
+        evalExpr(ClauseType.PARENTS, "(()");
+    }
+    @Test(expected = ParsingException.class)
+    public void testParentsFail5() throws Exception {
+        evalExpr(ClauseType.PARENTS, "((5)(5))");
+    }
+
+    private double evalExpr(ClauseType type, String expr) throws ParsingException {
+        return ((Function) parse(type, expr)).eval(Arguments.EMPTY);
+    }
+
+    @Test
+    public void testTerm() throws Exception {
+        Assert.assertEquals(5, evalExpr(ClauseType.TERM, "2+3"), 1e-6);
+        Assert.assertEquals(18, evalExpr(ClauseType.TERM, "2*5+3+5"), 1e-6);
+        Assert.assertEquals(34, evalExpr(ClauseType.TERM, "2+3*6+(6+8)"), 1e-6);
+        Assert.assertEquals(1, evalExpr(ClauseType.TERM, "3-2"), 1e-6);
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testTermFail1() throws Exception {
+        evalExpr(ClauseType.TERM, "+");
+    }
+    @Test(expected = ParsingException.class)
+    public void testTermFail2() throws Exception {
+        evalExpr(ClauseType.TERM, "");
     }
 }

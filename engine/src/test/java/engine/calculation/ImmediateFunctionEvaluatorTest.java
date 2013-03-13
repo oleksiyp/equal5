@@ -22,7 +22,7 @@ public class ImmediateFunctionEvaluatorTest {
     public void testOk() throws Exception {
         Arguments args = new Arguments() {
             @Override
-            public String[] getArguments() {
+            public String[] getArgumentNames() {
                 return new String[0];
             }
 
@@ -54,7 +54,7 @@ public class ImmediateFunctionEvaluatorTest {
     public void testFail() throws Exception {
         Arguments args = new Arguments() {
             @Override
-            public String[] getArguments() {
+            public String[] getArgumentNames() {
                 return new String[] { "y" };
             }
 
