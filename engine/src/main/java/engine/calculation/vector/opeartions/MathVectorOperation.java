@@ -40,25 +40,30 @@ public class MathVectorOperation extends VectorOperation {
     }
 
     private class MathVectorCalc implements MathFunction.TypeVisitor {
-        private int size;
-        private double[][] data;
+        private final int size;
+        private final double[][] data;
+        private final double[] resultVector;
+        private final double[] inputVector;
 
         public MathVectorCalc(int size, double[][] data) {
             this.size = size;
             this.data = data;
+
+            resultVector = data[resultSlot];
+            inputVector = data[slots[0]];
         }
 
         @Override
         public void sin() {
             for (int i = 0; i < size; i++) {
-                data[resultSlot][i] = Math.sin(data[slots[0]][i]);
+                resultVector[i] = Math.sin(inputVector[i]);
             }
         }
 
         @Override
         public void cos() {
             for (int i = 0; i < size; i++) {
-                data[resultSlot][i] = Math.cos(data[slots[0]][i]);
+                resultVector[i] = Math.cos(inputVector[i]);
             }
         }
     }
