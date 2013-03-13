@@ -22,38 +22,43 @@ public class BasicCalculationEngine implements CalculationEngine {
     }
 
     @Override
-    public PixelDrawable calculate(int width, int height,
-                                   Equation equation) {
+    public PixelDrawable []calculate(int width, int height,
+                                   Equation []equations) {
+        PixelDrawable []result = new PixelDrawable[equations.length];
+        for (int i = 0; i < equations.length; i++)
+        {
+            Equation equation = equations[i];
+            double []row = new double[width + 1];
+            double []prevRow = new double[width + 1];
+            Function diff = new Subtraction(equation.getLeftPart(),
+                    equation.getRightPart());
 
-        double []row = new double[width + 1];
-        double []prevRow = new double[width + 1];
-        Function diff = new Subtraction(equation.getLeftPart(),
-                equation.getRightPart());
+            final double []coords = new double[2];
+            Arguments arguments = new XYArguments(coords);
 
-        final double []coords = new double[2];
-        Arguments arguments = new XYArguments(coords);
+            int [][]locusData = new int[height][];
 
-        int [][]locusData = new int[height][];
+            for (int y = 0; y <= height; y++) {
+                coords[1] = ((double)y) / (height + 1);
+                for (int x = 0; x <= width; x++) {
+                    coords[0] = ((double)x) / (width + 1);
+                    row[x] = evaluator.calculate(diff, arguments);
+                }
 
-        for (int y = 0; y <= height; y++) {
-            coords[1] = ((double)y) / (height + 1);
-            for (int x = 0; x <= width; x++) {
-                coords[0] = ((double)x) / (width + 1);
-                row[x] = evaluator.calculate(diff, arguments);
+                if (y >= 1) {
+                    locusData[y - 1] = equation
+                            .getType()
+                            .accept(new RowDifferentiator(row, prevRow));
+                }
+
+                double []swap = row;
+                row = prevRow;
+                prevRow = swap;
             }
 
-            if (y >= 1) {
-                locusData[y - 1] = equation
-                        .getType()
-                        .accept(new RowDifferentiator(row, prevRow));
-            }
-
-            double []swap = row;
-            row = prevRow;
-            prevRow = swap;
+            result[i] = new DiscreteLocus(locusData);
         }
-
-        return new DiscreteLocus(locusData);
+        return result;
     }
 
     private static class XYArguments implements Arguments {

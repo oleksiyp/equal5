@@ -8,7 +8,7 @@ import engine.locus.PixelDrawable;
  * At: 2/8/13  3:13 PM
  */
 public interface CalculationEngine {
-    PixelDrawable calculate(
+    PixelDrawable []calculate(
             int width, int height,
-            Equation equation);
+            Equation []equations);
 }
