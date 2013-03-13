@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.mainapp.EqualMainframe">
+  <grid id="27dc6" binding="root" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="1115" height="771"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="b9ea4" binding="sidePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="274b1" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="South"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="409a1" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints border-constraint="North"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c0fb1" class="javax.swing.JButton" binding="refreshButton">
+                    <constraints border-constraint="Center"/>
+                    <properties>
+                      <text value="Refresh (F5)"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="ffbc9" layout-manager="GridBagLayout">
+                <constraints border-constraint="South"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <hspacer id="88d45">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                  </hspacer>
+                  <vspacer id="bdec7">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                  </vspacer>
+                  <grid id="d6c63" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="c8071" class="javax.swing.JTextField" binding="leftBoundField">
+                        <constraints border-constraint="South"/>
+                        <properties>
+                          <text value="-10"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Left"/>
+                    </properties>
+                  </component>
+                  <component id="39695" class="javax.swing.JButton" binding="rightButton">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Right"/>
+                    </properties>
+                  </component>
+                  <component id="c5f5f" class="javax.swing.JButton" binding="downButton">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Down"/>
+                    </properties>
+                  </component>
+                  <component id="89653" class="javax.swing.JButton" binding="upButton">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Up"/>
+                    </properties>
+                  </component>
+                  <component id="d1016" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Navigation"/>
+                    </properties>
+                  </component>
+                  <component id="20c51" class="javax.swing.JTextField" binding="upBoundField">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="-10"/>
+                    </properties>
+                  </component>
+                  <component id="39ff3" class="javax.swing.JTextField" binding="rightBoundField">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="10"/>
+                    </properties>
+                  </component>
+                  <hspacer id="17df1">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="ce440">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="2445d" class="javax.swing.JTextField" binding="downBoundField">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="10"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <component id="ebbb6" class="javax.swing.JTextArea" binding="equationPad">
+            <constraints border-constraint="West"/>
+            <properties>
+              <columns value="30"/>
+              <text value="coords(5,1)&#10;y=&#10;" noi18n="true"/>
+            </properties>
+            <clientProperties>
+              <html.disable class="java.lang.Boolean" value="true"/>
+            </clientProperties>
+          </component>
+        </children>
+      </grid>
+      <grid id="3057d" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="67443" layout-manager="GridBagLayout">
+            <constraints border-constraint="South"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="b7722" class="javax.swing.JButton" binding="playButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Play (F6)"/>
+                </properties>
+              </component>
+              <component id="f8b33" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="t=0"/>
+                </properties>
+              </component>
+              <component id="448e1" class="javax.swing.JSlider" binding="playSlider">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="100.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <value value="0"/>
+                </properties>
+                <clientProperties>
+                  <JSlider.isFilled class="java.lang.Boolean" value="false"/>
+                  <Slider.paintThumbArrowShape class="java.lang.Boolean" value="false"/>
+                  <html.disable class="java.lang.Boolean" value="false"/>
+                </clientProperties>
+              </component>
+              <component id="f1bd2" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="steps:"/>
+                </properties>
+              </component>
+              <component id="a14cf" class="javax.swing.JTextField" binding="stepsField">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <columns value="4"/>
+                  <text value="100"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="76db8" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

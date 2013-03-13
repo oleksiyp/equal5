@@ -1,0 +1,42 @@
+
+FUNCTION = TERM ([+-] TERM)*
+TERM = FACTOR ([*/] FACTOR)*
+FACTOR = CONSTANT | VARIABLE | PARENTS
+PARENTS = '(' FUNCTION ')'
+CONSTANT = DECIMAL_FLOAT
+VARIABLE = ('a'..'z')+
+DECIMAL_FLOAT = DIGIT+ ('.' DIGIT* EXPONENT? )?
+              | '.' DIGIT+ EXPONENT?
+              | DIGIT+ EXPONENT
+EXPONENT = [eE] [+-]? DIGIT+
+DIGIT = '0' .. '9'
+
+EXAMPLE OF TRANSLATION
+min(x, y) := if(x < y, x, y)
+min(x, y) = 5
+
+At first the translation leads to:
+current = eval(expr="min(x, y) := if(x < y, x, y)\nmin(x, y) = 5")
+we call
+current.apply
+
+and get this:
+current = define(
+   name="min",
+   arguments=["x","y"],
+   definition=if(
+      condition=less(left=x,right=y),
+      then=x,
+      else=y),
+   next=eval(expr="\nmin(x, y) = 5"))
+
+when current.apply:
+functions.add("min2", {name="min", arguments=["x","y"],definition=if(condition=less(left=x,right=y),then=x,else=y})
+current=eval(expr="\nmin(x, y) = 5")
+
+and we call current.apply:
+graphic(left=min2(x,y),right=5,sign="=",next=end);
+
+and we call current.apply:
+add(get(graphics), {left=min2(x,y),right=5,sign="="},next=end)
+

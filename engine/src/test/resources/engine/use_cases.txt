@@ -1,0 +1,30 @@
+Use cases:
+------------------------
+1. Simple parabola
+coords(5,1)
+y = x^2
+
+2. Circle of radius 5
+coords(5,1)
+x^2 + y^2 = 5
+
+3! Function definition
+min(x, y) := if(x < y, x, y)
+min(x, y) = 5
+
+4! Factorial recursive
+fact(n) := if(n==1, 1, fact(n - 1) * n)
+y = fact(n)
+
+5! Factorial recursive
+fact(n <= 1) := 1
+fact(n) := fact(n - 1) * n
+y = fact(n)
+
+6! Iteration
+fact(n) := iterate(n, past()*it()*n)
+y = fact(n)
+
+7! Operator definition
+operator("!", 1, 0, true, 10, n) := fact(n)
+y = x!
