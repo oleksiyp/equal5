@@ -1,10 +1,7 @@
 package engine.calculation;
 
 import engine.calculation.functions.Subtraction;
-import engine.calculation.vector.VectorArguments;
-import engine.calculation.vector.VectorEvaluator;
-import engine.calculation.vector.VectorFiller;
-import engine.calculation.vector.VectorMachineEvaluator;
+import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.LinearVectorFiller;
 import engine.expressions.Equation;
@@ -38,6 +35,7 @@ public class VectorCalculationEngine implements CalculationEngine {
 
         evaluator.setSize(width + 1);
         evaluator.setFunctions(multiFunction);
+        evaluator.setConcurrency(2);
 
         evaluator.prepare();
 
@@ -81,10 +79,10 @@ public class VectorCalculationEngine implements CalculationEngine {
         return ret;
     }
 
-    private static double[][] copy(double[][] arr) {
-        double [][]ret = new double[arr.length][];
-        for (int i = 0; i < arr.length; i++) {
-            double[] values = arr[i];
+    private static double[][] copy(double[][] input) {
+        double [][]ret = new double[input.length][];
+        for (int i = 0; i < input.length; i++) {
+            double[] values = input[i];
             ret[i] = Arrays.copyOf(values, values.length);
         }
         return ret;
