@@ -274,19 +274,34 @@ public class ParboiledExpressionParserTest {
     }
 
     @Test
+    public void testFactor() throws Exception {
+        Assert.assertEquals(2, evalExpr(ClauseType.FACTOR, "2"), 1e-6);
+        Assert.assertEquals(2, evalExpr(ClauseType.FACTOR, "(2)"), 1e-6);
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testFactorFail1() throws Exception {
+        evalExpr(ClauseType.FACTOR, "1+1");
+    }
+    @Test(expected = ParsingException.class)
+    public void testFactorFail2() throws Exception {
+        evalExpr(ClauseType.FACTOR, "2-1");
+    }
+
+    @Test
     public void testTerm() throws Exception {
-        Assert.assertEquals(5, evalExpr(ClauseType.TERM, "2+3"), 1e-6);
-        Assert.assertEquals(18, evalExpr(ClauseType.TERM, "2*5+3+5"), 1e-6);
-        Assert.assertEquals(34, evalExpr(ClauseType.TERM, "2+3*6+(6+8)"), 1e-6);
-        Assert.assertEquals(1, evalExpr(ClauseType.TERM, "3-2"), 1e-6);
+        Assert.assertEquals(6, evalExpr(ClauseType.TERM, "2*3"), 1e-6);
+        Assert.assertEquals(60, evalExpr(ClauseType.TERM, "2*5*6"), 1e-6);
+        Assert.assertEquals(36*14, evalExpr(ClauseType.TERM, "2*3*6*(6+8)"), 1e-6);
+        Assert.assertEquals(6*42, evalExpr(ClauseType.TERM, "2*3*(42)"), 1e-6);
     }
 
     @Test(expected = ParsingException.class)
     public void testTermFail1() throws Exception {
-        evalExpr(ClauseType.TERM, "+");
+        evalExpr(ClauseType.TERM, "*");
     }
     @Test(expected = ParsingException.class)
     public void testTermFail2() throws Exception {
-        evalExpr(ClauseType.TERM, "");
+        evalExpr(ClauseType.TERM, "/");
     }
 }

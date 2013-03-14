@@ -35,8 +35,34 @@ public class ParboiledExpressionParser implements ExpressionParser {
         ClauseType value();
     }
     @BuildParseTree
-    private static class Parser extends BaseParser<Function> {
+    private static class Parser extends BaseParser<ParsableObject> {
         public Parser() {
+        }
+
+        @Clause(ClauseType.EQUATION)
+        public Rule Equation() {
+
+            Var<String> op = new Var<String>();
+            return Sequence(Function(),
+                    FirstOf("=", "<", ">", "<=", ">="),
+                    op.set(match()),
+                    Function(),
+                    push(new Equation(pop(Function.class),
+                            Equation.Type.valueOf(op.get()),
+                            pop(Function.class)
+                    )));
+        }
+
+        public <T> T pop(Class<T> clazz) {
+            ParsableObject obj = pop(Function.class);
+            if (obj == null) {
+                return null;
+            }
+            if (clazz.isAssignableFrom(obj.getClass())) {
+                return clazz.cast(obj);
+            } else {
+                throw new RuntimeException("Bad type matching. Requested: " + clazz + ", actual: " + obj.getClass());
+            }
         }
 
         @Clause(ClauseType.FUNCTION)
@@ -49,8 +75,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
                             Term(),
                             swap() && push(
                                     op.get() == '+' ?
-                                            new Addition(pop(), pop()) :
-                                            new Subtraction(pop(), pop()))));
+                                            new Addition(pop(Function.class), pop(Function.class)) :
+                                            new Subtraction(pop(Function.class), pop(Function.class)))));
         }
 
         @Clause(ClauseType.TERM)
@@ -63,8 +89,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
                             Factor(),
                             swap() && push(
                                     op.get() == '*' ?
-                                            new Multiplication(pop(), pop()) :
-                                            new Division(pop(), pop()))));
+                                            new Multiplication(pop(Function.class), pop(Function.class)) :
+                                            new Division(pop(Function.class), pop(Function.class)))));
         }
 
         @Clause(ClauseType.FACTOR)
@@ -137,7 +163,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
     }
 
-    public Object parse(ClauseType type,
+    public ParsableObject parse(ClauseType type,
                         String expression,
                         boolean finalize) throws ParsingException {
         if (type == null) {
@@ -152,17 +178,17 @@ public class ParboiledExpressionParser implements ExpressionParser {
             rule = parser.Finalize(rule);
         }
 
-        ReportingParseRunner<Function> runner;
-        runner = new ReportingParseRunner<Function>(rule);
+        ReportingParseRunner<ParsableObject> runner;
+        runner = new ReportingParseRunner<ParsableObject>(rule);
 
-        ParsingResult<Function> result = runner.run(expression);
+        ParsingResult<ParsableObject> result = runner.run(expression);
 
         checkForErrors(result);
 
         return result.resultValue;
     }
 
-    private void checkForErrors(ParsingResult<Function> result) throws ParsingException {
+    private void checkForErrors(ParsingResult<?> result) throws ParsingException {
         List<ParseError> errors = result.parseErrors;
         if (!errors.isEmpty()) {
             List<ParsingException.SyntaxError> strErrors;
@@ -225,6 +251,6 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
     @Override
     public Equation parseEquation(String expression) throws ParsingException {
-        return null;
+        return (Equation) parse(ClauseType.EQUATION, expression, true);
     }
 }
