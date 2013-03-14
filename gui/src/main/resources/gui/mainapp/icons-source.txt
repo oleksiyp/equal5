@@ -1,0 +1,19 @@
+WooCons #1 by WooThemes
+http://www.woothemes.com 
+
+http://www.iconfinder.com/search/?q=iconset%3Awoocons1
+170 icons total
+Format: raster icons
+License: GPL
+
+Files:
+left-arrow.png
+up-arrow.png
+down-arrow.png
+right-arrow.png
+play.png
+zoom-in.png
+zoom-out.png
+reload.png
+
+-----------------------
