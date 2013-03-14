@@ -41,20 +41,19 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         @Clause(ClauseType.EQUATION)
         public Rule Equation() {
-
             Var<String> op = new Var<String>();
             return Sequence(Function(),
                     FirstOf("=", "<", ">", "<=", ">="),
                     op.set(match()),
                     Function(),
                     push(new Equation(pop(Function.class),
-                            Equation.Type.valueOf(op.get()),
+                            Equation.Type.byOperator(op.get()),
                             pop(Function.class)
                     )));
         }
 
         public <T> T pop(Class<T> clazz) {
-            ParsableObject obj = pop(Function.class);
+            ParsableObject obj = pop();
             if (obj == null) {
                 return null;
             }

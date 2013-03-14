@@ -17,8 +17,14 @@ public class Equation implements ParsableObject {
         T greaterEqual();
     }
     public enum Type {
-        LESS, EQUAL, GREATER,
-        LESS_EQUAL, GREATER_EQUAL;
+        LESS("<"), EQUAL("="), GREATER(">"),
+        LESS_EQUAL("<="), GREATER_EQUAL(">=");
+
+        private final String operator;
+
+        Type(String operator) {
+            this.operator = operator;
+        }
 
         public <T> T accept(TypeVisitor<T> visitor) {
             switch (this) {
@@ -29,6 +35,15 @@ public class Equation implements ParsableObject {
                 case GREATER_EQUAL: return visitor.greaterEqual();
             }
             throw new IllegalStateException("bad Equation.Type");
+        }
+
+        public static Type byOperator(String str) {
+            for (Type t : Type.values()) {
+                if (t.operator.equals(str)) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Equation.Type.byOperator(str = '" + str + "')");
         }
     }
 

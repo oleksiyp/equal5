@@ -143,7 +143,6 @@
                   <text value="coords(5,1)&#10;y=&#10;" noi18n="true"/>
                 </properties>
                 <clientProperties>
-                  <caretAspectRatio class="java.lang.Float" value="0.04"/>
                   <html.disable class="java.lang.Boolean" value="true"/>
                 </clientProperties>
               </component>
@@ -167,6 +166,7 @@
                   <gridbag weightx="100.0" weighty="0.0"/>
                 </constraints>
                 <properties>
+                  <snapToTicks value="true"/>
                   <value value="0"/>
                 </properties>
                 <clientProperties>
@@ -182,14 +182,18 @@
             <properties/>
             <border type="bevel-lowered" title="Viewport"/>
             <children>
-              <grid id="756d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <grid id="756d" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints border-constraint="Center"/>
                 <properties>
                   <background awt-color="white"/>
                 </properties>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <component id="304fb" class="gui.mainapp.EqualViewport" binding="equalViewport" custom-create="true">
+                    <constraints border-constraint="Center"/>
+                    <properties/>
+                  </component>
+                </children>
               </grid>
             </children>
           </grid>

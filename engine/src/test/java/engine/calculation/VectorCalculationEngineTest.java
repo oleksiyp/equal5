@@ -1,10 +1,10 @@
 package engine.calculation;
 
-import engine.calculation.functions.*;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
+import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
 import org.junit.Before;

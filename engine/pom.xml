@@ -16,10 +16,6 @@
           <groupId>org.parboiled</groupId>
           <artifactId>parboiled-java</artifactId>
         </dependency>
-        <dependency>
-        	<groupId>org.ow2.asm</groupId>
-        	<artifactId>asm-debug-all</artifactId>
-        </dependency>
     </dependencies>
 
 

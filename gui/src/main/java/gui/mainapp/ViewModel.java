@@ -1,6 +1,13 @@
 package gui.mainapp;
 
+import java.util.*;
+
 public class ViewModel {
+    public static final int MOVE_PART = 10;
+    private static final double ZOOM_COEFFICIENT = 1.4;
+
+    private ViewModel.ActionHandler handler;
+
     public enum ActionType {
         REFRESH,
         PLAY,
@@ -45,9 +52,59 @@ public class ViewModel {
         void zoomOut();
     }
 
+
+    public enum InterfacePart {
+        CONSTANTS, VARIABLES, EQUATION, VIEWPORT, TIME_CONTROL;
+
+        public void accept(InterfacePartVisitor visitor) {
+            switch (this) {
+                case CONSTANTS: visitor.constants(); break;
+                case VARIABLES: visitor.variables(); break;
+                case EQUATION: visitor.equation(); break;
+                case VIEWPORT: visitor.viewport(); break;
+                case TIME_CONTROL: visitor.timeControl(); break;
+            }
+        }
+    }
+
+    public interface InterfacePartVisitor {
+        void constants();
+
+        void variables();
+
+        void equation();
+
+        void viewport();
+
+        void timeControl();
+    }
+
+    public interface ViewListener {
+        void onUpdate(Set<InterfacePart> parts);
+    }
+
     private String equations;
+    private int t;
+    private int steps;
+    private int width, height;
+    private ViewportBounds viewportBounds;
+
+    private List<ViewListener> viewListeners = new ArrayList<ViewListener>();
 
     public ViewModel() {
+        handler = new ActionHandler();
+        resetToDefaults();
+    }
+
+    public void resetToDefaults() {
+        equations = "y=";
+        t = 0;
+        steps = 100;
+        viewportBounds = new ViewportBounds(-10, 10, -10, 10);
+        width = 600;
+        height = 600;
+
+        notifyAllViewListeners();
     }
 
     public String getEquations() {
@@ -56,9 +113,151 @@ public class ViewModel {
 
     public void setEquations(final String equations) {
         this.equations = equations;
+        notifyViewListeners(InterfacePart.EQUATION);
+    }
+
+    public int getT() {
+        return t;
+    }
+
+    public void setT(int t) {
+        this.t = t;
+        notifyViewListeners(
+                InterfacePart.TIME_CONTROL,
+                InterfacePart.VARIABLES);
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
+        notifyViewListeners(InterfacePart.TIME_CONTROL);
+    }
+
+
+    public void setViewportBounds(ViewportBounds viewportBounds) {
+        this.viewportBounds = viewportBounds;
+        notifyViewListeners(InterfacePart.CONSTANTS);
+    }
+
+    public ViewportBounds getViewportBounds() {
+        return viewportBounds;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+        notifyViewListeners(InterfacePart.CONSTANTS);
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+        notifyViewListeners(InterfacePart.CONSTANTS);
+    }
+
+    public String getConstantsStatus() {
+        return String.format("LEFT(%.4g) TOP(%.4g) BOTTOM(%.4g) RIGHT(%.4g) WIDTH(%d) HEIGHT(%d) STEPS(%d)",
+                viewportBounds.getLeft(), viewportBounds.getTop(),
+                viewportBounds.getBottom(), viewportBounds.getRight(),
+                width, height,
+                steps);
+    }
+
+
+    public String getVariablesStatus() {
+        return String.format("t(%.2g)", getTAsVariable());
+    }
+
+    public double getTAsVariable() {
+        return ((double)t) / steps;
+    }
+
+    public void addViewListener(ViewListener listener) {
+        viewListeners.add(listener);
+        listener.onUpdate(EnumSet.allOf(InterfacePart.class));
+    }
+
+    public void removeViewListener(ViewListener listener) {
+        viewListeners.remove(listener);
+    }
+
+    private void notifyViewListeners(InterfacePart firstPart, InterfacePart... rest) {
+        Set<InterfacePart> parts = EnumSet.of(firstPart, rest);
+        for (ViewListener listener : viewListeners) {
+            listener.onUpdate(parts);
+        }
+    }
+
+    private void notifyAllViewListeners() {
+        for (ViewListener listener : viewListeners) {
+            listener.onUpdate(EnumSet.allOf(InterfacePart.class));
+        }
     }
 
     public void action(ActionType type) {
+        type.accept(handler);
+    }
 
+    private class ActionHandler implements ActionVisitor {
+
+        @Override
+        public void refresh() {
+            notifyViewListeners(InterfacePart.VIEWPORT);
+        }
+
+        @Override
+        public void play() {
+        }
+
+        @Override
+        public void left() {
+            double dx = viewportBounds.getWidth() / MOVE_PART;
+            viewportBounds = viewportBounds.offset(dx, 0);
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
+
+        @Override
+        public void right() {
+            double dx = viewportBounds.getWidth() / MOVE_PART;
+            viewportBounds = viewportBounds.offset(-dx, 0);
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
+
+        @Override
+        public void up() {
+            double dy = viewportBounds.getHeight() / MOVE_PART;
+            viewportBounds = viewportBounds.offset(0, -dy);
+
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
+
+        @Override
+        public void down() {
+            double dy = viewportBounds.getHeight() / MOVE_PART;
+            viewportBounds = viewportBounds.offset(0, dy);
+
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
+
+        @Override
+        public void zoomIn() {
+            viewportBounds = viewportBounds.zoom(ZOOM_COEFFICIENT);
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
+
+        @Override
+        public void zoomOut() {
+            viewportBounds = viewportBounds.zoom(1.0 / ZOOM_COEFFICIENT);
+            notifyViewListeners(InterfacePart.CONSTANTS);
+        }
     }
 }

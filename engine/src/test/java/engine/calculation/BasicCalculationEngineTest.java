@@ -2,6 +2,7 @@ package engine.calculation;
 
 import engine.calculation.functions.*;
 import engine.expressions.Equation;
+import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package engine.calculation;
+package engine.locus;
 
 import engine.locus.PixelDrawer;
 import engine.locus.RectRange;
@@ -14,9 +14,12 @@ import java.io.IOException;
 * Date: 3/13/13
 * Time: 9:34 AM
 */
-class DrawToImage implements PixelDrawer {
-
+public class DrawToImage implements PixelDrawer {
     private final BufferedImage image;
+
+    public BufferedImage getImage() {
+        return image;
+    }
 
     public DrawToImage(RectRange size) {
         image = new BufferedImage(size.getWidth(),
