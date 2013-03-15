@@ -1,7 +1,7 @@
 package gui.mainapp;
 
 public class ViewportBounds {
-    private static final double EPSILON = Double.MIN_NORMAL * 100000;
+    private static final double EPSILON = Double.MIN_NORMAL * (1 << 16);
 
     private final double left;
     private final double top;
@@ -76,5 +76,35 @@ public class ViewportBounds {
                 cy - dy / 2,
                 cy + dy / 2,
                 cx + dx / 2);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ViewportBounds that = (ViewportBounds) o;
+
+        if (Double.compare(that.bottom, bottom) != 0) return false;
+        if (Double.compare(that.left, left) != 0) return false;
+        if (Double.compare(that.right, right) != 0) return false;
+        if (Double.compare(that.top, top) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = left != +0.0d ? Double.doubleToLongBits(left) : 0L;
+        result = (int) (temp ^ (temp >>> 32));
+        temp = top != +0.0d ? Double.doubleToLongBits(top) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = bottom != +0.0d ? Double.doubleToLongBits(bottom) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = right != +0.0d ? Double.doubleToLongBits(right) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }
