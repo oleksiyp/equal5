@@ -1,10 +1,12 @@
 package gui.mainapp;
 
 import engine.expressions.Equation;
+import gui.util.CountDownQueue;
 import util.RunnableExecutorFactories;
 import util.RunnableExecutorPool;
 
 import java.awt.*;
+import java.util.*;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,9 +16,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * At: 3/15/13  12:17 PM
  */
 public class ViewportUpdater {
+    public static final int DEFAULT_DELAY = 3000;
+
     private static final int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
 
     private final ThreadFactory factory;
+
+    private CountDownQueue<Parameters> queue = new CountDownQueue<Parameters>();
+    {
+        queue.setCountDownTime(DEFAULT_DELAY);
+    }
 
     private Updater updater;
     private Thread updaterThread;
@@ -75,6 +84,8 @@ public class ViewportUpdater {
     }
 
     private class Updater implements Runnable {
+        private static final long DELAY = 3000;
+
         // general algorithm should following
 
         // there is such kind of parameters
@@ -125,19 +136,21 @@ public class ViewportUpdater {
         // }
         //
 
-        private Parameters parameters;
-
         @Override
         public void run() {
-        }
+            Parameters newParams;
+            try {
+                while ((newParams = queue.take()) != null) {
 
-        public void setParameters(Parameters parameters) {
-            //
+                }
+            } catch (InterruptedException e) {
+                // return
+            }
         }
     }
 
     public void setParameters(Parameters parameters) {
-        updater.setParameters(parameters);
+        queue.put(parameters);
     }
 
     public void paint(Graphics g) {
