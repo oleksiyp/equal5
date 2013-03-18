@@ -2,12 +2,12 @@ package gui.mainapp;
 
 import engine.expressions.Equation;
 import gui.util.CountDownQueue;
+import util.CancelFlag;
 import util.RunnableExecutorFactories;
 import util.RunnableExecutorPool;
 
 import java.awt.*;
-import java.util.*;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,20 +16,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * At: 3/15/13  12:17 PM
  */
 public class ViewportUpdater {
-    public static final int DEFAULT_DELAY = 3000;
 
     private static final int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
 
     private final ThreadFactory factory;
 
-    private CountDownQueue<Parameters> queue = new CountDownQueue<Parameters>();
-    {
-        queue.setCountDownTime(DEFAULT_DELAY);
-    }
-
-    private Updater updater;
+    private DelayedUpdater delayedUpdater;
     private Thread updaterThread;
     private RunnableExecutorPool pool;
+
+    private volatile Parameters current = null;
 
     private Lock startStopLock = new ReentrantLock();
 
@@ -45,7 +41,7 @@ public class ViewportUpdater {
                     RunnableExecutorFactories.SYNCHRONOUS);
             pool.start();
 
-            updaterThread = factory.newThread(new Updater());
+            updaterThread = factory.newThread(new DelayedUpdater());
             updaterThread.setName("Viewport updater thread");
             updaterThread.start();
         } finally {
@@ -83,74 +79,68 @@ public class ViewportUpdater {
         }
     }
 
-    private class Updater implements Runnable {
+    private Calculation calculation = new Calculation();
+
+    private CancelFlag flag = new CancelFlag();
+
+    private class Calculation implements Runnable {
+
+        private Calculation() {
+        }
+
+        @Override
+        public void run() {
+
+        }
+
+        public void startAndCancel(Parameters parameters)
+                throws InterruptedException {
+        }
+    }
+
+    private class DelayedUpdater implements Runnable {
         private static final long DELAY = 3000;
 
-        // general algorithm should following
-
-        // there is such kind of parameters
-        //
-        // current
-        // inProcess
-        // newOne
-        //
-        // setParamters(newOne) {
-        //   if (newOne equals current) {
-        //     if (no inProcess) { skip } else { cancel inProcess }
-        //   } else {
-        //     if (newOne equalsIgnoreWidthHeight current) {
-        //         triggerRepaint()
-        //     }
-        //     start countdown on newOne
-        //   }
-        // }
-        // play() {
-        //    if (playing) return
-        //    playing = current
-        //    t = 0
-        //    nextFrame()
-        // }
-        // nextFrame() {
-        //    if (t >= steps) { playing = null; finnishPlaying(); }
-        //    playing = playing with t
-        //    run playing
-        //    t++
-        // }
-        // stopPlaying() {
-        //    playing = null
-        // }
-        // on countdown done {
-        //    if (playing) return
-        //    if (newOne equals inProcess) { skip }
-        //    if (there is inProcess) {
-        //       cancel inProcess
-        //    }
-        //    run newOne
-        // }
-        // on inProcess done {
-        //    current = inProcess
-        //    triggerRepaint()
-        //    if (playing) {
-        //        nextFrame()
-        //    }
-        // }
-        //
+        public static final int DEFAULT_DELAY = 3000;
+        private final CountDownQueue<Parameters> queue = new CountDownQueue<Parameters>();
+        {
+            queue.setCountDownTime(DEFAULT_DELAY);
+        }
 
         @Override
         public void run() {
             Parameters newParams;
             try {
                 while ((newParams = queue.take()) != null) {
-
+                    Parameters cur = current;
+                    if (newParams.equals(cur)) {
+                        continue;
+                    }
+                    calculation.startAndCancel(newParams);
                 }
             } catch (InterruptedException e) {
                 // return
             }
         }
+
+        private void startExecution(Parameters newParams) {
+
+        }
+
+        private void cancelExecution() {
+
+        }
+
+        public void put(Parameters parameters) {
+            queue.put(parameters);
+        }
     }
 
     public void setParameters(Parameters parameters) {
-        queue.put(parameters);
+        if (parameters == null) {
+            throw new IllegalArgumentException("parameters");
+        }
+        delayedUpdater.put(parameters);
     }
 
     public void paint(Graphics g) {
