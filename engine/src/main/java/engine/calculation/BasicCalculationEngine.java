@@ -5,6 +5,7 @@ import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
 import engine.locus.PixelDrawable;
+import util.CancellationRoutine;
 
 /**
  * User: Oleksiy Pylypenko
@@ -12,15 +13,34 @@ import engine.locus.PixelDrawable;
  * Time: 7:37 PM
  */
 public class BasicCalculationEngine implements CalculationEngine {
+    private CancellationRoutine routine;
     private final FunctionEvaluator evaluator;
+    private int width = 0;
+    private int height = 0;
 
     public BasicCalculationEngine(FunctionEvaluator evaluator) {
         this.evaluator = evaluator;
     }
 
     @Override
-    public PixelDrawable []calculate(int width, int height,
-                                   Equation []equations) {
+    public void setCancellationRoutine(CancellationRoutine routine) {
+        this.routine = routine;
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("width or height");
+        }
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public PixelDrawable []calculate(Equation []equations) {
+        if (width == 0 || height == 0) {
+            throw new IllegalStateException("call setSize before");
+        }
         PixelDrawable []result = new PixelDrawable[equations.length];
         for (int i = 0; i < equations.length; i++)
         {
@@ -36,6 +56,9 @@ public class BasicCalculationEngine implements CalculationEngine {
             int [][]locusData = new int[height][];
 
             for (int y = 0; y <= height; y++) {
+
+                routine.checkCanceled();
+
                 coordinates[1] = ((double)y) / (height + 1);
                 for (int x = 0; x <= width; x++) {
                     coordinates[0] = ((double)x) / (width + 1);

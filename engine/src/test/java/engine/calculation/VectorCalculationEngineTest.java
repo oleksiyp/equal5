@@ -45,7 +45,9 @@ public class VectorCalculationEngineTest {
     void draw(String file, Equation... eqs) {
         RectRange size = new RectRange(0, 0, 1000, 1000);
 
-        PixelDrawable []drawables = eng.calculate(size.getWidth(), size.getHeight(), eqs);
+        eng.setSize(size.getWidth(), size.getHeight());
+
+        PixelDrawable []drawables = eng.calculate(eqs);
 
         DrawToImage drawer = new DrawToImage(size);
         for (PixelDrawable drawable : drawables) {

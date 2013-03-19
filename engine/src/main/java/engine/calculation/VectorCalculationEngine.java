@@ -9,6 +9,7 @@ import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
 import engine.locus.PixelDrawable;
+import util.CancellationRoutine;
 
 import java.util.Arrays;
 
@@ -18,8 +19,32 @@ import java.util.Arrays;
  * Time: 11:26 AM
  */
 public class VectorCalculationEngine implements CalculationEngine {
+    private final ConcurrentVectorEvaluator evaluator = new VectorMachineEvaluator();
+
+    private CancellationRoutine routine = CancellationRoutine.NO_ROUTINE;
+
+    private int width, height;
+
     @Override
-    public PixelDrawable[] calculate(final int width, final int height, Equation[] equations) {
+    public void setCancellationRoutine(CancellationRoutine routine) {
+        this.routine = routine;
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("width or height");
+        }
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public PixelDrawable[] calculate(Equation[] equations) {
+        if (width == 0 || height == 0) {
+            throw new IllegalStateException("call setSize before");
+        }
+
         int nEq = equations.length;
 
         PixelDrawable []ret = new PixelDrawable[nEq];
@@ -32,7 +57,6 @@ public class VectorCalculationEngine implements CalculationEngine {
                     equation.getRightPart());
         }
 
-        VectorMachineEvaluator evaluator = new VectorMachineEvaluator();
 
         evaluator.setSize(width + 1);
         evaluator.setFunctions(multiFunction);
@@ -47,6 +71,8 @@ public class VectorCalculationEngine implements CalculationEngine {
 
         double [][]prevMatrix = null;
         for (int y = 0; y <= height; y++) {
+            routine.checkCanceled();
+
             double[][] matrix = null;
 
             arguments.setY(((double)y) / (height + 1));

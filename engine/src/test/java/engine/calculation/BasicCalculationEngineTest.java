@@ -27,8 +27,8 @@ public class BasicCalculationEngineTest {
                                         new Constant(-0.5)),
                                         new Constant(2))));
 
-        PixelDrawable drawable = eng.calculate(800, 800,
-                new Equation[]{eq})[0];
+        eng.setSize(800, 800);
+        PixelDrawable drawable = eng.calculate(new Equation[]{eq})[0];
 
         DrawToImage drawer = new DrawToImage(drawable.getSize());
         drawable.draw(drawable.getSize(), drawer);

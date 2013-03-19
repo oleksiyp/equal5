@@ -59,8 +59,8 @@ public class EqualViewport extends JPanel {
         }
         int width = getWidth();
         int height = getHeight();
-        PixelDrawable[] drawables = engine.calculate(width, height,
-                new Equation[]{equation});
+        engine.setSize(width, height);
+        PixelDrawable[] drawables = engine.calculate(new Equation[]{equation});
         PixelDrawable drawable = drawables[0];
 
         RectRange sz = drawable.getSize();

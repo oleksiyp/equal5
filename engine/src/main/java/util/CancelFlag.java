@@ -9,45 +9,51 @@ import java.util.concurrent.locks.ReentrantLock;
  * Date: 3/18/13
  * Time: 9:54 AM
  */
-public class CancelFlag {
+public class CancelFlag implements CancellationRoutine {
     private volatile boolean cancel = false;
 
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
 
     private boolean cancelDone;
 
-    public void cancel() {
+    public void cancel() throws InterruptedException {
         cancel = true;
-    }
 
-    public void awaitCanceled() throws InterruptedException {
         lock.lock();
         try {
             while (cancelDone) {
                 condition.await();
             }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void canceled() {
-        lock.lock();
-        try {
-            cancelDone = true;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void reset() {
-        cancel = false;
-        lock.lock();
-        try {
             cancelDone = false;
         } finally {
             lock.unlock();
+        }
+    }
+
+    public void checkCanceled() throws CanceledException {
+        if (Thread.interrupted()) {
+            throw new AcknowledgedCanceledException(true);
+        }
+        if (cancel) {
+            cancel = false;
+            throw new AcknowledgedCanceledException(true);
+        }
+    }
+
+    private class AcknowledgedCanceledException extends CanceledException {
+        public AcknowledgedCanceledException(boolean interrupt) {
+            super(interrupt);
+        }
+
+        @Override
+        public void cancellationDone() {
+            lock.lock();
+            try {
+                cancelDone = true;
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }
