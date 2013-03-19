@@ -37,7 +37,7 @@ public class BasicCalculationEngine implements CalculationEngine {
     }
 
     @Override
-    public PixelDrawable []calculate(Equation []equations) {
+    public PixelDrawable []calculate(Equation ...equations) {
         if (width == 0 || height == 0) {
             throw new IllegalStateException("call setSize before");
         }

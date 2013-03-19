@@ -13,5 +13,5 @@ public interface CalculationEngine {
 
     void setSize(int width, int height);
 
-    PixelDrawable []calculate(Equation []equations);
+    PixelDrawable []calculate(Equation ...equations);
 }

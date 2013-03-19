@@ -4,12 +4,14 @@ package util;
  * User: Oleksiy Pylypenko
  * At: 3/19/13  4:52 PM
  */
-public abstract class CanceledException extends RuntimeException {
-    private boolean interrupt;
+public class CanceledException extends RuntimeException {
+    private boolean interrupted;
 
-    public CanceledException(boolean interrupt) {
-        this.interrupt = interrupt;
+    public CanceledException(boolean interrupted) {
+        this.interrupted = interrupted;
     }
 
-    public abstract void cancellationDone();
+    public boolean isInterrupted() {
+        return interrupted;
+    }
 }

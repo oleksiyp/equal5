@@ -12,48 +12,21 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CancelFlag implements CancellationRoutine {
     private volatile boolean cancel = false;
 
-    private final Lock lock = new ReentrantLock();
-    private final Condition condition = lock.newCondition();
-
-    private boolean cancelDone;
-
     public void cancel() throws InterruptedException {
         cancel = true;
-
-        lock.lock();
-        try {
-            while (cancelDone) {
-                condition.await();
-            }
-            cancelDone = false;
-        } finally {
-            lock.unlock();
-        }
     }
 
     public void checkCanceled() throws CanceledException {
         if (Thread.interrupted()) {
-            throw new AcknowledgedCanceledException(true);
+            throw new CanceledException(true);
         }
         if (cancel) {
-            cancel = false;
-            throw new AcknowledgedCanceledException(true);
+            reset();
+            throw new CanceledException(true);
         }
     }
 
-    private class AcknowledgedCanceledException extends CanceledException {
-        public AcknowledgedCanceledException(boolean interrupt) {
-            super(interrupt);
-        }
-
-        @Override
-        public void cancellationDone() {
-            lock.lock();
-            try {
-                cancelDone = true;
-            } finally {
-                lock.unlock();
-            }
-        }
+    public void reset() {
+        cancel = false;
     }
 }

@@ -1,13 +1,18 @@
 package gui.mainapp;
 
-import engine.expressions.Equation;
-import gui.util.CountDownQueue;
-import util.CancelFlag;
+import engine.calculation.CalculationEngine;
+import engine.calculation.VectorCalculationEngine;
+import engine.calculation.tasks.*;
+import engine.locus.DrawToImage;
+import engine.locus.PixelDrawable;
+import engine.locus.RectRange;
 import util.RunnableExecutorFactories;
 import util.RunnableExecutorPool;
 
+import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.*;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,22 +20,35 @@ import java.util.concurrent.locks.ReentrantLock;
  * User: Oleksiy Pylypenko
  * At: 3/15/13  12:17 PM
  */
-public class ViewportUpdater {
-
+public class ViewportUpdater implements CalculationNotifier {
+    private static final int DELAY = 300;
     private static final int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
 
     private final ThreadFactory factory;
 
-    private DelayedUpdater delayedUpdater;
-    private Thread updaterThread;
+    private Thread engineCalculationThread;
+    private Thread delayedCalculationThread;
+
+    private EngineCalculationTask engineCalculationTask;
+    private DelayedCalculationTask delayedCalculationTask;
+
     private RunnableExecutorPool pool;
 
-    private volatile Parameters current = null;
+    private volatile CalculationResults results = null;
 
     private Lock startStopLock = new ReentrantLock();
 
-    public ViewportUpdater(ThreadFactory factory) {
+    private final ViewportChangedListener listener;
+
+    public ViewportUpdater(ThreadFactory factory, ViewportChangedListener listener) {
         this.factory = factory;
+        this.listener = listener;
+
+        CalculationEngine engine = new VectorCalculationEngine();
+
+        engineCalculationTask = new EngineCalculationTask(engine, this);
+        delayedCalculationTask = new DelayedCalculationTask(engineCalculationTask,
+                DELAY);
     }
 
     public void start() {
@@ -41,9 +59,13 @@ public class ViewportUpdater {
                     RunnableExecutorFactories.SYNCHRONOUS);
             pool.start();
 
-            updaterThread = factory.newThread(new DelayedUpdater());
-            updaterThread.setName("Viewport updater thread");
-            updaterThread.start();
+            engineCalculationThread = factory.newThread(engineCalculationTask);
+            engineCalculationThread.setName("Viewport updater thread");
+            engineCalculationThread.start();
+
+            delayedCalculationThread = factory.newThread(delayedCalculationTask);
+            delayedCalculationThread.setName("Viewport updater thread");
+            delayedCalculationThread.start();
         } finally {
             startStopLock.unlock();
         }
@@ -54,9 +76,16 @@ public class ViewportUpdater {
         try {
             boolean interrupted = false;
 
-            updaterThread.interrupt();
+            engineCalculationThread.interrupt();
             try {
-                updaterThread.join();
+                engineCalculationThread.join();
+            } catch (InterruptedException e) {
+                interrupted = true;
+            }
+
+            delayedCalculationThread.interrupt();
+            try {
+                delayedCalculationThread.join();
             } catch (InterruptedException e) {
                 interrupted = true;
             }
@@ -68,7 +97,8 @@ public class ViewportUpdater {
                 interrupted = true;
             }
 
-            updaterThread = null;
+            engineCalculationThread = null;
+            delayedCalculationThread = null;
             pool = null;
 
             if (interrupted) {
@@ -79,110 +109,43 @@ public class ViewportUpdater {
         }
     }
 
-    private Calculation calculation = new Calculation();
-
-    private CancelFlag flag = new CancelFlag();
-
-    private class Calculation implements Runnable {
-
-        private Calculation() {
-        }
-
-        @Override
-        public void run() {
-
-        }
-
-        public void startAndCancel(Parameters parameters)
-                throws InterruptedException {
-        }
-    }
-
-    private class DelayedUpdater implements Runnable {
-        private static final long DELAY = 3000;
-
-        public static final int DEFAULT_DELAY = 3000;
-        private final CountDownQueue<Parameters> queue = new CountDownQueue<Parameters>();
-        {
-            queue.setCountDownTime(DEFAULT_DELAY);
-        }
-
-        @Override
-        public void run() {
-            Parameters newParams;
-            try {
-                while ((newParams = queue.take()) != null) {
-                    Parameters cur = current;
-                    if (newParams.equals(cur)) {
-                        continue;
-                    }
-                    calculation.startAndCancel(newParams);
-                }
-            } catch (InterruptedException e) {
-                // return
-            }
-        }
-
-        private void startExecution(Parameters newParams) {
-
-        }
-
-        private void cancelExecution() {
-
-        }
-
-        public void put(Parameters parameters) {
-            queue.put(parameters);
-        }
-    }
-
-    public void setParameters(Parameters parameters) {
+    public void setParameters(CalculationParameters parameters) {
         if (parameters == null) {
             throw new IllegalArgumentException("parameters");
         }
-        delayedUpdater.put(parameters);
+        CalculationResults lastResults = results;
+        if (lastResults != null && lastResults.getParameters().equals(parameters)) {
+            // skip the same
+            return;
+        }
+        delayedCalculationTask.calculate(parameters);
     }
 
-    public void paint(Graphics g) {
+    public void paint(Graphics g, int width, int height) {
+        RectRange range = new RectRange(0, 0, width, height);
+        DrawToImage drawToImage = new DrawToImage(range);
+        CalculationResults lastResults = results;
 
+        if (lastResults != null) {
+            PixelDrawable[] drawables = lastResults.getDrawables();
+            for (PixelDrawable drawable : drawables) {
+                RectRange size = drawable.getSize();
+                drawable.draw(size, drawToImage);
+            }
+        }
+
+        g.drawImage(drawToImage.getImage(), 0, 0, null);
     }
 
 
-    private class Parameters {
-        private final Equation equation;
-        private final ViewportBounds bounds;
-        private final int width, height;
-
-        private Parameters(Equation equation, ViewportBounds bounds, int width, int height) {
-            this.equation = equation;
-            this.bounds = bounds;
-            this.width = width;
-            this.height = height;
-        }
-
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Parameters that = (Parameters) o;
-
-            if (height != that.height) return false;
-            if (width != that.width) return false;
-            if (!bounds.equals(that.bounds)) return false;
-            if (!equation.equals(that.equation)) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = equation.hashCode();
-            result = 31 * result + bounds.hashCode();
-            result = 31 * result + width;
-            result = 31 * result + height;
-            return result;
-        }
+    @Override
+    public void doneCalculation(CalculationResults results) {
+        this.results = results;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                listener.viewportChanged();
+            }
+        });
     }
 }

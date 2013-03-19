@@ -1,5 +1,7 @@
 package gui.mainapp;
 
+import engine.calculation.tasks.ViewportBounds;
+
 import java.util.*;
 
 public class ViewModel {
@@ -113,7 +115,8 @@ public class ViewModel {
 
     public void setEquations(final String equations) {
         this.equations = equations;
-        notifyViewListeners(InterfacePart.EQUATION);
+        notifyViewListeners(InterfacePart.EQUATION,
+                InterfacePart.VIEWPORT);
     }
 
     public int getT() {
@@ -139,7 +142,8 @@ public class ViewModel {
 
     public void setViewportBounds(ViewportBounds viewportBounds) {
         this.viewportBounds = viewportBounds;
-        notifyViewListeners(InterfacePart.CONSTANTS);
+        notifyViewListeners(InterfacePart.CONSTANTS,
+                InterfacePart.VIEWPORT);
     }
 
     public ViewportBounds getViewportBounds() {

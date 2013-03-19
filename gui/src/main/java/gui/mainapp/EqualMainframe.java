@@ -43,7 +43,6 @@ public class EqualMainframe {
     public EqualMainframe(final ViewModel viewModel) {
         updateViewListener = new UpdateViewListener(viewModel);
         $$$setupUI$$$();
-        equalViewport.setEngine(new VectorCalculationEngine());
         equalViewport.setParser(new ParboiledExpressionParser());
 
         viewModel.addViewListener(updateViewListener);

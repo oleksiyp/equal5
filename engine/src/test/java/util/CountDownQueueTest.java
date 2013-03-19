@@ -1,7 +1,7 @@
-package gui.util;
+package util;
 
 import com.google.common.collect.Iterators;
-import gui.util.CountDownQueue;
+import util.CountDownQueue;
 import org.junit.Before;
 import org.junit.Test;
 

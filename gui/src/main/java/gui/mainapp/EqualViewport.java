@@ -1,39 +1,56 @@
 package gui.mainapp;
 
-import engine.calculation.CalculationEngine;
+import engine.calculation.tasks.CalculationParameters;
+import engine.calculation.tasks.ViewportBounds;
 import engine.expressions.Equation;
 import engine.expressions.ExpressionParser;
 import engine.expressions.ParsingException;
-import engine.locus.DrawToImage;
-import engine.locus.PixelDrawable;
-import engine.locus.RectRange;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * User: Oleksiy Pylypenko
  * Date: 3/14/13
  * Time: 9:06 PM
  */
-public class EqualViewport extends JPanel {
+public class EqualViewport extends JPanel  {
     private Equation equation;
     private ViewportBounds viewportBounds;
 
-    private CalculationEngine engine;
+    private ViewportUpdater updater;
+
     private ExpressionParser parser;
 
     public EqualViewport() {
         super(true);
-    }
 
-    public ViewportBounds getViewportBounds() {
-        return viewportBounds;
+        updater = new ViewportUpdater(new SomeThreadFactory(),
+                new RepaintViewportChangedListener());
+
+        updater.start();
+
+        addComponentListener(new RecalcOnResizeListener());
     }
 
     public void setViewportBounds(ViewportBounds viewportBounds) {
         this.viewportBounds = viewportBounds;
-        repaint();
+        submitRecalc();
+    }
+
+    private void submitRecalc() {
+        if (equation == null || viewportBounds == null) {
+            return;
+        }
+        updater.setParameters(
+                new CalculationParameters(equation,
+                        viewportBounds,
+                        getWidth(),
+                        getHeight())
+        );
     }
 
     public void setExpression(String expression) throws ParsingException {
@@ -41,11 +58,7 @@ public class EqualViewport extends JPanel {
             return;
         }
         equation = parser.parseEquation(expression);
-        repaint();
-    }
-
-    public void setEngine(CalculationEngine engine) {
-        this.engine = engine;
+        submitRecalc();
     }
 
     public void setParser(ExpressionParser parser) {
@@ -54,19 +67,29 @@ public class EqualViewport extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        if (equation == null || engine == null || viewportBounds == null) {
-            return;
-        }
         int width = getWidth();
         int height = getHeight();
-        engine.setSize(width, height);
-        PixelDrawable[] drawables = engine.calculate(new Equation[]{equation});
-        PixelDrawable drawable = drawables[0];
+        updater.paint(g, width, height);
+    }
 
-        RectRange sz = drawable.getSize();
-        DrawToImage drawToImage = new DrawToImage(sz);
-        drawable.draw(sz, drawToImage);
+    private static class SomeThreadFactory implements ThreadFactory {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r);
+        }
+    }
 
-        g.drawImage(drawToImage.getImage(), 0, 0, null);
+    private class RepaintViewportChangedListener implements ViewportChangedListener {
+        @Override
+        public void viewportChanged() {
+            repaint();
+        }
+    }
+
+    private class RecalcOnResizeListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            submitRecalc();
+        }
     }
 }
