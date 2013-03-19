@@ -79,9 +79,14 @@ public class EqualViewport extends JPanel  {
         }
     }
 
-    private class RepaintViewportChangedListener implements ViewportChangedListener {
+    private class RepaintViewportChangedListener implements ViewportChangedListener, Runnable {
         @Override
         public void viewportChanged() {
+            SwingUtilities.invokeLater(this);
+        }
+
+        @Override
+        public void run() {
             repaint();
         }
     }

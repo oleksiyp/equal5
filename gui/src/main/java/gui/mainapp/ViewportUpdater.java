@@ -141,11 +141,6 @@ public class ViewportUpdater implements CalculationNotifier {
     @Override
     public void doneCalculation(CalculationResults results) {
         this.results = results;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                listener.viewportChanged();
-            }
-        });
+        listener.viewportChanged();
     }
 }
