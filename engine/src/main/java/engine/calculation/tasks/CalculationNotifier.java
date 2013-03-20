@@ -8,4 +8,6 @@ import engine.calculation.CalculationResults;
  */
 public interface CalculationNotifier {
     void doneCalculation(CalculationResults results);
+
+    void runtimeProblem(RuntimeException ex);
 }

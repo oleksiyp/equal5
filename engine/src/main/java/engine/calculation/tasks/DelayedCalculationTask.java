@@ -21,7 +21,11 @@ public class DelayedCalculationTask implements CalculationTask, Runnable {
         CalculationParameters newParams;
         try {
             while ((newParams = queue.take()) != null) {
-                task.calculate(newParams);
+                try {
+                    task.calculate(newParams);
+                } catch (RuntimeException ex) {
+                    // TODO : add logging
+                }
             }
         } catch (InterruptedException e) {
             // return

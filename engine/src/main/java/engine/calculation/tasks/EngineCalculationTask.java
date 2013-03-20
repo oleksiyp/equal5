@@ -21,8 +21,12 @@ public class EngineCalculationTask implements CalculationTask, Cancelable {
 
     @Override
     public void calculate(CalculationParameters params) throws InterruptedException {
-        CalculationResults results = engine.calculate(params);
-        notifier.doneCalculation(results);
+        try {
+            CalculationResults results = engine.calculate(params);
+            notifier.doneCalculation(results);
+        } catch (RuntimeException ex) {
+            notifier.runtimeProblem(ex);
+        }
     }
 
     @Override

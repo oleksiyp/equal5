@@ -39,6 +39,8 @@ public class PreemptiveCalculationTask implements CalculationTask, Runnable {
                     if (ex.isInterrupted()) {
                         Thread.currentThread().interrupt();
                     }
+                } catch (RuntimeException ex) {
+                    // TODO : add logging
                 }
             }
         } catch (InterruptedException e) {

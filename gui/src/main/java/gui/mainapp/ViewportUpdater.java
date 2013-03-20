@@ -159,5 +159,10 @@ public class ViewportUpdater {
         public void doneCalculation(CalculationResults results) {
             ViewportUpdater.this.doneCalculation(results);
         }
+
+        @Override
+        public void runtimeProblem(RuntimeException ex) {
+            System.err.println(ex);
+        }
     }
 }

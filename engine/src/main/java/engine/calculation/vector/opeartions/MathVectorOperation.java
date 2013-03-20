@@ -34,9 +34,7 @@ public class MathVectorOperation extends VectorOperation {
 
     @Override
     public void markCalculated(boolean[] calculatedSlots) {
-        for (int slot : slots) {
-            calculatedSlots[slot] = true;
-        }
+        calculatedSlots[resultSlot] = true;
     }
 
     private class MathVectorCalc implements MathFunction.TypeVisitor {
