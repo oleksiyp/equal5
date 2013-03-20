@@ -18,18 +18,18 @@ import java.util.concurrent.locks.ReentrantLock;
  * User: Oleksiy Pylypenko
  * At: 3/15/13  12:17 PM
  */
-public class ViewportUpdater implements CalculationNotifier {
+public class ViewportUpdater {
     private static final int DELAY = 300;
     private static final int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
 
     private final ThreadFactory factory;
 
-    private Thread preemptiveEngineCalculationThread;
-    private Thread delayedCalculationThread;
+    private Thread preemptiveCalcThread;
+    private Thread delayedCalcThread;
 
-    private final EngineCalculationTask engineCalculationTask;
-    private final PreemptiveEngineCalculationTask preemptiveEngineCalculationTask;
-    private final DelayedCalculationTask delayedCalculationTask;
+    private final EngineCalculationTask engineCalcTask;
+    private final PreemptiveCalculationTask preemptiveCalcTask;
+    private final DelayedCalculationTask delayedCalcTask;
 
     private RunnableExecutorPool pool;
 
@@ -45,10 +45,9 @@ public class ViewportUpdater implements CalculationNotifier {
 
         CalculationEngine engine = new VectorCalculationEngine();
 
-        engineCalculationTask = new EngineCalculationTask(engine, this);
-        preemptiveEngineCalculationTask = new PreemptiveEngineCalculationTask(engineCalculationTask);
-        delayedCalculationTask = new DelayedCalculationTask(preemptiveEngineCalculationTask,
-                DELAY);
+        engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
+        preemptiveCalcTask = new PreemptiveCalculationTask(engineCalcTask);
+        delayedCalcTask = new DelayedCalculationTask(preemptiveCalcTask, DELAY);
     }
 
     public void start() {
@@ -59,13 +58,13 @@ public class ViewportUpdater implements CalculationNotifier {
                     RunnableExecutorFactories.SYNCHRONOUS);
             pool.start();
 
-            preemptiveEngineCalculationThread = factory.newThread(preemptiveEngineCalculationTask);
-            preemptiveEngineCalculationThread.setName("Preemptive engine calculation thread");
-            preemptiveEngineCalculationThread.start();
+            preemptiveCalcThread = factory.newThread(preemptiveCalcTask);
+            preemptiveCalcThread.setName("Preemptive engine calculation thread");
+            preemptiveCalcThread.start();
 
-            delayedCalculationThread = factory.newThread(delayedCalculationTask);
-            delayedCalculationThread.setName("Delayed calculation thread");
-            delayedCalculationThread.start();
+            delayedCalcThread = factory.newThread(delayedCalcTask);
+            delayedCalcThread.setName("Delayed calculation thread");
+            delayedCalcThread.start();
         } finally {
             startStopLock.unlock();
         }
@@ -76,16 +75,16 @@ public class ViewportUpdater implements CalculationNotifier {
         try {
             boolean interrupted = false;
 
-            preemptiveEngineCalculationThread.interrupt();
+            preemptiveCalcThread.interrupt();
             try {
-                preemptiveEngineCalculationThread.join();
+                preemptiveCalcThread.join();
             } catch (InterruptedException e) {
                 interrupted = true;
             }
 
-            delayedCalculationThread.interrupt();
+            delayedCalcThread.interrupt();
             try {
-                delayedCalculationThread.join();
+                delayedCalcThread.join();
             } catch (InterruptedException e) {
                 interrupted = true;
             }
@@ -97,8 +96,8 @@ public class ViewportUpdater implements CalculationNotifier {
                 interrupted = true;
             }
 
-            preemptiveEngineCalculationThread = null;
-            delayedCalculationThread = null;
+            preemptiveCalcThread = null;
+            delayedCalcThread = null;
             pool = null;
 
             if (interrupted) {
@@ -118,7 +117,7 @@ public class ViewportUpdater implements CalculationNotifier {
             // skip the same
             return;
         }
-        delayedCalculationTask.calculate(parameters);
+        delayedCalcTask.calculate(parameters);
     }
 
     public void paint(Graphics g, int width, int height) {
@@ -145,10 +144,15 @@ public class ViewportUpdater implements CalculationNotifier {
                 null);
     }
 
-
-    @Override
-    public void doneCalculation(CalculationResults results) {
+    protected void doneCalculation(CalculationResults results) {
         this.results = results;
         listener.viewportChanged();
+    }
+
+    private class DoneCalculationHandler implements CalculationNotifier {
+        @Override
+        public void doneCalculation(CalculationResults results) {
+            ViewportUpdater.this.doneCalculation(results);
+        }
     }
 }

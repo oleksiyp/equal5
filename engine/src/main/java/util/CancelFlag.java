@@ -22,7 +22,7 @@ public class CancelFlag implements CancellationRoutine {
         }
         if (cancel) {
             reset();
-            throw new CanceledException(true);
+            throw new CanceledException(false);
         }
     }
 

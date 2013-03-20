@@ -11,12 +11,12 @@ import java.util.concurrent.SynchronousQueue;
 * User: Oleksiy Pylypenko
 * At: 3/19/13  6:10 PM
 */
-public class PreemptiveEngineCalculationTask implements CalculationTask, Runnable {
+public class PreemptiveCalculationTask implements CalculationTask, Runnable {
     private final CancelFlag cancelFlag = new CancelFlag();
     private final BlockingQueue<CalculationParameters> queue = new SynchronousQueue<CalculationParameters>();
     private final CalculationTask nextChain;
 
-    public PreemptiveEngineCalculationTask(CalculationTask nextChain) {
+    public PreemptiveCalculationTask(CalculationTask nextChain) {
         this.nextChain = nextChain;
 
         if (nextChain instanceof Cancelable) {
@@ -30,10 +30,10 @@ public class PreemptiveEngineCalculationTask implements CalculationTask, Runnabl
             while (!Thread.currentThread().isInterrupted()) {
                 try{
                     CalculationParameters params = queue.take();
+                    cancelFlag.reset();
 
                     nextChain.calculate(params);
 
-                    cancelFlag.reset();
                 } catch (CanceledException ex) {
                     if (ex.isInterrupted()) {
                         Thread.currentThread().interrupt();
