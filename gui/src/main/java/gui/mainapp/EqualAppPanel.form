@@ -27,7 +27,7 @@
                 <children>
                   <component id="39695" class="javax.swing.JButton" binding="rightButton">
                     <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -39,25 +39,13 @@
                   </component>
                   <vspacer id="17971">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0" ipady="10"/>
                     </constraints>
                   </vspacer>
-                  <component id="b7722" class="javax.swing.JButton" binding="playButton">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <horizontalTextPosition value="11"/>
-                      <icon value="gui/mainapp/play.png"/>
-                      <text value=" F6"/>
-                      <toolTipText value="Run time series of graphics by changing &quot;t&quot; from 0 to 1 "/>
-                    </properties>
-                  </component>
                   <component id="a7b57" class="javax.swing.JButton" binding="zoomInButton">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -69,7 +57,7 @@
                   </component>
                   <component id="a864d" class="javax.swing.JButton" binding="zoomOutButton">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -79,21 +67,9 @@
                       <toolTipText value="Zoom out viewport"/>
                     </properties>
                   </component>
-                  <component id="c0fb1" class="javax.swing.JButton" binding="refreshButton">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <horizontalTextPosition value="10"/>
-                      <icon value="gui/mainapp/reload.png"/>
-                      <text value="F5"/>
-                      <toolTipText value="Refresh image and set &quot;t&quot; to zero"/>
-                    </properties>
-                  </component>
                   <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -105,7 +81,7 @@
                   </component>
                   <component id="89653" class="javax.swing.JButton" binding="upButton">
                     <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -117,7 +93,7 @@
                   </component>
                   <component id="c5f5f" class="javax.swing.JButton" binding="downButton">
                     <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -143,6 +119,7 @@
                   <text value="coords(5,1)&#10;y=&#10;" noi18n="true"/>
                 </properties>
                 <clientProperties>
+                  <caretAspectRatio class="java.lang.Float" value="0.04"/>
                   <html.disable class="java.lang.Boolean" value="true"/>
                 </clientProperties>
               </component>
@@ -162,7 +139,7 @@
             <children>
               <component id="448e1" class="javax.swing.JSlider" binding="timeSlider">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="100.0" weighty="0.0"/>
                 </constraints>
                 <properties>
@@ -174,6 +151,18 @@
                   <Slider.paintThumbArrowShape class="java.lang.Boolean" value="false"/>
                   <html.disable class="java.lang.Boolean" value="false"/>
                 </clientProperties>
+              </component>
+              <component id="b7722" class="javax.swing.JButton" binding="playButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <horizontalTextPosition value="11"/>
+                  <icon value="gui/mainapp/play.png"/>
+                  <text value=" F6"/>
+                  <toolTipText value="Run time series of graphics by changing &quot;t&quot; from 0 to 1 "/>
+                </properties>
               </component>
             </children>
           </grid>
