@@ -17,7 +17,7 @@ import java.util.Set;
  * Date: 3/5/13
  * Time: 7:31 AM
  */
-public class EqualMainframe {
+public class EqualAppPanel {
     private JTextArea equationPad;
     private JPanel root;
     private JPanel sidePanel;
@@ -35,7 +35,7 @@ public class EqualMainframe {
     private EqualViewport equalViewport;
     private final UpdateViewListener updateViewListener;
 
-    public EqualMainframe(final ViewModel viewModel) {
+    public EqualAppPanel(final ViewModel viewModel) {
         updateViewListener = new UpdateViewListener(viewModel);
         $$$setupUI$$$();
         equalViewport.setParser(new ParboiledExpressionParser());
@@ -78,15 +78,6 @@ public class EqualMainframe {
 
     public void createUIComponents() {
         equalViewport = new EqualViewport();
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("equal5");
-        ViewModel model = new ViewModel();
-        frame.setContentPane(new EqualMainframe(model).root);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-        frame.setVisible(true);
     }
 
     /**
@@ -257,6 +248,10 @@ public class EqualMainframe {
      */
     public JComponent $$$getRootComponent$$$() {
         return root;
+    }
+
+    public void beAContentPaneOf(JFrame frame) {
+        frame.setContentPane(root);
     }
 
     private class EquationUpdater implements DocumentListener, Runnable {

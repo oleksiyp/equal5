@@ -6,7 +6,7 @@ import util.CountDownQueue;
 * User: Oleksiy Pylypenko
 * At: 3/19/13  6:12 PM
 */
-public class DelayedCalculationTask implements CalculationTask {
+public class DelayedCalculationTask implements CalculationTask, Runnable {
     private CalculationTask task;
     private final CountDownQueue<CalculationParameters> queue = new CountDownQueue<CalculationParameters>();
 
