@@ -30,7 +30,7 @@ public class BasicCalculationEngineTest {
                                         new Constant(-0.5)),
                                         new Constant(2))));
 
-        ViewportSize size = new ViewportSize(800, 800);
+        ViewportSize size = new ViewportSize(1000, 1000);
         CalculationParameters params = new CalculationParameters(
                 new ViewportBounds(0, 0, 1, 1),
                 size, eq);

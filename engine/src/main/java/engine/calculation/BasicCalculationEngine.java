@@ -16,7 +16,7 @@ import util.CancellationRoutine;
  * Time: 7:37 PM
  */
 public class BasicCalculationEngine implements CalculationEngine, Cancelable {
-    private CancellationRoutine routine;
+    private CancellationRoutine routine = CancellationRoutine.NO_ROUTINE;
     private final FunctionEvaluator evaluator;
 
     public BasicCalculationEngine(FunctionEvaluator evaluator) {

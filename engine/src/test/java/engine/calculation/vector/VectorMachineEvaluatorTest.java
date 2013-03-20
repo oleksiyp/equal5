@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class VectorMachineEvaluatorTest {
     private ConcurrentVectorEvaluator ve;
     private static final int N_SAMPLES = 100;
-    private static final int SIZE = 2000 * 2000; // 4 mega-pixels
+    private static final int SIZE = 1000 * 1000; // 4 mega-pixels
     private static final Random RND = new Random(232);
     private static final double EPSILON = 1e-6;
 

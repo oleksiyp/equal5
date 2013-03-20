@@ -13,10 +13,8 @@ import java.util.Stack;
  */
 public class ExpressionPrintingVisitor implements FunctionVisitor {
     private final ExpressionWriter writer;
+    private final Stack<Integer> priorities = new Stack<Integer>();
     private final Stack<Boolean> brackets = new Stack<Boolean>();
-
-    private int priority = 0;
-
 
     public ExpressionPrintingVisitor(ExpressionWriter writer) {
         this.writer = writer;
@@ -75,21 +73,17 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
     }
 
     private void openBracket(int priority) {
-        boolean needOutput = changePriority(priority);
+        boolean needOutput = !priorities.isEmpty()
+                && priorities.peek() > priority;
         brackets.push(needOutput);
+        priorities.push(priority);
         if (needOutput) {
             writer.outputOpenBracket();
         }
     }
 
-    private boolean changePriority(int priority) {
-        boolean ret = priority < this.priority;
-        this.priority = priority;
-        return ret;
-    }
-
     private void closeBracket(int priority) {
-        changePriority(priority);
+        priorities.pop();
         if (brackets.pop()) {
             writer.outputCloseBracket();
         }
