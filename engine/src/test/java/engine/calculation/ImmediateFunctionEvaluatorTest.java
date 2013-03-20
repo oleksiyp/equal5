@@ -1,5 +1,7 @@
 package engine.calculation;
 
+import engine.calculation.evaluator.FunctionEvaluator;
+import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
 import org.junit.Before;
 import org.junit.Test;

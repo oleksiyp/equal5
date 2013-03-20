@@ -1,7 +1,6 @@
 package engine.calculation.functions;
 
 import engine.expressions.Function;
-import engine.calculation.FunctionVisitor;
 
 /**
  * User: Oleksiy Pylypenko

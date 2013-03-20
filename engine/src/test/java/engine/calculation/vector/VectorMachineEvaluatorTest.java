@@ -2,7 +2,7 @@ package engine.calculation.vector;
 
 import com.google.common.base.Stopwatch;
 import engine.calculation.Arguments;
-import engine.calculation.ImmediateFunctionEvaluator;
+import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;

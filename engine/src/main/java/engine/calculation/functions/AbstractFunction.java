@@ -1,5 +1,7 @@
-package engine.calculation;
+package engine.calculation.functions;
 
+import engine.calculation.Arguments;
+import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.util.ExpressionPrintingVisitor;
 import engine.calculation.util.ExpressionWriter;
 import engine.expressions.Function;
@@ -19,8 +21,8 @@ public abstract class AbstractFunction implements Function {
     }
 
     public double eval(Arguments arguments) {
-        EvaluatingVisitor visitor = new EvaluatingVisitor(arguments);
-        return visitor.calculate(this);
+        ImmediateFunctionEvaluator eval = new ImmediateFunctionEvaluator();
+        return eval.calculate(this, arguments);
     }
 
     private static String toString(Function function) {

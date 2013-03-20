@@ -20,15 +20,14 @@ public class EngineCalculationTask implements CalculationTask, Cancelable {
 
     @Override
     public void calculate(CalculationParameters params) throws InterruptedException {
-        engine.setSize(params.getWidth(), params.getHeight());
-        //params.bounds
-        PixelDrawable[] drawables = engine.calculate(params.getEquation());
-        CalculationResults results = new CalculationResults(params, drawables);
+        CalculationResults results = engine.calculate(params);
         notifier.doneCalculation(results);
     }
 
     @Override
     public void setCancellationRoutine(CancellationRoutine routine) {
-        this.engine.setCancellationRoutine(routine);
+        if (this.engine instanceof Cancelable) {
+            ((Cancelable)this.engine).setCancellationRoutine(routine);
+        }
     }
 }

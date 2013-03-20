@@ -2,36 +2,45 @@ package engine.calculation.tasks;
 
 import engine.expressions.Equation;
 
+import java.util.Arrays;
+
 /**
 * User: Oleksiy Pylypenko
 * At: 3/19/13  6:07 PM
 */
 public class CalculationParameters {
-    private final Equation equation;
+    private final Equation []equations;
     private final ViewportBounds bounds;
-    private final int width, height;
+    private final ViewportSize size;
 
-    public CalculationParameters(Equation equation, ViewportBounds bounds, int width, int height) {
-        this.equation = equation;
+    public CalculationParameters(ViewportBounds bounds,
+                                 ViewportSize size,
+                                 Equation ...equations) {
+        if (bounds == null) {
+            throw new NullPointerException("bounds");
+        }
+        if (size == null) {
+            throw new NullPointerException("bounds");
+        }
+        if (equations == null) {
+            throw new NullPointerException("equations");
+        }
+
+        this.equations = equations;
         this.bounds = bounds;
-        this.width = width;
-        this.height = height;
+        this.size = size;
     }
 
-    public Equation getEquation() {
-        return equation;
+    public Equation []getEquations() {
+        return equations;
     }
 
     public ViewportBounds getBounds() {
         return bounds;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+    public ViewportSize getSize() {
+        return size;
     }
 
     @Override
@@ -41,20 +50,18 @@ public class CalculationParameters {
 
         CalculationParameters that = (CalculationParameters) o;
 
-        if (height != that.height) return false;
-        if (width != that.width) return false;
         if (!bounds.equals(that.bounds)) return false;
-        if (!equation.equals(that.equation)) return false;
+        if (!Arrays.equals(equations, that.equations)) return false;
+        if (!size.equals(that.size)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = equation.hashCode();
+        int result = Arrays.hashCode(equations);
         result = 31 * result + bounds.hashCode();
-        result = 31 * result + width;
-        result = 31 * result + height;
+        result = 31 * result + size.hashCode();
         return result;
     }
 }

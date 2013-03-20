@@ -1,6 +1,8 @@
 package engine.calculation;
 
 import engine.calculation.functions.Subtraction;
+import engine.calculation.tasks.CalculationParameters;
+import engine.calculation.tasks.CalculationResults;
 import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.LinearVectorFiller;
@@ -9,6 +11,7 @@ import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
 import engine.locus.PixelDrawable;
+import util.Cancelable;
 import util.CancellationRoutine;
 
 import java.util.Arrays;
@@ -18,32 +21,22 @@ import java.util.Arrays;
  * Date: 3/13/13
  * Time: 11:26 AM
  */
-public class VectorCalculationEngine implements CalculationEngine {
+public class VectorCalculationEngine implements CalculationEngine, Cancelable {
     private final ConcurrentVectorEvaluator evaluator = new VectorMachineEvaluator();
 
     private CancellationRoutine routine = CancellationRoutine.NO_ROUTINE;
-
-    private int width, height;
 
     @Override
     public void setCancellationRoutine(CancellationRoutine routine) {
         this.routine = routine;
     }
 
-    @Override
-    public void setSize(int width, int height) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException("width or height");
-        }
-        this.width = width;
-        this.height = height;
-    }
 
     @Override
-    public PixelDrawable[] calculate(Equation ...equations) {
-        if (width == 0 || height == 0) {
-            throw new IllegalStateException("call setSize before");
-        }
+    public CalculationResults calculate(CalculationParameters parameters) {
+        Equation[] equations = parameters.getEquations();
+        int width = parameters.getSize().getWidth();
+        int height = parameters.getSize().getHeight();
 
         int nEq = equations.length;
 
@@ -101,7 +94,7 @@ public class VectorCalculationEngine implements CalculationEngine {
             ret[i] = new DiscreteLocus(locusData[i]);
         }
 
-        return ret;
+        return new CalculationResults(parameters, ret);
     }
 
     private static double[][] copy(double[][] input) {

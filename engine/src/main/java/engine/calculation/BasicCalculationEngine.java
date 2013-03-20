@@ -1,10 +1,14 @@
 package engine.calculation;
 
+import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.functions.Subtraction;
+import engine.calculation.tasks.CalculationParameters;
+import engine.calculation.tasks.CalculationResults;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
 import engine.locus.PixelDrawable;
+import util.Cancelable;
 import util.CancellationRoutine;
 
 /**
@@ -12,11 +16,9 @@ import util.CancellationRoutine;
  * Date: 2/8/13
  * Time: 7:37 PM
  */
-public class BasicCalculationEngine implements CalculationEngine {
+public class BasicCalculationEngine implements CalculationEngine, Cancelable {
     private CancellationRoutine routine;
     private final FunctionEvaluator evaluator;
-    private int width = 0;
-    private int height = 0;
 
     public BasicCalculationEngine(FunctionEvaluator evaluator) {
         this.evaluator = evaluator;
@@ -28,57 +30,53 @@ public class BasicCalculationEngine implements CalculationEngine {
     }
 
     @Override
-    public void setSize(int width, int height) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException("width or height");
-        }
-        this.width = width;
-        this.height = height;
-    }
+    public CalculationResults calculate(CalculationParameters parameters) {
+        Equation[] equations = parameters.getEquations();
 
-    @Override
-    public PixelDrawable []calculate(Equation ...equations) {
-        if (width == 0 || height == 0) {
-            throw new IllegalStateException("call setSize before");
-        }
         PixelDrawable []result = new PixelDrawable[equations.length];
         for (int i = 0; i < equations.length; i++)
         {
-            Equation equation = equations[i];
-            double []row = new double[width + 1];
-            double []prevRow = new double[width + 1];
-            Function diff = new Subtraction(equation.getLeftPart(),
-                    equation.getRightPart());
+            result[i] = buildDiscreteLocus(parameters, equations[i]);
+        }
+        return new CalculationResults(parameters, result);
+    }
 
-            final double []coordinates = new double[2];
-            Arguments arguments = new XYArguments(coordinates);
+    private DiscreteLocus buildDiscreteLocus(CalculationParameters parameters, Equation equation) {
+        int width = parameters.getSize().getWidth();
+        int height = parameters.getSize().getHeight();
 
-            int [][]locusData = new int[height][];
+        double []row = new double[width + 1];
+        double []prevRow = new double[width + 1];
+        Function diff = new Subtraction(equation.getLeftPart(),
+                equation.getRightPart());
 
-            for (int y = 0; y <= height; y++) {
+        final double []coordinates = new double[2];
+        Arguments arguments = new XYArguments(coordinates);
 
-                routine.checkCanceled();
+        int [][]locusData = new int[height][];
 
-                coordinates[1] = ((double)y) / (height + 1);
-                for (int x = 0; x <= width; x++) {
-                    coordinates[0] = ((double)x) / (width + 1);
-                    row[x] = evaluator.calculate(diff, arguments);
-                }
+        for (int y = 0; y <= height; y++) {
 
-                if (y >= 1) {
-                    locusData[y - 1] = equation
-                            .getType()
-                            .accept(new LocusRowDiffVisitor(row, prevRow));
-                }
+            routine.checkCanceled();
 
-                double []swap = row;
-                row = prevRow;
-                prevRow = swap;
+            coordinates[1] = ((double)y) / (height + 1);
+            for (int x = 0; x <= width; x++) {
+                coordinates[0] = ((double)x) / (width + 1);
+                row[x] = evaluator.calculate(diff, arguments);
             }
 
-            result[i] = new DiscreteLocus(locusData);
+            if (y >= 1) {
+                locusData[y - 1] = equation
+                        .getType()
+                        .accept(new LocusRowDiffVisitor(row, prevRow));
+            }
+
+            double []swap = row;
+            row = prevRow;
+            prevRow = swap;
         }
-        return result;
+
+        return new DiscreteLocus(locusData);
     }
 
     private static class XYArguments implements Arguments {

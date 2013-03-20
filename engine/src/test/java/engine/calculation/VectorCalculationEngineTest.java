@@ -1,5 +1,9 @@
 package engine.calculation;
 
+import engine.calculation.tasks.CalculationParameters;
+import engine.calculation.tasks.CalculationResults;
+import engine.calculation.tasks.ViewportBounds;
+import engine.calculation.tasks.ViewportSize;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.ParboiledExpressionParser;
@@ -43,17 +47,17 @@ public class VectorCalculationEngineTest {
 
 
     void draw(String file, Equation... eqs) {
-        RectRange size = new RectRange(0, 0, 1000, 1000);
+        ViewportSize size = new ViewportSize(1000, 1000);
+        CalculationParameters params = new CalculationParameters(
+                new ViewportBounds(0, 0, 1, 1),
+                size, eqs);
+        CalculationResults results = eng.calculate(params);
 
-        eng.setSize(size.getWidth(), size.getHeight());
-
-        PixelDrawable []drawables = eng.calculate(eqs);
-
-        DrawToImage drawer = new DrawToImage(size);
-        for (PixelDrawable drawable : drawables) {
-            drawable.draw(drawable.getSize(), drawer);
+        RectRange range = RectRange.fromViewportSize(size);
+        DrawToImage drawer = new DrawToImage(range);
+        for (PixelDrawable drawable : results.getDrawables()) {
+            drawable.draw(range, drawer);
         }
-
         try {
             drawer.writePng(new File(DIR, file));
         } catch (IOException e) {

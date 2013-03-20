@@ -1,9 +1,16 @@
 package engine.calculation;
 
+import engine.calculation.evaluator.FunctionEvaluator;
+import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
+import engine.calculation.tasks.CalculationParameters;
+import engine.calculation.tasks.CalculationResults;
+import engine.calculation.tasks.ViewportBounds;
+import engine.calculation.tasks.ViewportSize;
 import engine.expressions.Equation;
 import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
+import engine.locus.RectRange;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,11 +34,17 @@ public class BasicCalculationEngineTest {
                                         new Constant(-0.5)),
                                         new Constant(2))));
 
-        eng.setSize(800, 800);
-        PixelDrawable drawable = eng.calculate(new Equation[]{eq})[0];
+        ViewportSize size = new ViewportSize(800, 800);
+        CalculationParameters params = new CalculationParameters(
+                new ViewportBounds(0, 0, 1, 1),
+                size, eq);
+        CalculationResults results = eng.calculate(params);
 
-        DrawToImage drawer = new DrawToImage(drawable.getSize());
-        drawable.draw(drawable.getSize(), drawer);
+        RectRange range = RectRange.fromViewportSize(size);
+        DrawToImage drawer = new DrawToImage(range);
+        for (PixelDrawable drawable : results.getDrawables()) {
+            drawable.draw(range, drawer);
+        }
         drawer.writePng(new File("test1.png"));
     }
 

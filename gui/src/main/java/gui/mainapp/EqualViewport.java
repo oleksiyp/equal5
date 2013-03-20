@@ -2,6 +2,7 @@ package gui.mainapp;
 
 import engine.calculation.tasks.CalculationParameters;
 import engine.calculation.tasks.ViewportBounds;
+import engine.calculation.tasks.ViewportSize;
 import engine.expressions.Equation;
 import engine.expressions.ExpressionParser;
 import engine.expressions.ParsingException;
@@ -43,11 +44,15 @@ public class EqualViewport extends JComponent  {
         if (equation == null || viewportBounds == null) {
             return;
         }
+        int width = getWidth();
+        int height = getHeight();
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+        ViewportSize size = new ViewportSize(width, height);
         updater.setParameters(
-                new CalculationParameters(equation,
-                        viewportBounds,
-                        getWidth(),
-                        getHeight())
+                new CalculationParameters(viewportBounds,
+                        size, equation)
         );
     }
 

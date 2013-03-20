@@ -1,5 +1,7 @@
 package engine.locus;
 
+import engine.calculation.tasks.ViewportSize;
+
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:14 PM
@@ -54,5 +56,9 @@ public class RectRange {
         result = 31 * result + width;
         result = 31 * result + height;
         return result;
+    }
+
+    public static RectRange fromViewportSize(ViewportSize size) {
+        return new RectRange(0, 0, size.getWidth(), size.getHeight());
     }
 }

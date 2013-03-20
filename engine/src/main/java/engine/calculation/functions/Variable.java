@@ -1,8 +1,5 @@
 package engine.calculation.functions;
 
-import engine.calculation.AbstractFunction;
-import engine.calculation.FunctionVisitor;
-
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:47 PM

@@ -1,7 +1,5 @@
 package engine.calculation.functions;
 
-import engine.calculation.AbstractFunction;
-import engine.calculation.FunctionVisitor;
 import engine.expressions.Function;
 
 /**

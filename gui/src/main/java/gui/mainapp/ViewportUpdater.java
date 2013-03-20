@@ -128,16 +128,17 @@ public class ViewportUpdater {
             g.fillRect(0, 0, width, height);
             return;
         }
+
         CalculationParameters params = lastResults.getParameters();
-        RectRange range = new RectRange(0, 0,
-                params.getWidth(),
-                params.getHeight());
+
+        RectRange range = RectRange.fromViewportSize(params.getSize());
         DrawToImage drawToImage = new DrawToImage(range);
         PixelDrawable[] drawables = lastResults.getDrawables();
         for (PixelDrawable drawable : drawables) {
             RectRange size = drawable.getSize();
             drawable.draw(size, drawToImage);
         }
+
         g.drawImage(drawToImage.getImage(),
                 0, 0, width, height,
                 0, 0, range.getWidth(), range.getHeight(),

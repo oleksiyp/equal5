@@ -1,4 +1,4 @@
-package engine.calculation;
+package engine.calculation.functions;
 
 import engine.calculation.functions.*;
 

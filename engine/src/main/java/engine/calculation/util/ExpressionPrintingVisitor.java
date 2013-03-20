@@ -1,6 +1,6 @@
 package engine.calculation.util;
 
-import engine.calculation.FunctionVisitor;
+import engine.calculation.functions.FunctionVisitor;
 import engine.calculation.functions.*;
 import engine.expressions.Function;
 
