@@ -87,7 +87,11 @@ public class CountDownQueue<E>
                     (element == null || awakeTime > currentTime)) {
 
                 long delta = awakeTime - currentTime;
-                timeExceeded.await(delta, TimeUnit.MILLISECONDS);
+                if (delta <= 0) {
+                    timeExceeded.await();
+                } else {
+                    timeExceeded.await(delta, TimeUnit.MILLISECONDS);
+                }
 
                 currentTime = System.currentTimeMillis();
             }

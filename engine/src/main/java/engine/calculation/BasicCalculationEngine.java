@@ -4,6 +4,7 @@ import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.functions.Subtraction;
 import engine.calculation.tasks.CalculationParameters;
 import engine.calculation.tasks.CalculationResults;
+import engine.calculation.tasks.ViewportBounds;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
@@ -55,18 +56,26 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
 
         int [][]locusData = new int[height][];
 
-        for (int y = 0; y <= height; y++) {
+        ViewportBounds bounds = parameters.getBounds();
+
+        double xDelta = bounds.getXDelta(width);
+        double yDelta = bounds.getYDelta(height);
+
+        double xStart = bounds.getLeft() - xDelta / 2.0;
+        double yStart = bounds.getTop() - yDelta / 2.0;
+
+        for (int j = 0; j <= height; j++) {
 
             routine.checkCanceled();
 
-            coordinates[1] = ((double)y) / (height + 1);
-            for (int x = 0; x <= width; x++) {
-                coordinates[0] = ((double)x) / (width + 1);
-                row[x] = evaluator.calculate(diff, arguments);
+            coordinates[1] = yStart + j * yDelta;
+            for (int i = 0; i <= width; i++) {
+                coordinates[0] = xStart + i * xDelta;
+                row[i] = evaluator.calculate(diff, arguments);
             }
 
-            if (y >= 1) {
-                locusData[y - 1] = equation
+            if (j >= 1) {
+                locusData[j - 1] = equation
                         .getType()
                         .accept(new LocusRowDiffVisitor(row, prevRow));
             }

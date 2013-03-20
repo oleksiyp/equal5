@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * At: 3/15/13  12:17 PM
  */
 public class ViewportUpdater {
-    private static final int DELAY = 300;
+    private static final int DELAY = 25;
     private static final int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
 
     private final ThreadFactory factory;
