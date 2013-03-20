@@ -1,9 +1,7 @@
 package engine.calculation;
 
+import engine.calculation.functions.MathFunction;
 import engine.calculation.functions.Subtraction;
-import engine.calculation.tasks.CalculationParameters;
-import engine.calculation.tasks.CalculationResults;
-import engine.calculation.tasks.ViewportBounds;
 import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.LinearVectorFiller;
@@ -23,15 +21,17 @@ import java.util.Arrays;
  * Time: 11:26 AM
  */
 public class VectorCalculationEngine implements CalculationEngine, Cancelable {
-    private final ConcurrentVectorEvaluator evaluator = new VectorMachineEvaluator();
-
+    private final VectorEvaluator evaluator;
     private CancellationRoutine routine = CancellationRoutine.NO_ROUTINE;
+
+    public VectorCalculationEngine(VectorEvaluator evaluator) {
+        this.evaluator = evaluator;
+    }
 
     @Override
     public void setCancellationRoutine(CancellationRoutine routine) {
         this.routine = routine;
     }
-
 
     @Override
     public CalculationResults calculate(CalculationParameters parameters) {
@@ -47,14 +47,16 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
         for (int i = 0; i < nEq; i++)
         {
             Equation equation = equations[i];
-            multiFunction[i] = new Subtraction(equation.getLeftPart(),
-                    equation.getRightPart());
+            multiFunction[i] = new MathFunction(
+                    MathFunction.Type.SIGNUM,
+                    new Subtraction(
+                            equation.getLeftPart(),
+                            equation.getRightPart()));
         }
 
 
         evaluator.setSize(width + 1);
         evaluator.setFunctions(multiFunction);
-        evaluator.setConcurrency(2);
 
         evaluator.prepare();
 

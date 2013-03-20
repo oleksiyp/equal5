@@ -6,14 +6,18 @@ import engine.calculation.vector.opeartions.*;
 import engine.expressions.Function;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 3/12/13  6:44 PM
  */
 public class VectorMachineBuilder {
+
     private final Function []functions;
-    private int concurrency = Runtime.getRuntime().availableProcessors();
+
+    private ExecutorService executor;
+    private int concurrency = 0;
 
     public VectorMachineBuilder(Function []functions) {
         this.functions = functions;
@@ -27,6 +31,14 @@ public class VectorMachineBuilder {
         this.concurrency = concurrency;
     }
 
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
     public VectorMachine build() {
         ConstructingVisitor visitor = new ConstructingVisitor();
         int []resultSlots = new int[functions.length];
@@ -36,7 +48,7 @@ public class VectorMachineBuilder {
 
         List<VectorOperation> op = visitor.operations;
         VectorOperation[] operationsArray = op.toArray(new VectorOperation[op.size()]);
-        if (concurrency <= 1) {
+        if (concurrency <= 1 || executor == null) {
             return new SequentialVectorMachine(visitor.nSlots,
                     resultSlots,
                     operationsArray,
@@ -48,6 +60,7 @@ public class VectorMachineBuilder {
                     operationsArray,
                     visitor.variables,
                     visitor.constants,
+                    executor,
                     concurrency);
         }
     }

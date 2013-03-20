@@ -3,9 +3,11 @@ package engine.calculation.vector;
 import com.google.common.base.Stopwatch;
 import engine.calculation.vector.opeartions.VectorOperation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,6 +25,8 @@ public class ParallelVectorMachine implements VectorMachine {
 
     private final Map<Integer, Double> constantSlots;
     private final VectorOperation[]operations;
+
+    private final ExecutorService executor;
     private final int concurrency;
 
     ParallelVectorMachine(int slotCount,
@@ -30,16 +34,13 @@ public class ParallelVectorMachine implements VectorMachine {
                             VectorOperation[] operations,
                             Map<String, Integer> argumentSlots,
                             Map<Integer, Double> constantSlots,
-                            int concurrency) {
-        if (concurrency < 1) {
-            throw new IllegalArgumentException("concurrency");
-        }
-
+                            ExecutorService executor, int concurrency) {
         this.slotCount = slotCount;
         this.resultSlots = resultSlots;
         this.argumentSlots = argumentSlots;
         this.constantSlots = constantSlots;
         this.operations = operations;
+        this.executor = executor;
         this.concurrency = concurrency;
     }
 
@@ -102,24 +103,29 @@ public class ParallelVectorMachine implements VectorMachine {
         public void applyAndEstimateOperations(TimeReporter timeReporter) {
 
             VectorOperationPool pool = new VectorOperationPool();
-            Thread []threads = new Thread[concurrency];
 
+            List<Future<?>> list = new ArrayList<Future<?>>();
             for (int i = 0; i < concurrency; i++) {
                 Runnable runnable = timeReporter != null ?
                         new TRRunner(i, pool, timeReporter) :
                         new Runner(pool);
-                threads[i] = new Thread(runnable);
+
+                list.add(executor.submit(runnable));
             }
 
-            for (Thread thread : threads) {
-                thread.start();
-            }
-            for (Thread thread : threads) {
+            boolean interrupted = false;
+            for (Future<?> future : list) {
                 try {
-                    thread.join();
+                    future.get();
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    interrupted = true;
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("future task execution problem", e);
                 }
+            }
+
+            if (interrupted) {
+                Thread.currentThread().interrupt();
             }
         }
 

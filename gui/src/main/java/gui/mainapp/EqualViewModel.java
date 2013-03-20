@@ -1,6 +1,6 @@
 package gui.mainapp;
 
-import engine.calculation.tasks.ViewportBounds;
+import engine.calculation.ViewportBounds;
 
 import java.awt.*;
 import java.util.*;

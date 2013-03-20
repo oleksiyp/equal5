@@ -1,4 +1,4 @@
-package engine.calculation.tasks;
+package engine.calculation;
 
 import engine.locus.PixelDrawable;
 

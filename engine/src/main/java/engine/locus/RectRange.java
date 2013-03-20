@@ -1,6 +1,6 @@
 package engine.locus;
 
-import engine.calculation.tasks.ViewportSize;
+import engine.calculation.ViewportSize;
 
 /**
  * User: Oleksiy Pylypenko

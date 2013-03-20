@@ -1,9 +1,6 @@
 package engine.calculation;
 
-import engine.calculation.tasks.CalculationParameters;
-import engine.calculation.tasks.CalculationResults;
-import engine.calculation.tasks.ViewportBounds;
-import engine.calculation.tasks.ViewportSize;
+import engine.calculation.vector.VectorMachineEvaluator;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.ParboiledExpressionParser;
@@ -32,7 +29,8 @@ public class VectorCalculationEngineTest {
     @Before
     public void setUp() throws Exception {
         DIR.mkdirs();
-        eng = new VectorCalculationEngine();
+        VectorMachineEvaluator evaluator = new VectorMachineEvaluator();
+        eng = new VectorCalculationEngine(evaluator);
     }
 
     @Test

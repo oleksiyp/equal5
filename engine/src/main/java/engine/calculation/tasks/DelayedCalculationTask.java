@@ -1,5 +1,6 @@
 package engine.calculation.tasks;
 
+import engine.calculation.CalculationParameters;
 import util.CountDownQueue;
 
 /**

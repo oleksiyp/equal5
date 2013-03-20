@@ -25,7 +25,7 @@ class LocusRowDiffVisitor implements Equation.TypeVisitor<int[]> {
         for (int i = 0; i < row.length - 1; i++) {
             double a = row[i];
 
-            if (sign(a) == -1) {
+            if (a == -1.0) {
                 ret[sz++] = i;
             }
         }
@@ -42,19 +42,13 @@ class LocusRowDiffVisitor implements Equation.TypeVisitor<int[]> {
             double a = row[i], b = row[i + 1],
                     c = prevRow[i], d = prevRow[i + 1];
 
-            int s = sign(a) + sign(b) + sign(c) + sign(d);
-            if (-4 < s && s < 4) {
+            double s = a + b + c + d;
+            if (-4.0 < s && s < 4.0) {
                 ret[sz++] = i;
             }
         }
 
         return Arrays.copyOf(ret, sz);
-    }
-
-    private int sign(double a) {
-        if (a < 0) return -1;
-        if (a > 0) return 1;
-        return 0;
     }
 
     @Override
@@ -65,7 +59,7 @@ class LocusRowDiffVisitor implements Equation.TypeVisitor<int[]> {
         for (int i = 0; i < row.length - 1; i++) {
             double a = row[i];
 
-            if (sign(a) == 1) {
+            if (a == 1.0) {
                 ret[sz++] = i;
             }
         }

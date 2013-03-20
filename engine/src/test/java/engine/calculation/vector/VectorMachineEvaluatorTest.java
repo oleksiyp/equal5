@@ -93,7 +93,6 @@ public class VectorMachineEvaluatorTest {
 
         ve.setSize(SIZE);
         ve.setFunctions(functions);
-        ve.setConcurrency(concurrency);
 
         Stopwatch sw = new Stopwatch().start();
         ve.prepare();

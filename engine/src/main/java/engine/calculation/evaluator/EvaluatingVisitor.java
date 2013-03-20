@@ -97,8 +97,14 @@ class EvaluatingVisitor implements FunctionVisitor {
 
         @Override
         public void cos() {
-            double x = calculate(args[1]);
+            double x = calculate(args[0]);
             stack.push(Math.sin(x));
+        }
+
+        @Override
+        public void signum() {
+            double x = calculate(args[0]);
+            stack.push(Math.signum(x));
         }
     }
 }

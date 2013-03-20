@@ -1,10 +1,8 @@
 package engine.calculation;
 
 import engine.calculation.evaluator.FunctionEvaluator;
+import engine.calculation.functions.MathFunction;
 import engine.calculation.functions.Subtraction;
-import engine.calculation.tasks.CalculationParameters;
-import engine.calculation.tasks.CalculationResults;
-import engine.calculation.tasks.ViewportBounds;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
@@ -48,8 +46,9 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
 
         double []row = new double[width + 1];
         double []prevRow = new double[width + 1];
-        Function diff = new Subtraction(equation.getLeftPart(),
-                equation.getRightPart());
+        Function diff = new MathFunction(MathFunction.Type.SIGNUM,
+                new Subtraction(equation.getLeftPart(),
+                equation.getRightPart()));
 
         final double []coordinates = new double[2];
         Arguments arguments = new XYArguments(coordinates);

@@ -4,6 +4,7 @@ import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
 
 /**
  * User: Oleksiy Pylypenko
@@ -16,10 +17,12 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
     private int size;
     private TimeReporter timeReporter;
     private Function[] functions;
-    private Integer concurrency;
     {
         clear();
     }
+
+    private ExecutorService executor;
+    private int concurrency = 0;
 
     public VectorMachineEvaluator() {
     }
@@ -56,8 +59,9 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
     public void prepare() {
         if (machine == null) {
             VectorMachineBuilder builder = new VectorMachineBuilder(functions);
-            if (concurrency != null) {
+            if (executor != null && concurrency >= 2) {
                 builder.setConcurrency(concurrency);
+                builder.setExecutor(executor);
             }
             machine = builder.build();
         }
@@ -113,12 +117,13 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
         size = 1;
         timeReporter = null;
         functions = new Function[0];
-        concurrency = null;
+        concurrency = 0;
     }
 
     @Override
-    public void setConcurrency(Integer value) {
-        this.concurrency = value;
+    public void setConcurrentEvaluation(int concurrency, ExecutorService service) {
+        this.concurrency = concurrency;
+        this.executor = service;
         this.machine = null;
         this.state = null;
     }

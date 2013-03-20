@@ -1,15 +1,18 @@
 package gui.mainapp;
 
 import engine.calculation.CalculationEngine;
+import engine.calculation.CalculationParameters;
+import engine.calculation.CalculationResults;
 import engine.calculation.VectorCalculationEngine;
 import engine.calculation.tasks.*;
+import engine.calculation.vector.VectorMachineEvaluator;
 import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
-import util.RunnableExecutorFactories;
-import util.RunnableExecutorPool;
 
 import java.awt.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,26 +27,31 @@ public class ViewportUpdater {
 
     private final ThreadFactory factory;
 
-    private Thread preemptiveCalcThread;
-    private Thread delayedCalcThread;
 
     private final EngineCalculationTask engineCalcTask;
     private final PreemptiveCalculationTask preemptiveCalcTask;
     private final DelayedCalculationTask delayedCalcTask;
 
-    private RunnableExecutorPool pool;
+    private int concurrency = MAX_CONCURRENCY;
+
+    private ExecutorService executor;
+    private Thread preemptiveCalcThread;
+    private Thread delayedCalcThread;
 
     private volatile CalculationResults results = null;
 
     private Lock startStopLock = new ReentrantLock();
 
     private final ViewportChangedListener listener;
+    private final VectorMachineEvaluator evaluator;
+    private final CalculationEngine engine;
 
     public ViewportUpdater(ThreadFactory factory, ViewportChangedListener listener) {
         this.factory = factory;
         this.listener = listener;
 
-        CalculationEngine engine = new VectorCalculationEngine();
+        evaluator = new VectorMachineEvaluator();
+        engine = new VectorCalculationEngine(evaluator);
 
         engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
         preemptiveCalcTask = new PreemptiveCalculationTask(engineCalcTask);
@@ -53,10 +61,11 @@ public class ViewportUpdater {
     public void start() {
         startStopLock.lock();
         try {
-            pool = new RunnableExecutorPool(MAX_CONCURRENCY,
-                    factory,
-                    RunnableExecutorFactories.SYNCHRONOUS);
-            pool.start();
+            executor = Executors.newFixedThreadPool(
+                    MAX_CONCURRENCY,
+                    factory);
+
+            evaluator.setConcurrentEvaluation(concurrency, executor);
 
             preemptiveCalcThread = factory.newThread(preemptiveCalcTask);
             preemptiveCalcThread.setName("Preemptive engine calculation thread");
@@ -89,16 +98,11 @@ public class ViewportUpdater {
                 interrupted = true;
             }
 
-            pool.interrupt();
-            try {
-                pool.join();
-            } catch (InterruptedException e) {
-                interrupted = true;
-            }
+            executor.shutdown();
 
             preemptiveCalcThread = null;
             delayedCalcThread = null;
-            pool = null;
+            executor = null;
 
             if (interrupted) {
                 Thread.currentThread().interrupt();

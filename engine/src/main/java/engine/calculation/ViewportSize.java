@@ -1,4 +1,4 @@
-package engine.calculation.tasks;
+package engine.calculation;
 
 public class ViewportSize {
     private final int width;

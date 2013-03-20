@@ -66,5 +66,12 @@ public class MathVectorOperation extends VectorOperation {
                 resultVector[i] = Math.cos(inputVector[i]);
             }
         }
+
+        @Override
+        public void signum() {
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.signum(inputVector[i]);
+            }
+        }
     }
 }

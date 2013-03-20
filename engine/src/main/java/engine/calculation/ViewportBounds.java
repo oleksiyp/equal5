@@ -1,4 +1,4 @@
-package engine.calculation.tasks;
+package engine.calculation;
 
 public class ViewportBounds {
     private static final double EPSILON = Double.MIN_NORMAL * (1 << 16);

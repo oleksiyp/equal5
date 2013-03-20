@@ -1,7 +1,8 @@
 package engine.calculation.tasks;
 
 import engine.calculation.CalculationEngine;
-import engine.locus.PixelDrawable;
+import engine.calculation.CalculationParameters;
+import engine.calculation.CalculationResults;
 import util.Cancelable;
 import util.CancellationRoutine;
 

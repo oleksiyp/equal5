@@ -1,8 +1,8 @@
 package gui.mainapp;
 
-import engine.calculation.tasks.CalculationParameters;
-import engine.calculation.tasks.ViewportBounds;
-import engine.calculation.tasks.ViewportSize;
+import engine.calculation.CalculationParameters;
+import engine.calculation.ViewportBounds;
+import engine.calculation.ViewportSize;
 import engine.expressions.Equation;
 import engine.expressions.ExpressionParser;
 import engine.expressions.ParsingException;
