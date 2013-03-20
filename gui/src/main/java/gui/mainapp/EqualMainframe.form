@@ -25,51 +25,16 @@
                 <properties/>
                 <border type="etched" title="Controls"/>
                 <children>
-                  <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <horizontalTextPosition value="10"/>
-                      <icon value="gui/mainapp/left-arrow.png"/>
-                      <text value="F9"/>
-                      <toolTipText value="Move viewport left"/>
-                    </properties>
-                  </component>
-                  <component id="89653" class="javax.swing.JButton" binding="upButton">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <horizontalTextPosition value="10"/>
-                      <icon value="gui/mainapp/up-arrow.png"/>
-                      <text value="F10"/>
-                      <toolTipText value="Move viewort up"/>
-                    </properties>
-                  </component>
                   <component id="39695" class="javax.swing.JButton" binding="rightButton">
-                    <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <icon value="gui/mainapp/right-arrow.png"/>
-                      <text value="F12"/>
-                      <toolTipText value="Move viewport right"/>
-                    </properties>
-                  </component>
-                  <component id="c5f5f" class="javax.swing.JButton" binding="downButton">
                     <constraints>
                       <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <horizontalTextPosition value="11"/>
-                      <icon value="gui/mainapp/down-arrow.png"/>
-                      <text value="F11"/>
-                      <toolTipText value="Move viewport down"/>
+                      <icon value="gui/mainapp/right-arrow.png"/>
+                      <text value="F12"/>
+                      <toolTipText value="Move viewport right"/>
                     </properties>
                   </component>
                   <vspacer id="17971">
@@ -120,11 +85,46 @@
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
-                      <hideActionText value="false"/>
                       <horizontalTextPosition value="10"/>
                       <icon value="gui/mainapp/reload.png"/>
                       <text value="F5"/>
                       <toolTipText value="Refresh image and set &quot;t&quot; to zero"/>
+                    </properties>
+                  </component>
+                  <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <horizontalTextPosition value="10"/>
+                      <icon value="gui/mainapp/left-arrow.png"/>
+                      <text value="F9"/>
+                      <toolTipText value="Move viewport left"/>
+                    </properties>
+                  </component>
+                  <component id="89653" class="javax.swing.JButton" binding="upButton">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <horizontalTextPosition value="11"/>
+                      <icon value="gui/mainapp/up-arrow.png"/>
+                      <text value="F10"/>
+                      <toolTipText value="Move viewort up"/>
+                    </properties>
+                  </component>
+                  <component id="c5f5f" class="javax.swing.JButton" binding="downButton">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <horizontalTextPosition value="10"/>
+                      <icon value="gui/mainapp/down-arrow.png"/>
+                      <text value="F11"/>
+                      <toolTipText value="Move viewport down"/>
                     </properties>
                   </component>
                 </children>
