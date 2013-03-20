@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadFactory;
  * Date: 3/14/13
  * Time: 9:06 PM
  */
-public class EqualViewport extends JPanel  {
+public class EqualViewport extends JComponent  {
     private Equation equation;
     private ViewportBounds viewportBounds;
 
@@ -26,9 +26,7 @@ public class EqualViewport extends JPanel  {
     private ExpressionParser parser;
 
     public EqualViewport() {
-        super(true);
-
-        updater = new ViewportUpdater(new SomeThreadFactory(),
+            updater = new ViewportUpdater(new SomeThreadFactory(),
                 new RepaintViewportChangedListener());
 
         updater.start();

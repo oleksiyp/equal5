@@ -1,8 +1,5 @@
 package gui.mainapp;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import engine.calculation.VectorCalculationEngine;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 
@@ -12,8 +9,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -47,6 +42,12 @@ public class EqualMainframe {
 
         viewModel.addViewListener(updateViewListener);
 
+        new ViewModelAction(viewModel, ViewModel.ActionType.REFRESH)
+                .fillTextAndIcon(refreshButton)
+                .putActionMap(root)
+                .bindKey(root, KeyStroke.getKeyStroke("F5"))
+                .bind(refreshButton);
+
         bindAction(viewModel, refreshButton, KeyStroke.getKeyStroke("F5"), ViewModel.ActionType.REFRESH);
         bindAction(viewModel, playButton, KeyStroke.getKeyStroke("F6"), ViewModel.ActionType.PLAY);
         bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F7"), ViewModel.ActionType.ZOOM_IN);
@@ -64,30 +65,19 @@ public class EqualMainframe {
         timeSlider.addChangeListener(new TimeSliderUpdater(viewModel));
     }
 
+    private void bindAction(ViewModel viewModel,
+                            JButton button,
+                            KeyStroke key,
+                            ViewModel.ActionType actionType) {
+        new ViewModelAction(viewModel, actionType)
+                .fillTextAndIcon(button)
+                .putActionMap(root)
+                .bindKey(root, key)
+                .bind(button);
+    }
 
     public void createUIComponents() {
         equalViewport = new EqualViewport();
-    }
-
-    private void bindAction(final ViewModel viewModel,
-                            JButton button,
-                            KeyStroke key,
-                            final ViewModel.ActionType actionType) {
-        Action action = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewModel.action(actionType);
-            }
-        };
-
-        action.putValue(Action.NAME, button.getText());
-        action.putValue(Action.SMALL_ICON, button.getIcon());
-
-        root.getActionMap().put(actionType.toString(), action);
-        button.setAction(action);
-
-        root.getInputMap()
-                .put(key, actionType.toString());
     }
 
     public static void main(String[] args) {
