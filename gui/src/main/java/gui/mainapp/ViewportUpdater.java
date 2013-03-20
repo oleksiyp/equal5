@@ -122,19 +122,27 @@ public class ViewportUpdater implements CalculationNotifier {
     }
 
     public void paint(Graphics g, int width, int height) {
-        RectRange range = new RectRange(0, 0, width, height);
-        DrawToImage drawToImage = new DrawToImage(range);
         CalculationResults lastResults = results;
 
-        if (lastResults != null) {
-            PixelDrawable[] drawables = lastResults.getDrawables();
-            for (PixelDrawable drawable : drawables) {
-                RectRange size = drawable.getSize();
-                drawable.draw(size, drawToImage);
-            }
+        if (lastResults == null) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, width, height);
+            return;
         }
-
-        g.drawImage(drawToImage.getImage(), 0, 0, null);
+        CalculationParameters params = lastResults.getParameters();
+        RectRange range = new RectRange(0, 0,
+                params.getWidth(),
+                params.getHeight());
+        DrawToImage drawToImage = new DrawToImage(range);
+        PixelDrawable[] drawables = lastResults.getDrawables();
+        for (PixelDrawable drawable : drawables) {
+            RectRange size = drawable.getSize();
+            drawable.draw(size, drawToImage);
+        }
+        g.drawImage(drawToImage.getImage(),
+                0, 0, width, height,
+                0, 0, range.getWidth(), range.getHeight(),
+                null);
     }
 
 
