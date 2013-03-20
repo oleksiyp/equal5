@@ -3,6 +3,7 @@ package engine.calculation;
 import engine.calculation.functions.Subtraction;
 import engine.calculation.tasks.CalculationParameters;
 import engine.calculation.tasks.CalculationResults;
+import engine.calculation.tasks.ViewportBounds;
 import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.LinearVectorFiller;
@@ -59,18 +60,23 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
         int [][][]locusData = new int[nEq][height][];
 
-        double xDelta = 1.0 / (double) (width + 1);
-        XYTVectorArguments arguments = new XYTVectorArguments(0, xDelta);
+        ViewportBounds bounds = parameters.getBounds();
+
+        double xDelta = bounds.getXDelta(width);
+        double yDelta = bounds.getYDelta(height);
+
+        double xStart = bounds.getLeft() - xDelta / 2.0;
+        double yStart = bounds.getTop() - yDelta / 2.0;
+
+        XYTVectorArguments arguments = new XYTVectorArguments(xStart, xDelta);
 
         double [][]prevMatrix = null;
-        for (int y = 0; y <= height; y++) {
+        for (int j = 0; j <= height; j++) {
             routine.checkCanceled();
 
-            double[][] matrix = null;
+            arguments.setY(yStart + j * yDelta);
 
-            arguments.setY(((double)y) / (height + 1));
-
-            matrix = evaluator.calculate(arguments);
+            double[][] matrix = evaluator.calculate(arguments);
 
             if (prevMatrix == null) {
                 prevMatrix = copy(matrix);
@@ -83,7 +89,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
                 double []row = matrix[i];
                 double []prevRow = prevMatrix[i];
 
-                locusData[i][y - 1] = eqType
+                locusData[i][j - 1] = eqType
                         .accept(new LocusRowDiffVisitor(row, prevRow));
             }
 

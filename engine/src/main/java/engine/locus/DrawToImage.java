@@ -1,8 +1,5 @@
 package engine.locus;
 
-import engine.locus.PixelDrawer;
-import engine.locus.RectRange;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

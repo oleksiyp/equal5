@@ -107,4 +107,12 @@ public class ViewportBounds {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    public double getXDelta(int divisor) {
+        return getWidth() / divisor;
+    }
+
+    public double getYDelta(int divisor) {
+        return getHeight() / divisor;
+    }
 }
