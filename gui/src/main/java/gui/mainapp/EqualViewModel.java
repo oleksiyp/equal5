@@ -170,7 +170,7 @@ public class EqualViewModel {
 
 
     public String getVariablesStatus() {
-        return String.format("t(%.2g)", getTAsVariable());
+        return String.format("t=%.2g", getTAsVariable());
     }
 
     public double getTAsVariable() {

@@ -7,20 +7,29 @@ import javax.swing.*;
  * At: 3/20/13  2:08 PM
  */
 public class EqualApp {
+    private final EqualViewModel model = new EqualViewModel();
+    private final EqualAppPanel panel = new EqualAppPanel(model);
+    private final JFrame frame = new JFrame("equal5");
+
     public static void main(String[] args) {
         switchToNativeLAF();
 
         EqualApp app = new EqualApp();
-        app.showGUI();
+        app.show();
     }
 
-    private void showGUI() {
-        JFrame frame = new JFrame("equal5");
-        EqualViewModel model = new EqualViewModel();
+    public EqualApp() {
+        initGUI();
+    }
 
-        new EqualAppPanel(model).beAContentPaneOf(frame);
-
+    private void initGUI() {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(1000, 600);
+
+        panel.beAContentPaneOf(frame);
+    }
+
+    private void show() {
         frame.setVisible(true);
     }
 
