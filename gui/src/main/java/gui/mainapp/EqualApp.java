@@ -8,20 +8,19 @@ import javax.swing.*;
  */
 public class EqualApp {
     public static void main(String[] args) {
-        EqualApp app = new EqualApp();
-
-        app.showGUI();
         switchToNativeLAF();
+
+        EqualApp app = new EqualApp();
+        app.showGUI();
     }
 
     private void showGUI() {
         JFrame frame = new JFrame("equal5");
-        ViewModel model = new ViewModel();
+        EqualViewModel model = new EqualViewModel();
 
         new EqualAppPanel(model).beAContentPaneOf(frame);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
         frame.setVisible(true);
     }
 

@@ -2,13 +2,15 @@ package gui.mainapp;
 
 import engine.calculation.tasks.ViewportBounds;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
-public class ViewModel {
+public class EqualViewModel {
     public static final int MOVE_PART = 10;
     private static final double ZOOM_COEFFICIENT = 1.4;
 
-    private ViewModel.ActionHandler handler;
+    private EqualViewModel.ActionHandler handler;
 
     public enum ActionType {
         REFRESH,
@@ -88,12 +90,12 @@ public class ViewModel {
     private String equations;
     private int t;
     private int steps;
-    private int width, height;
+    private Dimension viewportSize;
     private ViewportBounds viewportBounds;
 
     private List<ViewListener> viewListeners = new ArrayList<ViewListener>();
 
-    public ViewModel() {
+    public EqualViewModel() {
         handler = new ActionHandler();
         resetToDefaults();
     }
@@ -103,8 +105,7 @@ public class ViewModel {
         t = 0;
         steps = 100;
         viewportBounds = new ViewportBounds(-10, 10, -10, 10);
-        width = 600;
-        height = 600;
+        viewportSize = new Dimension(600, 600);
 
         notifyAllViewListeners();
     }
@@ -117,6 +118,10 @@ public class ViewModel {
         this.equations = equations;
         notifyViewListeners(InterfacePart.EQUATION,
                 InterfacePart.VIEWPORT);
+    }
+
+    public Dimension getViewportSize() {
+        return viewportSize;
     }
 
     public int getT() {
@@ -150,29 +155,16 @@ public class ViewModel {
         return viewportBounds;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-        notifyViewListeners(InterfacePart.CONSTANTS);
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+    public void setViewportSize(Dimension viewportSize) {
+        this.viewportSize = viewportSize;
         notifyViewListeners(InterfacePart.CONSTANTS);
     }
 
     public String getConstantsStatus() {
-        return String.format("LEFT(%.4g) TOP(%.4g) BOTTOM(%.4g) RIGHT(%.4g) WIDTH(%d) HEIGHT(%d) STEPS(%d)",
+        return String.format("\u21D0 %.4g \u21D1 %.4g \u21D3 %.4g \u21D2 %.4g \u21F2 %dx%d \u21DD %d",
                 viewportBounds.getLeft(), viewportBounds.getTop(),
                 viewportBounds.getBottom(), viewportBounds.getRight(),
-                width, height,
+                viewportSize.width, viewportSize.height,
                 steps);
     }
 

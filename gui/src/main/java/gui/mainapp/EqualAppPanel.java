@@ -9,6 +9,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -35,40 +37,42 @@ public class EqualAppPanel {
     private EqualViewport equalViewport;
     private final UpdateViewListener updateViewListener;
 
-    public EqualAppPanel(final ViewModel viewModel) {
+    public EqualAppPanel(final EqualViewModel viewModel) {
         updateViewListener = new UpdateViewListener(viewModel);
         $$$setupUI$$$();
         equalViewport.setParser(new ParboiledExpressionParser());
 
         viewModel.addViewListener(updateViewListener);
 
-        new ViewModelAction(viewModel, ViewModel.ActionType.REFRESH)
+        new ViewModelAction(viewModel, EqualViewModel.ActionType.REFRESH)
                 .fillTextAndIcon(refreshButton)
                 .putActionMap(root)
                 .bindKey(root, KeyStroke.getKeyStroke("F5"))
                 .bind(refreshButton);
 
-        bindAction(viewModel, refreshButton, KeyStroke.getKeyStroke("F5"), ViewModel.ActionType.REFRESH);
-        bindAction(viewModel, playButton, KeyStroke.getKeyStroke("F6"), ViewModel.ActionType.PLAY);
-        bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F7"), ViewModel.ActionType.ZOOM_IN);
-        bindAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F8"), ViewModel.ActionType.ZOOM_OUT);
-        bindAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), ViewModel.ActionType.LEFT);
-        bindAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), ViewModel.ActionType.UP);
-        bindAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), ViewModel.ActionType.DOWN);
-        bindAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), ViewModel.ActionType.RIGHT);
+        bindAction(viewModel, refreshButton, KeyStroke.getKeyStroke("F5"), EqualViewModel.ActionType.REFRESH);
+        bindAction(viewModel, playButton, KeyStroke.getKeyStroke("F6"), EqualViewModel.ActionType.PLAY);
+        bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F7"), EqualViewModel.ActionType.ZOOM_IN);
+        bindAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F8"), EqualViewModel.ActionType.ZOOM_OUT);
+        bindAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), EqualViewModel.ActionType.LEFT);
+        bindAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), EqualViewModel.ActionType.UP);
+        bindAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), EqualViewModel.ActionType.DOWN);
+        bindAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), EqualViewModel.ActionType.RIGHT);
 
         equationPad
                 .getDocument()
                 .addDocumentListener(
                         new EquationUpdater(viewModel));
 
+        equalViewport.addComponentListener(new ViewportResizeUpdater(viewModel));
+
         timeSlider.addChangeListener(new TimeSliderUpdater(viewModel));
     }
 
-    private void bindAction(ViewModel viewModel,
+    private void bindAction(EqualViewModel viewModel,
                             JButton button,
                             KeyStroke key,
-                            ViewModel.ActionType actionType) {
+                            EqualViewModel.ActionType actionType) {
         new ViewModelAction(viewModel, actionType)
                 .fillTextAndIcon(button)
                 .putActionMap(root)
@@ -255,9 +259,9 @@ public class EqualAppPanel {
     }
 
     private class EquationUpdater implements DocumentListener, Runnable {
-        private final ViewModel viewModel;
+        private final EqualViewModel viewModel;
 
-        public EquationUpdater(ViewModel viewModel) {
+        public EquationUpdater(EqualViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
@@ -277,7 +281,7 @@ public class EqualAppPanel {
         }
 
         private void updateModel() {
-            updateViewListener.withDisabled(ViewModel.InterfacePart.EQUATION, this);
+            updateViewListener.withDisabled(EqualViewModel.InterfacePart.EQUATION, this);
         }
 
         @Override
@@ -286,10 +290,10 @@ public class EqualAppPanel {
         }
     }
 
-    private class InterfaceUpdater implements ViewModel.InterfacePartVisitor {
-        private final ViewModel viewModel;
+    private class InterfaceUpdater implements EqualViewModel.InterfacePartVisitor {
+        private final EqualViewModel viewModel;
 
-        public InterfaceUpdater(ViewModel viewModel) {
+        public InterfaceUpdater(EqualViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
@@ -311,6 +315,7 @@ public class EqualAppPanel {
         @Override
         public void viewport() {
             try {
+                equalViewport.setSize(viewModel.getViewportSize());
                 equalViewport.setViewportBounds(viewModel.getViewportBounds());
                 equalViewport.setExpression(viewModel.getEquations());
             } catch (ParsingException e) {
@@ -326,24 +331,24 @@ public class EqualAppPanel {
         }
     }
 
-    private class UpdateViewListener implements ViewModel.ViewListener {
-        private final ViewModel viewModel;
-        private Set<ViewModel.InterfacePart> disabled;
+    private class UpdateViewListener implements EqualViewModel.ViewListener {
+        private final EqualViewModel viewModel;
+        private Set<EqualViewModel.InterfacePart> disabled;
 
-        public UpdateViewListener(ViewModel viewModel) {
+        public UpdateViewListener(EqualViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
-        public void withDisabled(ViewModel.InterfacePart disabledPart, Runnable runnable) {
-            Set<ViewModel.InterfacePart> prevDisabled = disabled;
+        public void withDisabled(EqualViewModel.InterfacePart disabledPart, Runnable runnable) {
+            Set<EqualViewModel.InterfacePart> prevDisabled = disabled;
             disabled = EnumSet.of(disabledPart);
             runnable.run();
             disabled = prevDisabled;
         }
 
         @Override
-        public void onUpdate(Set<ViewModel.InterfacePart> parts) {
-            for (ViewModel.InterfacePart part : parts) {
+        public void onUpdate(Set<EqualViewModel.InterfacePart> parts) {
+            for (EqualViewModel.InterfacePart part : parts) {
                 if (disabled != null && disabled.contains(part)) {
                     continue;
                 }
@@ -353,20 +358,38 @@ public class EqualAppPanel {
     }
 
     private class TimeSliderUpdater implements ChangeListener, Runnable {
-        private final ViewModel viewModel;
+        private final EqualViewModel viewModel;
 
-        public TimeSliderUpdater(ViewModel viewModel) {
+        public TimeSliderUpdater(EqualViewModel viewModel) {
             this.viewModel = viewModel;
         }
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            updateViewListener.withDisabled(ViewModel.InterfacePart.TIME_CONTROL, this);
+            updateViewListener.withDisabled(EqualViewModel.InterfacePart.TIME_CONTROL, this);
         }
 
         @Override
         public void run() {
             viewModel.setT(timeSlider.getValue());
+        }
+    }
+
+    private class ViewportResizeUpdater extends ComponentAdapter implements Runnable {
+        private EqualViewModel viewModel;
+
+        private ViewportResizeUpdater(EqualViewModel viewModel) {
+            this.viewModel = viewModel;
+        }
+
+        @Override
+        public void componentResized(ComponentEvent e) {
+            updateViewListener.withDisabled(EqualViewModel.InterfacePart.VIEWPORT, this);
+        }
+
+        @Override
+        public void run() {
+            viewModel.setViewportSize(equalViewport.getSize());
         }
     }
 }

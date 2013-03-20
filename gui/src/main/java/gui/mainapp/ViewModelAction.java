@@ -8,10 +8,10 @@ import java.awt.event.ActionEvent;
  * At: 3/20/13  1:30 PM
  */
 public class ViewModelAction extends AbstractAction {
-    private ViewModel viewModel;
-    private ViewModel.ActionType actionType;
+    private EqualViewModel viewModel;
+    private EqualViewModel.ActionType actionType;
 
-    public ViewModelAction(ViewModel viewModel, ViewModel.ActionType actionType) {
+    public ViewModelAction(EqualViewModel viewModel, EqualViewModel.ActionType actionType) {
         this.viewModel = viewModel;
         this.actionType = actionType;
     }
