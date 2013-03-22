@@ -1,9 +1,19 @@
 package engine;
 
-import junit.framework.TestSuite;
+import com.google.common.base.Stopwatch;
+import engine.calculation.*;
+import engine.calculation.vector.VectorEvaluator;
+import engine.calculation.vector.VectorMachineEvaluator;
+import engine.calculation.vector.implementations.VectorMachineBuilder;
+import engine.expressions.Equation;
+import engine.expressions.ExpressionParser;
+import engine.expressions.ParboiledExpressionParser;
+import engine.expressions.ParsingException;
+import engine.locus.DrawToImage;
+import engine.locus.PixelDrawable;
+import engine.locus.RectRange;
+import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -14,18 +24,88 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.fail;
 
 /**
+ * Look use_cases.txt in src/test/resources
+ *
  * User: Oleksiy Pylypenko
  * Date: 3/5/13
  * Time: 9:01 AM
  */
 @RunWith(Theories.class)
 public class UseCasesTest {
+    private final static int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
+    private static final File DIR = new File("test_images");
+    static {
+        DIR.mkdirs();
+    }
+    private ExecutorService executor = Executors.newFixedThreadPool(MAX_CONCURRENCY);
+    private ViewportSize size = new ViewportSize(1000, 1000);
+
+    static class Header {
+        static {
+            System.out.println("Look '" + DIR + "' directory for image results");
+            System.out.printf("%20s ", "EQUATION");
+            for (int i = 1; i <= MAX_CONCURRENCY; i++) {
+                System.out.printf("%8s", i + " CORE");
+            }
+            System.out.println();
+        }
+    }
 
     @Theory
-    public void testUseCases(EqualUseCase useCase) throws Exception {
-        System.out.println(useCase.equations);
+    public void testUseCase(EqualUseCase useCase) throws Exception {
+        new Header();
+        StringTokenizer tokenizer = new StringTokenizer(useCase.bounds);
+        ViewportBounds bounds = new ViewportBounds(
+                Double.parseDouble(tokenizer.nextToken()),
+                Double.parseDouble(tokenizer.nextToken()),
+                Double.parseDouble(tokenizer.nextToken()),
+                Double.parseDouble(tokenizer.nextToken()));
+
+        String eqs = useCase.equations.trim().replaceAll("\n\r?", ",");
+
+        System.out.printf("%20s ", eqs);
+
+        ExpressionParser parser = new ParboiledExpressionParser();
+        Equation equation;
+        try {
+            equation = parser.parseEquation(eqs);
+        } catch (ParsingException ex) {
+            fail("syntax error on '" + useCase.equations + "', exception: " + ex);
+            return;
+        }
+
+        CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
+                equation);
+
+        for (int c = 1; c <= MAX_CONCURRENCY; c++) {
+            VectorMachineBuilder builder = new VectorMachineBuilder();
+            builder.setConcurrency(c, executor);
+            VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
+            CalculationEngine engine = new VectorCalculationEngine(evaluator);
+            Stopwatch sw = new Stopwatch().start();
+            CalculationResults results = engine.calculate(params);
+            long time = sw.stop().elapsedTime(TimeUnit.MILLISECONDS);
+            RectRange range = RectRange.fromViewportSize(size);
+            DrawToImage drawToImage = new DrawToImage(range);
+            for (PixelDrawable drawable : results.getDrawables()) {
+                drawable.draw(range, drawToImage);
+            }
+            String filename = String.format("test%03dc%02d.png",
+                    useCase.number,
+                    c);
+            drawToImage.writePng(new File(DIR, filename));
+
+            System.out.printf("%8d", time);
+        }
+        System.out.println(" ms");
     }
 
     private static EqualUseCase []useCases;
@@ -49,11 +129,13 @@ public class UseCasesTest {
         private final int number;
         private final String description;
         private final String equations;
+        private final String bounds;
 
-        private EqualUseCase(int number, String description, String equations) {
+        private EqualUseCase(int number, String description, String equations, String bounds) {
             this.number = number;
             this.description = description;
             this.equations = equations;
+            this.bounds = bounds;
         }
 
         public static EqualUseCase[] read(URL resource) {
@@ -98,6 +180,8 @@ public class UseCasesTest {
                         System.err.println("Skipping use case: " + line);
                     }
 
+                    String bounds = scanner.nextLine().trim();
+
                     StringBuilder builder = new StringBuilder();
                     while (scanner.hasNext()) {
                         line = scanner.nextLine();
@@ -111,7 +195,7 @@ public class UseCasesTest {
                     String equations = builder.toString();
 
                     if (!skip) {
-                        useCaseList.add(new EqualUseCase(i, description, equations));
+                        useCaseList.add(new EqualUseCase(i, description, equations, bounds));
                     }
                 }
 
