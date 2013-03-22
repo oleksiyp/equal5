@@ -22,7 +22,10 @@ public class EqualViewModel {
         DOWN,
 
         ZOOM_IN,
-        ZOOM_OUT;
+        ZOOM_OUT,
+
+        RAISE_T,
+        LOWER_T;
 
         public void accept(ActionVisitor visitor) {
             switch (this) {
@@ -34,6 +37,8 @@ public class EqualViewModel {
                 case DOWN: visitor.down(); break;
                 case ZOOM_IN: visitor.zoomIn(); break;
                 case ZOOM_OUT: visitor.zoomOut(); break;
+                case LOWER_T: visitor.lowerT(); break;
+                case RAISE_T: visitor.raiseT(); break;
             }
         }
     }
@@ -54,6 +59,10 @@ public class EqualViewModel {
         void zoomIn();
 
         void zoomOut();
+
+        void lowerT();
+
+        void raiseT();
     }
 
 
@@ -217,43 +226,62 @@ public class EqualViewModel {
 
         @Override
         public void left() {
-            double dx = viewportBounds.getWidth() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(-dx, 0);
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds bounds = getViewportBounds();
+            double dx = bounds.getWidth() / MOVE_PART;
+            setViewportBounds(bounds.offset(-dx, 0));
         }
 
         @Override
         public void right() {
-            double dx = viewportBounds.getWidth() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(dx, 0);
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds bounds = getViewportBounds();
+            double dx = bounds.getWidth() / MOVE_PART;
+            setViewportBounds(bounds.offset(dx, 0));
         }
 
         @Override
         public void up() {
-            double dy = viewportBounds.getHeight() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(0, dy);
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds boundsVal = getViewportBounds();
+            double dy = boundsVal.getHeight() / MOVE_PART;
+            setViewportBounds(boundsVal.offset(0, dy));
         }
 
         @Override
         public void down() {
-            double dy = viewportBounds.getHeight() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(0, -dy);
-
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds bounds = getViewportBounds();
+            double dy = bounds.getHeight() / MOVE_PART;
+            setViewportBounds(bounds.offset(0, -dy));
         }
 
         @Override
         public void zoomIn() {
-            viewportBounds = viewportBounds.zoom(1.0 / ZOOM_COEFFICIENT);
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds bounds = getViewportBounds();
+            setViewportBounds(bounds.zoom(1.0 / ZOOM_COEFFICIENT));
         }
 
         @Override
         public void zoomOut() {
-            viewportBounds = viewportBounds.zoom(ZOOM_COEFFICIENT);
-            notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
+            ViewportBounds bounds = getViewportBounds();
+            setViewportBounds(bounds.zoom(ZOOM_COEFFICIENT));
+        }
+
+        @Override
+        public void lowerT() {
+            int tVal = getT();
+            tVal--;
+            if (tVal < 0) {
+                tVal = 0;
+            }
+            setT(tVal);
+        }
+
+        @Override
+        public void raiseT() {
+            int tVal = getT();
+            tVal++;
+            if (tVal > steps) {
+                tVal = steps;
+            }
+            setT(tVal);
         }
     }
 }

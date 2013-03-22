@@ -44,13 +44,20 @@ public class EqualAppPanel {
 
         viewModel.addViewListener(updateViewListener);
 
-        bindAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), EqualViewModel.ActionType.PLAY);
-        bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), EqualViewModel.ActionType.ZOOM_IN);
-        bindAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F7"), EqualViewModel.ActionType.ZOOM_OUT);
-        bindAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), EqualViewModel.ActionType.LEFT);
-        bindAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), EqualViewModel.ActionType.UP);
-        bindAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), EqualViewModel.ActionType.DOWN);
-        bindAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), EqualViewModel.ActionType.RIGHT);
+        bindButtonAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), EqualViewModel.ActionType.PLAY);
+        bindButtonAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), EqualViewModel.ActionType.ZOOM_IN);
+        bindButtonAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F7"), EqualViewModel.ActionType.ZOOM_OUT);
+        bindButtonAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), EqualViewModel.ActionType.LEFT);
+        bindButtonAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), EqualViewModel.ActionType.UP);
+        bindButtonAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), EqualViewModel.ActionType.DOWN);
+        bindButtonAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), EqualViewModel.ActionType.RIGHT);
+
+        bindAction(viewModel,
+                KeyStroke.getKeyStroke("F3"),
+                EqualViewModel.ActionType.LOWER_T);
+        bindAction(viewModel,
+                KeyStroke.getKeyStroke("F4"),
+                EqualViewModel.ActionType.RAISE_T);
 
         equationPad
                 .getDocument()
@@ -62,15 +69,23 @@ public class EqualAppPanel {
         timeSlider.addChangeListener(new TimeSliderUpdater(viewModel));
     }
 
-    private void bindAction(EqualViewModel viewModel,
-                            JButton button,
-                            KeyStroke key,
-                            EqualViewModel.ActionType actionType) {
+    private void bindButtonAction(EqualViewModel viewModel,
+                                  JButton button,
+                                  KeyStroke key,
+                                  EqualViewModel.ActionType actionType) {
         new ViewModelAction(viewModel, actionType)
                 .fillTextAndIcon(button)
                 .putActionMap(root)
                 .bindKey(root, key)
                 .bind(button);
+    }
+
+    private void bindAction(EqualViewModel viewModel,
+                                  KeyStroke key,
+                                  EqualViewModel.ActionType actionType) {
+        new ViewModelAction(viewModel, actionType)
+                .putActionMap(root)
+                .bindKey(root, key);
     }
 
     public void createUIComponents() {
