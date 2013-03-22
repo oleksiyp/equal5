@@ -30,13 +30,11 @@ public class ViewportUpdater {
 
 
     private final EngineCalculationTask engineCalcTask;
-    private final PreemptiveCalculationTask preemptiveCalcTask;
     private final DelayedCalculationTask delayedCalcTask;
 
     private int concurrency = MAX_CONCURRENCY;
 
     private ExecutorService executor;
-    private Thread preemptiveCalcThread;
     private Thread delayedCalcThread;
 
     private volatile CalculationResults results = null;
@@ -57,8 +55,7 @@ public class ViewportUpdater {
         engine = new VectorCalculationEngine(evaluator);
 
         engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
-        preemptiveCalcTask = new PreemptiveCalculationTask(engineCalcTask);
-        delayedCalcTask = new DelayedCalculationTask(preemptiveCalcTask, DELAY);
+        delayedCalcTask = new DelayedCalculationTask(engineCalcTask, DELAY);
     }
 
     public void start() {
@@ -69,10 +66,6 @@ public class ViewportUpdater {
                     factory);
 
             vmBuilder.setConcurrency(concurrency, executor);
-
-            preemptiveCalcThread = factory.newThread(preemptiveCalcTask);
-            preemptiveCalcThread.setName("Preemptive engine calculation thread");
-            preemptiveCalcThread.start();
 
             delayedCalcThread = factory.newThread(delayedCalcTask);
             delayedCalcThread.setName("Delayed calculation thread");
@@ -87,13 +80,6 @@ public class ViewportUpdater {
         try {
             boolean interrupted = false;
 
-            preemptiveCalcThread.interrupt();
-            try {
-                preemptiveCalcThread.join();
-            } catch (InterruptedException e) {
-                interrupted = true;
-            }
-
             delayedCalcThread.interrupt();
             try {
                 delayedCalcThread.join();
@@ -103,7 +89,6 @@ public class ViewportUpdater {
 
             executor.shutdown();
 
-            preemptiveCalcThread = null;
             delayedCalcThread = null;
             executor = null;
 
