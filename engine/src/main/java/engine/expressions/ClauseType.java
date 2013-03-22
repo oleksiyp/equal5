@@ -15,5 +15,7 @@ public enum ClauseType {
     VARIABLE, // T
     DECIMAL_FLOAT, // T
     EXPONENT, // T
+    ARGUMENTS,
+    MATH_FUNCTION,
     DIGIT // T
 }

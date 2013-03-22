@@ -7,13 +7,11 @@ import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.SuppressSubnodes;
 import org.parboiled.buffers.InputBuffer;
+import org.parboiled.errors.ActionException;
 import org.parboiled.errors.InvalidInputError;
 import org.parboiled.errors.ParseError;
 import org.parboiled.parserunners.ReportingParseRunner;
-import org.parboiled.support.MatcherPath;
-import org.parboiled.support.ParsingResult;
-import org.parboiled.support.Position;
-import org.parboiled.support.Var;
+import org.parboiled.support.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,7 +33,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         ClauseType value();
     }
     @BuildParseTree
-    private static class Parser extends BaseParser<ParsableObject> {
+    private static class Parser extends BaseParser<Object> {
         public Parser() {
         }
 
@@ -53,7 +51,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
 
         public <T> T pop(Class<T> clazz) {
-            ParsableObject obj = pop();
+            Object obj = pop();
             if (obj == null) {
                 return null;
             }
@@ -94,7 +92,60 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         @Clause(ClauseType.FACTOR)
         public Rule Factor() {
-            return FirstOf(Constant(), Variable(), Parents());
+            return FirstOf(Constant(), MathFunc(), Variable(), Parents());
+        }
+
+
+        @Clause(ClauseType.MATH_FUNCTION)
+        public Rule MathFunc() {
+            StringVar type = new StringVar();
+            Var<List<Function>> arguments = new Var<List<Function>>();
+            return Sequence(
+                    OneOrMore(CharRange('a', 'z')),
+                    type.set(matchOrDefault("")),
+                    '(', Arguments(), ')',
+                    arguments.set(pop(List.class)),
+                    push(mathFuncConstruct(type, arguments)));
+
+        }
+
+        protected MathFunction mathFuncConstruct(StringVar typeVar, Var<List<Function>> argsVar) {
+            String type = typeVar.get();
+            List<Function> list = argsVar.get();
+            Function[] args = list.toArray(new Function[list.size()]);
+
+            MathFunction.Type funcType = getMathFuncType(type, args);
+            if (funcType == null) {
+                throw new ActionException("there is no function matching name '" + type +
+                        "' and " + argsVar.get().size() + " argument(s)");
+            }
+            return new MathFunction(funcType,args);
+        }
+
+        protected MathFunction.Type getMathFuncType(String name, Function[] args) {
+            for (MathFunction.Type type : MathFunction.Type.values()) {
+                if (type.getInExpressionName().equals(name)
+                        && type.getArgumentsCount() == args.length) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Clause(ClauseType.ARGUMENTS)
+        public Rule Arguments() {
+            Var<List<Function>> arguments = new Var<List<Function>>(new ArrayList<Function>());
+
+            return Sequence(
+                    Function(),
+                    arguments.get().add(pop(Function.class)),
+
+                    Optional(',',
+                            Arguments(),
+                            arguments.get().addAll(pop(List.class))),
+
+                    push(arguments.get())
+            );
         }
 
         @Clause(ClauseType.PARENTS)
@@ -162,7 +213,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
     }
 
-    public ParsableObject parse(ClauseType type,
+    public Object parse(ClauseType type,
                         String expression,
                         boolean finalize) throws ParsingException {
         if (type == null) {
