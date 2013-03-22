@@ -217,41 +217,41 @@ public class EqualViewModel {
         @Override
         public void left() {
             double dx = viewportBounds.getWidth() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(dx, 0);
+            viewportBounds = viewportBounds.offset(-dx, 0);
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
 
         @Override
         public void right() {
             double dx = viewportBounds.getWidth() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(-dx, 0);
+            viewportBounds = viewportBounds.offset(dx, 0);
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
 
         @Override
         public void up() {
             double dy = viewportBounds.getHeight() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(0, -dy);
+            viewportBounds = viewportBounds.offset(0, dy);
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
 
         @Override
         public void down() {
             double dy = viewportBounds.getHeight() / MOVE_PART;
-            viewportBounds = viewportBounds.offset(0, dy);
+            viewportBounds = viewportBounds.offset(0, -dy);
 
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
 
         @Override
         public void zoomIn() {
-            viewportBounds = viewportBounds.zoom(ZOOM_COEFFICIENT);
+            viewportBounds = viewportBounds.zoom(1.0 / ZOOM_COEFFICIENT);
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
 
         @Override
         public void zoomOut() {
-            viewportBounds = viewportBounds.zoom(1.0 / ZOOM_COEFFICIENT);
+            viewportBounds = viewportBounds.zoom(ZOOM_COEFFICIENT);
             notifyViewListeners(InterfacePart.CONSTANTS, InterfacePart.VIEWPORT);
         }
     }
