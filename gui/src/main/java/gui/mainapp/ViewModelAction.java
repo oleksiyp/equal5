@@ -33,7 +33,7 @@ public class ViewModelAction extends AbstractAction {
     }
 
     public ViewModelAction bindKey(JComponent component, KeyStroke key) {
-        component.getInputMap()
+        component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(key, actionType.toString());
         return this;
     }

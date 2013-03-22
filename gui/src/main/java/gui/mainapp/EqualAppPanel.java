@@ -45,8 +45,8 @@ public class EqualAppPanel {
         viewModel.addViewListener(updateViewListener);
 
         bindAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), EqualViewModel.ActionType.PLAY);
-        bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F7"), EqualViewModel.ActionType.ZOOM_IN);
-        bindAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F8"), EqualViewModel.ActionType.ZOOM_OUT);
+        bindAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), EqualViewModel.ActionType.ZOOM_IN);
+        bindAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F7"), EqualViewModel.ActionType.ZOOM_OUT);
         bindAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), EqualViewModel.ActionType.LEFT);
         bindAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), EqualViewModel.ActionType.UP);
         bindAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), EqualViewModel.ActionType.DOWN);

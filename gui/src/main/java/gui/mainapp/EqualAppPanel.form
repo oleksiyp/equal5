@@ -51,7 +51,7 @@
                     <properties>
                       <horizontalTextPosition value="10"/>
                       <icon value="gui/mainapp/zoom-in.png"/>
-                      <text value="F7"/>
+                      <text value="F8"/>
                       <toolTipText value="Zoom in viewport"/>
                     </properties>
                   </component>
@@ -63,7 +63,7 @@
                     <properties>
                       <horizontalTextPosition value="11"/>
                       <icon value="gui/mainapp/zoom-out.png"/>
-                      <text value="F8"/>
+                      <text value="F7"/>
                       <toolTipText value="Zoom out viewport"/>
                     </properties>
                   </component>
@@ -160,7 +160,7 @@
                 <properties>
                   <horizontalTextPosition value="11"/>
                   <icon value="gui/mainapp/play.png"/>
-                  <text value=" F6"/>
+                  <text value=" F5"/>
                   <toolTipText value="Run time series of graphics by changing &quot;t&quot; from 0 to 1 "/>
                 </properties>
               </component>
