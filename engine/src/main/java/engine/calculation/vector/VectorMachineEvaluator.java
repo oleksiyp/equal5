@@ -1,10 +1,10 @@
 package engine.calculation.vector;
 
+import engine.calculation.vector.builder.VectorMachineFactory;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
 
 /**
  * User: Oleksiy Pylypenko

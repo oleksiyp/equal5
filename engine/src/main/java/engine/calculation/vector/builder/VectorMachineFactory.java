@@ -1,5 +1,6 @@
-package engine.calculation.vector;
+package engine.calculation.vector.builder;
 
+import engine.calculation.vector.VectorMachine;
 import engine.expressions.Function;
 
 /**

@@ -1,6 +1,8 @@
-package engine.calculation.vector;
+package engine.calculation.vector.implementations;
 
 import com.google.common.base.Stopwatch;
+import engine.calculation.vector.TimeReporter;
+import engine.calculation.vector.VectorMachine;
 import engine.calculation.vector.opeartions.VectorOperation;
 
 import java.util.Arrays;

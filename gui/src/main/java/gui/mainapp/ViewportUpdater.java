@@ -5,7 +5,7 @@ import engine.calculation.CalculationParameters;
 import engine.calculation.CalculationResults;
 import engine.calculation.VectorCalculationEngine;
 import engine.calculation.tasks.*;
-import engine.calculation.vector.VectorMachineBuilder;
+import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;

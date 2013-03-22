@@ -1,4 +1,4 @@
-package engine.calculation.vector;
+package engine.calculation.vector.implementations;
 
 import engine.calculation.functions.*;
 import engine.calculation.vector.opeartions.*;
