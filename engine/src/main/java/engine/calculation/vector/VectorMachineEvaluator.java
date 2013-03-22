@@ -1,6 +1,5 @@
 package engine.calculation.vector;
 
-import engine.calculation.vector.builder.VectorMachineFactory;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 

@@ -1,4 +1,4 @@
-package engine.calculation.vector.builder;
+package engine.calculation.vector;
 
 import engine.calculation.vector.VectorMachine;
 import engine.expressions.Function;

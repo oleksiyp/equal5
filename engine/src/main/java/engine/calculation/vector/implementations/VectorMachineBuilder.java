@@ -1,6 +1,6 @@
 package engine.calculation.vector.implementations;
 
-import engine.calculation.vector.builder.VectorMachineFactory;
+import engine.calculation.vector.VectorMachineFactory;
 import engine.calculation.vector.VectorMachine;
 import engine.calculation.vector.opeartions.*;
 import engine.expressions.Function;
