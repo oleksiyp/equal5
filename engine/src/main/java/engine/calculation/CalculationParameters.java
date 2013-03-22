@@ -12,10 +12,13 @@ public class CalculationParameters {
     private final Equation []equations;
     private final ViewportBounds bounds;
     private final ViewportSize size;
+    private final double t;
 
     public CalculationParameters(ViewportBounds bounds,
                                  ViewportSize size,
-                                 Equation ...equations) {
+                                 double t,
+                                 Equation... equations) {
+        this.t = t;
         if (bounds == null) {
             throw new NullPointerException("bounds");
         }
@@ -24,6 +27,9 @@ public class CalculationParameters {
         }
         if (equations == null) {
             throw new NullPointerException("equations");
+        }
+        if (t < 0 || t > 1) {
+            throw new IllegalArgumentException("t");
         }
 
         this.equations = equations;
@@ -43,6 +49,10 @@ public class CalculationParameters {
         return size;
     }
 
+    public double getT() {
+        return t;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,6 +60,7 @@ public class CalculationParameters {
 
         CalculationParameters that = (CalculationParameters) o;
 
+        if (Double.compare(that.t, t) != 0) return false;
         if (!bounds.equals(that.bounds)) return false;
         if (!Arrays.equals(equations, that.equations)) return false;
         if (!size.equals(that.size)) return false;
@@ -59,9 +70,13 @@ public class CalculationParameters {
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(equations);
+        int result;
+        long temp;
+        result = Arrays.hashCode(equations);
         result = 31 * result + bounds.hashCode();
         result = 31 * result + size.hashCode();
+        temp = t != +0.0d ? Double.doubleToLongBits(t) : 0L;
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }

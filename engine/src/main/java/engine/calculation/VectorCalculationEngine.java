@@ -64,13 +64,15 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
         ViewportBounds bounds = parameters.getBounds();
 
+        double t = parameters.getT();
+
         double xDelta = bounds.getXDelta(width);
         double yDelta = bounds.getYDelta(height);
 
         double xStart = bounds.getLeft() - xDelta / 2.0;
         double yStart = bounds.getTop() - yDelta / 2.0;
 
-        XYTVectorArguments arguments = new XYTVectorArguments(xStart, xDelta);
+        XYTVectorArguments arguments = new XYTVectorArguments(xStart, xDelta, t);
 
         double [][]prevMatrix = null;
         for (int j = 0; j <= height; j++) {
@@ -119,9 +121,9 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
         private final ConstantVectorFiller tFiller;
         private final LinearVectorFiller xFiller;
 
-        public XYTVectorArguments(double xStart, double xDelta) {
+        public XYTVectorArguments(double xStart, double xDelta, double t) {
             yFiller = new ConstantVectorFiller(0);
-            tFiller = new ConstantVectorFiller(0);
+            tFiller = new ConstantVectorFiller(t);
             xFiller = new LinearVectorFiller(xStart, xDelta);
         }
 
@@ -132,10 +134,6 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
         public void setY(double y) {
             yFiller.setValue(y);
-        }
-
-        public void setT(double t) {
-            tFiller.setValue(t);
         }
 
         @Override

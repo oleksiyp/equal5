@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadFactory;
 public class EqualViewport extends JComponent  {
     private Equation equation;
     private ViewportBounds viewportBounds;
+    private double t;
 
     private ViewportUpdater updater;
 
@@ -40,6 +41,11 @@ public class EqualViewport extends JComponent  {
         submitRecalc();
     }
 
+    public void setT(double t) {
+        this.t = t;
+        submitRecalc();
+    }
+
     private void submitRecalc() {
         if (equation == null || viewportBounds == null) {
             return;
@@ -52,7 +58,7 @@ public class EqualViewport extends JComponent  {
         ViewportSize size = new ViewportSize(width, height);
         updater.setParameters(
                 new CalculationParameters(viewportBounds,
-                        size, equation)
+                        size, t, equation)
         );
     }
 

@@ -50,12 +50,14 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
                 new Subtraction(equation.getLeftPart(),
                 equation.getRightPart()));
 
-        final double []coordinates = new double[2];
+        final double []coordinates = new double[3];
         Arguments arguments = new XYArguments(coordinates);
 
         int [][]locusData = new int[height][];
 
         ViewportBounds bounds = parameters.getBounds();
+
+        coordinates[2] = parameters.getT();
 
         double xDelta = bounds.getXDelta(width);
         double yDelta = bounds.getYDelta(height);
@@ -109,6 +111,8 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
                 return coordinates[0];
             } else if ("y".equals(name)) {
                 return coordinates[1];
+            } else if ("t".equals(name)) {
+                return coordinates[2];
             }
             throw new UnknownArgumentUsedException(name);
         }

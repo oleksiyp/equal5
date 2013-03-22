@@ -132,7 +132,8 @@ public class EqualViewModel {
         this.t = t;
         notifyViewListeners(
                 InterfacePart.TIME_CONTROL,
-                InterfacePart.VARIABLES);
+                InterfacePart.VARIABLES,
+                InterfacePart.VIEWPORT);
     }
 
     public int getSteps() {

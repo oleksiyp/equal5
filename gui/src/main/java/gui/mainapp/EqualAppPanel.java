@@ -310,6 +310,7 @@ public class EqualAppPanel {
             try {
                 equalViewport.setSize(viewModel.getViewportSize());
                 equalViewport.setViewportBounds(viewModel.getViewportBounds());
+                equalViewport.setT(viewModel.getTAsVariable());
                 equalViewport.setExpression(viewModel.getEquations());
             } catch (ParsingException e) {
                 System.out.println(e);

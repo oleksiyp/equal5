@@ -33,7 +33,7 @@ public class BasicCalculationEngineTest {
         ViewportSize size = new ViewportSize(1000, 1000);
         CalculationParameters params = new CalculationParameters(
                 new ViewportBounds(0, 0, 1, 1),
-                size, eq);
+                size, 0, eq);
         CalculationResults results = eng.calculate(params);
 
         RectRange range = RectRange.fromViewportSize(size);

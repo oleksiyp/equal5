@@ -52,7 +52,7 @@ public class VectorCalculationEngineTest {
         ViewportSize size = new ViewportSize(1000, 1000);
         CalculationParameters params = new CalculationParameters(
                 new ViewportBounds(0, 0, 1, 1),
-                size, eqs);
+                size, 0, eqs);
         CalculationResults results = eng.calculate(params);
 
         RectRange range = RectRange.fromViewportSize(size);
