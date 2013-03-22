@@ -10,7 +10,8 @@ import java.util.concurrent.ExecutorService;
  * User: Oleksiy Pylypenko
  * At: 3/12/13  6:43 PM
  */
-public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
+public class VectorMachineEvaluator implements VectorEvaluator {
+    private VectorMachineFactory machineFactory;
     private VectorMachine machine;
     private VectorMachine.State state;
 
@@ -21,10 +22,8 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
         clear();
     }
 
-    private ExecutorService executor;
-    private int concurrency = 0;
-
-    public VectorMachineEvaluator() {
+    public VectorMachineEvaluator(VectorMachineFactory machineFactory) {
+        this.machineFactory = machineFactory;
     }
 
     @Override
@@ -58,12 +57,7 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
     @Override
     public void prepare() {
         if (machine == null) {
-            VectorMachineBuilder builder = new VectorMachineBuilder(functions);
-            if (executor != null && concurrency >= 2) {
-                builder.setConcurrency(concurrency);
-                builder.setExecutor(executor);
-            }
-            machine = builder.build();
+            machine = machineFactory.create(functions);
         }
 
         if (state == null) {
@@ -112,19 +106,9 @@ public class VectorMachineEvaluator implements ConcurrentVectorEvaluator {
 
     @Override
     public void clear() {
-        machine = null;
         state = null;
         size = 1;
         timeReporter = null;
         functions = new Function[0];
-        concurrency = 0;
-    }
-
-    @Override
-    public void setConcurrentEvaluation(int concurrency, ExecutorService service) {
-        this.concurrency = concurrency;
-        this.executor = service;
-        this.machine = null;
-        this.state = null;
     }
 }

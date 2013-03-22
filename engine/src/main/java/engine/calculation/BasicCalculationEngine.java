@@ -98,7 +98,8 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
         public String[] getArgumentNames() {
             return new String[]{
                     "x",
-                    "y"
+                    "y",
+                    "t"
             };
         }
 

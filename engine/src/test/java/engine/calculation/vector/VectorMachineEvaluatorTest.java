@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  * At: 3/12/13  7:47 PM
  */
 public class VectorMachineEvaluatorTest {
-    private ConcurrentVectorEvaluator ve;
+    private VectorEvaluator ve;
     private static final int N_SAMPLES = 100;
     private static final int SIZE = 1000 * 1000; // 4 mega-pixels
     private static final Random RND = new Random(232);
@@ -29,7 +29,8 @@ public class VectorMachineEvaluatorTest {
 
     @Before
     public void setUp() throws Exception {
-        ve = new VectorMachineEvaluator();
+        VectorMachineBuilder builder = new VectorMachineBuilder();
+        ve = new VectorMachineEvaluator(builder);
     }
 
     @Test

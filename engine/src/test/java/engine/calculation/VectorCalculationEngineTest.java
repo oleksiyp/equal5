@@ -1,5 +1,6 @@
 package engine.calculation;
 
+import engine.calculation.vector.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.expressions.Equation;
 import engine.expressions.Function;
@@ -13,6 +14,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 import static org.junit.Assert.fail;
 
@@ -29,7 +31,9 @@ public class VectorCalculationEngineTest {
     @Before
     public void setUp() throws Exception {
         DIR.mkdirs();
-        VectorMachineEvaluator evaluator = new VectorMachineEvaluator();
+        VectorMachineBuilder builder = new VectorMachineBuilder();
+        builder.setConcurrency(2, Executors.newFixedThreadPool(2));
+        VectorMachineEvaluator evaluator = new VectorMachineEvaluator(builder);
         eng = new VectorCalculationEngine(evaluator);
     }
 

@@ -5,6 +5,7 @@ import engine.calculation.CalculationParameters;
 import engine.calculation.CalculationResults;
 import engine.calculation.VectorCalculationEngine;
 import engine.calculation.tasks.*;
+import engine.calculation.vector.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
@@ -45,12 +46,14 @@ public class ViewportUpdater {
     private final ViewportChangedListener listener;
     private final VectorMachineEvaluator evaluator;
     private final CalculationEngine engine;
+    private final VectorMachineBuilder vmBuilder;
 
     public ViewportUpdater(ThreadFactory factory, ViewportChangedListener listener) {
         this.factory = factory;
         this.listener = listener;
 
-        evaluator = new VectorMachineEvaluator();
+        vmBuilder = new VectorMachineBuilder();
+        evaluator = new VectorMachineEvaluator(vmBuilder);
         engine = new VectorCalculationEngine(evaluator);
 
         engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
@@ -65,7 +68,7 @@ public class ViewportUpdater {
                     MAX_CONCURRENCY,
                     factory);
 
-            evaluator.setConcurrentEvaluation(concurrency, executor);
+            vmBuilder.setConcurrency(concurrency, executor);
 
             preemptiveCalcThread = factory.newThread(preemptiveCalcTask);
             preemptiveCalcThread.setName("Preemptive engine calculation thread");
