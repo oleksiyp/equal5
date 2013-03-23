@@ -28,8 +28,8 @@ public class EqualViewport extends JComponent  {
     private ExpressionParser parser;
 
     public EqualViewport() {
-            updater = new ViewportUpdater(new SomeThreadFactory(),
-                new RepaintViewportChangedListener());
+        updater = new ViewportUpdater(new SomeThreadFactory(),
+            new RepaintViewportChangedListener());
 
         updater.start();
 
@@ -82,9 +82,12 @@ public class EqualViewport extends JComponent  {
     }
 
     private static class SomeThreadFactory implements ThreadFactory {
+        int n = 1;
         @Override
         public Thread newThread(Runnable r) {
-            return new Thread(r);
+            Thread thread = new Thread(r);
+            thread.setName("EqualViewportThread #" + n++);
+            return thread;
         }
     }
 

@@ -1,4 +1,4 @@
-package gui.mainapp;
+package gui.mainapp.viewmodel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,9 +9,9 @@ import java.awt.event.ActionEvent;
  */
 public class ViewModelAction extends AbstractAction {
     private EqualViewModel viewModel;
-    private EqualViewModel.ActionType actionType;
+    private ActionType actionType;
 
-    public ViewModelAction(EqualViewModel viewModel, EqualViewModel.ActionType actionType) {
+    public ViewModelAction(EqualViewModel viewModel, ActionType actionType) {
         this.viewModel = viewModel;
         this.actionType = actionType;
     }

@@ -1,5 +1,7 @@
 package gui.mainapp;
 
+import gui.mainapp.viewmodel.EqualViewModel;
+
 import javax.swing.*;
 
 /**
