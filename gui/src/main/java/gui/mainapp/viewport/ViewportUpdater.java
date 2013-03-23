@@ -1,4 +1,4 @@
-package gui.mainapp;
+package gui.mainapp.viewport;
 
 import engine.calculation.CalculationEngine;
 import engine.calculation.CalculationParameters;
@@ -9,10 +9,13 @@ import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.locus.DrawToImage;
 import engine.locus.Drawable;
-import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
 
-import java.awt.*;
+import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -31,8 +34,8 @@ public class ViewportUpdater {
 
     private final DrawToImage drawToImage = new DrawToImage(new RectRange(0, 0, 500, 500));
 
-    private final EngineCalculationTask engineCalcTask;
     private final DelayedCalculationTask delayedCalcTask;
+    private final FrameDoneRunnable frameDoneRunnable = new FrameDoneRunnable();
 
     private int concurrency = MAX_CONCURRENCY;
 
@@ -43,20 +46,18 @@ public class ViewportUpdater {
 
     private Lock startStopLock = new ReentrantLock();
 
-    private final ViewportChangedListener listener;
-    private final VectorMachineEvaluator evaluator;
-    private final CalculationEngine engine;
     private final VectorMachineBuilder vmBuilder;
 
-    public ViewportUpdater(ThreadFactory factory, ViewportChangedListener listener) {
+    private final List<FrameListener> frameListeners = new ArrayList<FrameListener>();
+
+    public ViewportUpdater(ThreadFactory factory) {
         this.factory = factory;
-        this.listener = listener;
 
         vmBuilder = new VectorMachineBuilder();
-        evaluator = new VectorMachineEvaluator(vmBuilder);
-        engine = new VectorCalculationEngine(evaluator);
+        VectorMachineEvaluator evaluator = new VectorMachineEvaluator(vmBuilder);
+        CalculationEngine engine = new VectorCalculationEngine(evaluator);
 
-        engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
+        EngineCalculationTask engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
         delayedCalcTask = new DelayedCalculationTask(engineCalcTask, DELAY);
     }
 
@@ -103,15 +104,23 @@ public class ViewportUpdater {
     }
 
     public void setParameters(CalculationParameters parameters) {
+        setParameters(parameters, false, true);
+    }
+
+    public void setParameters(CalculationParameters parameters,
+                              boolean recalc,
+                              boolean delayed) {
         if (parameters == null) {
             throw new IllegalArgumentException("parameters");
         }
-        CalculationResults lastResults = results;
-        if (lastResults != null && lastResults.getParameters().equals(parameters)) {
-            // skip the same
-            return;
+        if (!recalc) {
+            CalculationResults lastResults = results;
+            if (lastResults != null && lastResults.getParameters().equals(parameters)) {
+                // skip the same
+                return;
+            }
         }
-        delayedCalcTask.calculate(parameters);
+        delayedCalcTask.calculate(delayed ? DELAY : 0, parameters);
     }
 
     public void paint(Graphics g, int width, int height) {
@@ -142,7 +151,19 @@ public class ViewportUpdater {
 
     protected void doneCalculation(CalculationResults results) {
         this.results = results;
-        listener.viewportChanged();
+        SwingUtilities.invokeLater(frameDoneRunnable);
+    }
+
+    public void addFrameListener(FrameListener listener) {
+        synchronized (frameListeners) {
+            frameListeners.add(listener);
+        }
+    }
+
+    public void removeFrameListener(FrameListener listener) {
+        synchronized (frameListeners) {
+            frameListeners.remove(listener);
+        }
     }
 
     private class DoneCalculationHandler implements CalculationNotifier {
@@ -154,6 +175,20 @@ public class ViewportUpdater {
         @Override
         public void runtimeProblem(RuntimeException ex) {
             System.err.println(ex);
+        }
+    }
+
+    private class FrameDoneRunnable implements Runnable {
+        @Override
+        public void run() {
+            List<FrameListener> listeners;
+            synchronized (frameListeners) {
+                listeners = new ArrayList<FrameListener>(frameListeners);
+            }
+
+            for (FrameListener listener : listeners) {
+                listener.frameDone();
+            }
         }
     }
 }

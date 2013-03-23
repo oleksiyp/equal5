@@ -89,7 +89,7 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
         }
     }
 
-    private class MathFunctionPrintingVisitor implements MathFunction.TypeVisitor {
+    private class MathFunctionPrintingVisitor implements MathFunctionTypeVisitor {
         private final Function[] arguments;
 
         public MathFunctionPrintingVisitor(Function[] arguments) {

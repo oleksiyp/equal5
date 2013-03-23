@@ -22,16 +22,17 @@ public enum ActionType {
 
     public void accept(ActionVisitor visitor) {
         switch (this) {
-            case REFRESH: visitor.refresh(); break;
-            case PLAY: visitor.play(); break;
-            case LEFT: visitor.left(); break;
-            case RIGHT: visitor.right(); break;
-            case UP: visitor.up(); break;
-            case DOWN: visitor.down(); break;
-            case ZOOM_IN: visitor.zoomIn(); break;
-            case ZOOM_OUT: visitor.zoomOut(); break;
-            case LOWER_T: visitor.lowerT(); break;
-            case RAISE_T: visitor.raiseT(); break;
+            case REFRESH: visitor.refresh(); return;
+            case PLAY: visitor.play(); return;
+            case LEFT: visitor.left(); return;
+            case RIGHT: visitor.right(); return;
+            case UP: visitor.up(); return;
+            case DOWN: visitor.down(); return;
+            case ZOOM_IN: visitor.zoomIn(); return;
+            case ZOOM_OUT: visitor.zoomOut(); return;
+            case LOWER_T: visitor.lowerT(); return;
+            case RAISE_T: visitor.raiseT(); return;
         }
+        throw new UnsupportedOperationException("accept(" + this + ")");
     }
 }

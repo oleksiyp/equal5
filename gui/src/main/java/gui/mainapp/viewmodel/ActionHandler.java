@@ -21,6 +21,7 @@ class ActionHandler implements ActionVisitor {
 
     @Override
     public void play() {
+        viewModel.playStateHolder.togglePlaying();
     }
 
     @Override

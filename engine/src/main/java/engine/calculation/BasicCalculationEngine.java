@@ -2,12 +2,12 @@ package engine.calculation;
 
 import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.functions.MathFunction;
+import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
 import engine.locus.Drawable;
-import engine.locus.PixelDrawable;
 import util.Cancelable;
 import util.CancellationRoutine;
 
@@ -47,7 +47,7 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
 
         double []row = new double[width + 1];
         double []prevRow = new double[width + 1];
-        Function diff = new MathFunction(MathFunction.Type.SIGNUM,
+        Function diff = new MathFunction(MathFunctionType.SIGNUM,
                 new Subtraction(equation.getLeftPart(),
                 equation.getRightPart()));
 

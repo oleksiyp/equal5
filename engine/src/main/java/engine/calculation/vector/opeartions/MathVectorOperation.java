@@ -1,17 +1,18 @@
 package engine.calculation.vector.opeartions;
 
-import engine.calculation.functions.MathFunction;
+import engine.calculation.functions.MathFunctionType;
+import engine.calculation.functions.MathFunctionTypeVisitor;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 3/13/13  4:37 PM
  */
 public class MathVectorOperation extends VectorOperation {
-    private MathFunction.Type type;
+    private MathFunctionType type;
     private int[] slots;
     private int resultSlot;
 
-    public MathVectorOperation(MathFunction.Type type, int[] slots, int resultSlot) {
+    public MathVectorOperation(MathFunctionType type, int[] slots, int resultSlot) {
         this.type = type;
         this.slots = slots;
         this.resultSlot = resultSlot;
@@ -37,7 +38,7 @@ public class MathVectorOperation extends VectorOperation {
         calculatedSlots[resultSlot] = true;
     }
 
-    private class MathVectorCalc implements MathFunction.TypeVisitor {
+    private class MathVectorCalc implements MathFunctionTypeVisitor {
         private final int size;
         private final double[][] data;
         private final double[] resultVector;

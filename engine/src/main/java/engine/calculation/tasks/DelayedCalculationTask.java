@@ -36,4 +36,8 @@ public class DelayedCalculationTask implements CalculationTask, Runnable {
     public void calculate(CalculationParameters parameters) {
         queue.put(parameters);
     }
+
+    public void calculate(long delay, CalculationParameters parameters) {
+        queue.put(delay, parameters);
+    }
 }

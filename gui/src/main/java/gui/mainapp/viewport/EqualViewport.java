@@ -1,4 +1,4 @@
-package gui.mainapp;
+package gui.mainapp.viewport;
 
 import engine.calculation.CalculationParameters;
 import engine.calculation.ViewportBounds;
@@ -26,11 +26,13 @@ public class EqualViewport extends JComponent  {
     private ViewportUpdater updater;
 
     private ExpressionParser parser;
+    private volatile boolean recalculateEachSubmit;
+    private volatile boolean delayedRecalculation;
 
     public EqualViewport() {
-        updater = new ViewportUpdater(new SomeThreadFactory(),
-            new RepaintViewportChangedListener());
+        updater = new ViewportUpdater(new SomeThreadFactory());
 
+        updater.addFrameListener(new RepaintFrameListener());
         updater.start();
 
         addComponentListener(new RecalcOnResizeListener());
@@ -38,15 +40,15 @@ public class EqualViewport extends JComponent  {
 
     public void setViewportBounds(ViewportBounds viewportBounds) {
         this.viewportBounds = viewportBounds;
-        submitRecalc();
+        submitCalculation();
     }
 
     public void setT(double t) {
         this.t = t;
-        submitRecalc();
+        submitCalculation();
     }
 
-    private void submitRecalc() {
+    public void submitCalculation() {
         if (equations == null || viewportBounds == null) {
             return;
         }
@@ -58,8 +60,25 @@ public class EqualViewport extends JComponent  {
         ViewportSize size = new ViewportSize(width, height);
         updater.setParameters(
                 new CalculationParameters(viewportBounds,
-                        size, t, equations)
-        );
+                        size, t, equations),
+                recalculateEachSubmit,
+                delayedRecalculation);
+    }
+
+    public boolean isRecalculateEachSubmit() {
+        return recalculateEachSubmit;
+    }
+
+    public void setRecalculateEachSubmit(boolean recalculateEachSubmit) {
+        this.recalculateEachSubmit = recalculateEachSubmit;
+    }
+
+    public boolean isDelayedRecalculation() {
+        return delayedRecalculation;
+    }
+
+    public void setDelayedRecalculation(boolean delayedRecalculation) {
+        this.delayedRecalculation = delayedRecalculation;
     }
 
     public void setExpression(String expression) throws ParsingException {
@@ -67,7 +86,7 @@ public class EqualViewport extends JComponent  {
             return;
         }
         equations = parser.parseEquations(expression);
-        submitRecalc();
+        submitCalculation();
     }
 
     public void setParser(ExpressionParser parser) {
@@ -81,6 +100,14 @@ public class EqualViewport extends JComponent  {
         updater.paint(g, width, height);
     }
 
+    public void addFrameListener(FrameListener listener) {
+        updater.addFrameListener(listener);
+    }
+
+    public void removeFrameListener(FrameListener listener) {
+        updater.removeFrameListener(listener);
+    }
+
     private static class SomeThreadFactory implements ThreadFactory {
         int n = 1;
         @Override
@@ -91,14 +118,9 @@ public class EqualViewport extends JComponent  {
         }
     }
 
-    private class RepaintViewportChangedListener implements ViewportChangedListener, Runnable {
+    private class RepaintFrameListener implements FrameListener {
         @Override
-        public void viewportChanged() {
-            SwingUtilities.invokeLater(this);
-        }
-
-        @Override
-        public void run() {
+        public void frameDone() {
             repaint();
         }
     }
@@ -106,7 +128,7 @@ public class EqualViewport extends JComponent  {
     private class RecalcOnResizeListener extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
-            submitRecalc();
+            submitCalculation();
         }
     }
 }

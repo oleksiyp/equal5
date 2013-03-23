@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * User: Oleksiy Pylypenko
@@ -384,13 +383,13 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testMathFunction() throws Exception {
-        assertEquals(new MathFunction(MathFunction.Type.SIN, new Variable("x")),
+        assertEquals(new MathFunction(MathFunctionType.SIN, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "sin(x)"));
-        assertEquals(new MathFunction(MathFunction.Type.COS, new Variable("x")),
+        assertEquals(new MathFunction(MathFunctionType.COS, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "cos(x)"));
-        assertEquals(new MathFunction(MathFunction.Type.SIGNUM, new Variable("x")),
+        assertEquals(new MathFunction(MathFunctionType.SIGNUM, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "sign(x)"));
-        assertEquals(new MathFunction(MathFunction.Type.SIGNUM,
+        assertEquals(new MathFunction(MathFunctionType.SIGNUM,
                 new Addition(new Variable("x"), new Variable("y"))),
                 parse(ClauseType.MATH_FUNCTION, "sign(x+y)"));
     }

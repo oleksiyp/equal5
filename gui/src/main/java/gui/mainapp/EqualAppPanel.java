@@ -3,6 +3,8 @@ package gui.mainapp;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 import gui.mainapp.viewmodel.*;
+import gui.mainapp.viewport.EqualViewport;
+import gui.mainapp.viewport.FrameListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -35,15 +37,23 @@ public class EqualAppPanel {
     private JButton zoomOutButton;
     private JLabel constantsLabel;
     private JLabel variablesLabel;
+
     private EqualViewport equalViewport;
-    private final UpdateViewListener updateViewListener;
+
+    private final EqualViewModel viewModel;
+    private final Player player;
+    private final EqualAppPanelViewListener viewListener;
 
     public EqualAppPanel(final EqualViewModel viewModel) {
-        updateViewListener = new UpdateViewListener(viewModel);
+        this.viewModel = viewModel;
+
         $$$setupUI$$$();
+
         equalViewport.setParser(new ParboiledExpressionParser());
 
-        viewModel.addViewListener(updateViewListener);
+        player = new Player();
+        viewListener = new EqualAppPanelViewListener();
+        viewModel.addViewListener(viewListener);
 
         bindButtonAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), ActionType.PLAY);
         bindButtonAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), ActionType.ZOOM_IN);
@@ -65,9 +75,11 @@ public class EqualAppPanel {
                 .addDocumentListener(
                         new EquationUpdater(viewModel));
 
-        equalViewport.addComponentListener(new ViewportResizeUpdater(viewModel));
+        equalViewport.addComponentListener(new ViewportResizeUpdater());
+        equalViewport.setRecalculateEachSubmit(false);
+        equalViewport.setDelayedRecalculation(true);
 
-        timeSlider.addChangeListener(new TimeSliderUpdater(viewModel));
+        timeSlider.addChangeListener(new TimeSliderUpdater());
     }
 
     private void bindButtonAction(EqualViewModel viewModel,
@@ -280,7 +292,7 @@ public class EqualAppPanel {
         }
 
         private void updateModel() {
-            updateViewListener.withDisabled(InterfacePart.EQUATION, this);
+            viewListener.withDisabled(InterfacePart.EQUATION, this);
         }
 
         @Override
@@ -331,13 +343,8 @@ public class EqualAppPanel {
         }
     }
 
-    private class UpdateViewListener implements ViewListener {
-        private final EqualViewModel viewModel;
+    private class EqualAppPanelViewListener implements ViewListener {
         private Set<InterfacePart> disabled;
-
-        public UpdateViewListener(EqualViewModel viewModel) {
-            this.viewModel = viewModel;
-        }
 
         public void withDisabled(InterfacePart disabledPart, Runnable runnable) {
             Set<InterfacePart> prevDisabled = disabled;
@@ -355,18 +362,45 @@ public class EqualAppPanel {
                 part.accept(new InterfaceUpdater(viewModel));
             }
         }
+
+        @Override
+        public void onPlayStateChange(PlayState state) {
+            state.accept(player);
+        }
     }
+    private class Player implements PlayStateVisitor, FrameListener {
 
-    private class TimeSliderUpdater implements ChangeListener, Runnable {
-        private final EqualViewModel viewModel;
-
-        public TimeSliderUpdater(EqualViewModel viewModel) {
-            this.viewModel = viewModel;
+        @Override
+        public void play() {
+            equalViewport.addFrameListener(this);
+            equalViewport.setRecalculateEachSubmit(true);
+            equalViewport.setDelayedRecalculation(false);
+            viewModel.setT(0);
         }
 
         @Override
+        public void stop() {
+            equalViewport.setRecalculateEachSubmit(false);
+            equalViewport.setDelayedRecalculation(true);
+            equalViewport.removeFrameListener(this);
+        }
+
+        @Override
+        public void frameDone() {
+            int t = viewModel.getT();
+            if (t >= viewModel.getSteps()) {
+                viewModel.getPlayStateControl().stop();
+            } else {
+                viewModel.setT(t + 1);
+            }
+        }
+    }
+
+    private class TimeSliderUpdater implements ChangeListener, Runnable {
+
+        @Override
         public void stateChanged(ChangeEvent e) {
-            updateViewListener.withDisabled(InterfacePart.TIME_CONTROL, this);
+            viewListener.withDisabled(InterfacePart.TIME_CONTROL, this);
         }
 
         @Override
@@ -376,15 +410,9 @@ public class EqualAppPanel {
     }
 
     private class ViewportResizeUpdater extends ComponentAdapter implements Runnable {
-        private EqualViewModel viewModel;
-
-        private ViewportResizeUpdater(EqualViewModel viewModel) {
-            this.viewModel = viewModel;
-        }
-
         @Override
         public void componentResized(ComponentEvent e) {
-            updateViewListener.withDisabled(InterfacePart.VIEWPORT, this);
+            viewListener.withDisabled(InterfacePart.VIEWPORT, this);
         }
 
         @Override

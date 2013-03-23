@@ -178,7 +178,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="304fb" class="gui.mainapp.EqualViewport" binding="equalViewport" custom-create="true">
+                  <component id="304fb" class="gui.mainapp.viewport.EqualViewport" binding="equalViewport" custom-create="true">
                     <constraints border-constraint="Center"/>
                     <properties/>
                   </component>

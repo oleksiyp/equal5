@@ -82,7 +82,7 @@ class EvaluatingVisitor implements FunctionVisitor {
                 .accept(new MathFunctionCalcVisitor(args));
     }
 
-    private class MathFunctionCalcVisitor implements MathFunction.TypeVisitor {
+    private class MathFunctionCalcVisitor implements MathFunctionTypeVisitor {
         private final Function[] args;
 
         public MathFunctionCalcVisitor(Function[] args) {

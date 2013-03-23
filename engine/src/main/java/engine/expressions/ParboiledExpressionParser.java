@@ -145,7 +145,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
             List<Function> list = argsVar.get();
             Function[] args = list.toArray(new Function[list.size()]);
 
-            MathFunction.Type funcType = getMathFuncType(type, args);
+            MathFunctionType funcType = getMathFuncType(type, args);
             if (funcType == null) {
                 throw new ActionException("there is no function matching name '" + type +
                         "' and " + argsVar.get().size() + " argument(s)");
@@ -153,8 +153,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
             return new MathFunction(funcType,args);
         }
 
-        protected MathFunction.Type getMathFuncType(String name, Function[] args) {
-            for (MathFunction.Type type : MathFunction.Type.values()) {
+        protected MathFunctionType getMathFuncType(String name, Function[] args) {
+            for (MathFunctionType type : MathFunctionType.values()) {
                 if (type.getInExpressionName().equals(name)
                         && type.getArgumentsCount() == args.length) {
                     return type;

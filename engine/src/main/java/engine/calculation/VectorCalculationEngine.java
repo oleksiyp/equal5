@@ -1,6 +1,7 @@
 package engine.calculation;
 
 import engine.calculation.functions.MathFunction;
+import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
 import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
@@ -48,7 +49,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
         {
             Equation equation = equations[i];
             multiFunction[i] = new MathFunction(
-                    MathFunction.Type.SIGNUM,
+                    MathFunctionType.SIGNUM,
                     new Subtraction(
                             equation.getLeftPart(),
                             equation.getRightPart()));

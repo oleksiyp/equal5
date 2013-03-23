@@ -9,4 +9,6 @@ import java.util.Set;
 */
 public interface ViewListener {
     void onUpdate(Set<InterfacePart> parts);
+
+    void onPlayStateChange(PlayState state);
 }

@@ -1,6 +1,7 @@
 package util;
 
 import com.google.common.collect.Iterators;
+import engine.calculation.CalculationParameters;
 
 import java.util.AbstractQueue;
 import java.util.Collection;
@@ -41,10 +42,17 @@ public class CountDownQueue<E>
 
     @Override
     public void put(E e) {
+        put(countDownTime, e);
+    }
+
+    public void put(long delay, E e) {
         if (e == null) {
             throw new IllegalArgumentException("e");
         }
-        long time = System.currentTimeMillis() + countDownTime;
+        if (delay < 0) {
+            throw new IllegalArgumentException("delay");
+        }
+        long time = System.currentTimeMillis() + delay;
         lock.lock();
         try {
             awakeTime = Math.max(time, awakeTime);
@@ -193,4 +201,5 @@ public class CountDownQueue<E>
             lock.unlock();
         }
     }
+
 }

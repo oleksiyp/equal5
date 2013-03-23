@@ -10,7 +10,11 @@ public class EqualViewModel {
     public static final int MOVE_PART = 10;
     public static final double ZOOM_COEFFICIENT = 1.4;
 
-    private ActionHandler handler;
+    final List<ViewListener> viewListeners = new ArrayList<ViewListener>();
+
+    final ActionHandler actionHandler;
+    final PlayStateHolder playStateHolder;
+    final BroadcastViewListener broadcastViewListener = new BroadcastViewListener(this);
 
     private String equations;
     private int t;
@@ -18,17 +22,16 @@ public class EqualViewModel {
     private Dimension viewportSize;
     private ViewportBounds viewportBounds;
 
-    private List<ViewListener> viewListeners = new ArrayList<ViewListener>();
-
     public EqualViewModel() {
-        handler = new ActionHandler(this);
+        actionHandler = new ActionHandler(this);
+        playStateHolder = new PlayStateHolder(this);
         resetToDefaults();
     }
 
     public void resetToDefaults() {
         equations = "y=";
         t = 0;
-        steps = 100;
+        steps = 30;
         viewportBounds = new ViewportBounds(-10, 10, -10, 10);
         viewportSize = new Dimension(600, 600);
 
@@ -126,6 +129,10 @@ public class EqualViewModel {
     }
 
     public void action(ActionType type) {
-        type.accept(handler);
+        type.accept(actionHandler);
+    }
+
+    public PlayStateControl getPlayStateControl() {
+        return playStateHolder;
     }
 }

@@ -9,39 +9,10 @@ import java.util.Arrays;
  * At: 3/13/13  4:24 PM
  */
 public class MathFunction extends AbstractFunction {
-    public enum Type {
-        SIN("sin", 1),
-        COS("cos", 1),
-        SIGNUM("sign", 1);
-        private final String inExpressionName;
-        private final int argumentsCount;
-
-        private Type(String inExpressionName, int argumentsCount) {
-            this.inExpressionName = inExpressionName;
-            this.argumentsCount = argumentsCount;
-        }
-
-        public void accept(TypeVisitor visitor) {
-            switch (this) {
-                case SIN: visitor.sin(); return;
-                case COS: visitor.cos(); return;
-                case SIGNUM: visitor.signum(); return;
-            }
-        }
-
-        public String getInExpressionName() {
-            return inExpressionName;
-        }
-
-        public int getArgumentsCount() {
-            return argumentsCount;
-        }
-    }
-    private final Type type;
+    private final MathFunctionType type;
     private final Function[] arguments;
 
-
-    public MathFunction(Type type, Function... arguments) {
+    public MathFunction(MathFunctionType type, Function... arguments) {
         this.type = type;
         this.arguments = arguments;
         if (type.getArgumentsCount() != arguments.length) {
@@ -53,7 +24,7 @@ public class MathFunction extends AbstractFunction {
         return arguments;
     }
 
-    public Type getType() {
+    public MathFunctionType getType() {
         return type;
     }
 
@@ -80,14 +51,6 @@ public class MathFunction extends AbstractFunction {
         int result = type.hashCode();
         result = 31 * result + Arrays.hashCode(arguments);
         return result;
-    }
-
-    public interface TypeVisitor {
-        void sin();
-
-        void cos();
-
-        void signum();
     }
 
 }
