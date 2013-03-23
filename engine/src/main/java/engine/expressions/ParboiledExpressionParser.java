@@ -2,6 +2,7 @@ package engine.expressions;
 
 import engine.calculation.functions.*;
 import org.parboiled.BaseParser;
+import org.parboiled.Context;
 import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
@@ -125,30 +126,62 @@ public class ParboiledExpressionParser implements ExpressionParser {
             return FirstOf(Constant(), MathFunc(), Variable(), Parents());
         }
 
+        class MathFuncStrPos {
+            private int start, end;
+
+            public boolean setStart(int idx) {
+                this.start = idx;
+                return true;
+            }
+
+            public boolean setEnd(int idx) {
+                this.end = idx;
+                return true;
+            }
+
+            public int getStart() {
+                return start;
+            }
+
+            public int getEnd() {
+                return end;
+            }
+        }
 
         @Clause(ClauseType.MATH_FUNCTION)
         public Rule MathFunc() {
             StringVar type = new StringVar();
             Var<List<Function>> arguments = new Var<List<Function>>();
+            Var<MathFuncStrPos> mathFuncStrPosVar = new Var<MathFuncStrPos>(new MathFuncStrPos());
             return Sequence(
+                    mathFuncStrPosVar.get().setStart(getContext().getCurrentIndex()),
                     OneOrMore(CharRange('a', 'z')),
+                    mathFuncStrPosVar.get().setEnd(getContext().getCurrentIndex()),
                     type.set(matchOrDefault("")),
                     WhiteSpace(),
                     "( ", Arguments(), ") ",
                     arguments.set(pop(List.class)),
-                    push(mathFuncConstruct(type, arguments)));
+                    push(mathFuncConstruct(type, arguments, mathFuncStrPosVar)));
 
         }
 
-        protected MathFunction mathFuncConstruct(StringVar typeVar, Var<List<Function>> argsVar) {
+        protected MathFunction mathFuncConstruct(StringVar typeVar, Var<List<Function>> argsVar, Var<MathFuncStrPos> strPos) {
             String type = typeVar.get();
             List<Function> list = argsVar.get();
             Function[] args = list.toArray(new Function[list.size()]);
 
             MathFunctionType funcType = getMathFuncType(type, args);
             if (funcType == null) {
-                throw new ActionException("there is no function matching name '" + type +
-                        "' and " + argsVar.get().size() + " argument(s)");
+                Context<Object> context = getContext();
+                context.getParseErrors().add(
+                        new SimpleActionError(context.getInputBuffer(),
+                                strPos.get().getStart(),
+                                strPos.get().getEnd(),
+                                "there is no function matching name '" +
+                                        type + "' and " + argsVar.get().size() +
+                                        " argument(s)",
+                                context.getPath()));
+                return new MathFunction(MathFunctionType.IDENTITY, new Constant(0));
             }
             return new MathFunction(funcType,args);
         }

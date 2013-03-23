@@ -72,5 +72,10 @@ public class MathVectorOperation extends VectorOperation {
                 resultVector[i] = Math.signum(inputVector[i]);
             }
         }
+
+        @Override
+        public void identity() {
+            System.arraycopy(inputVector, 0, resultVector, 0, size);
+        }
     }
 }

@@ -114,6 +114,12 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
             writeArguments();
         }
 
+        @Override
+        public void identity() {
+            writer.write("id");
+            writeArguments();
+        }
+
         private void writeArguments() {
             writer.write("(");
             for (int i = 0; i < arguments.length; i++) {

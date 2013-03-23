@@ -8,7 +8,8 @@ package engine.calculation.functions;
 public enum MathFunctionType {
     SIN("sin", 1),
     COS("cos", 1),
-    SIGNUM("sign", 1);
+    SIGNUM("sign", 1),
+    IDENTITY("id", 1);
 
     private final String inExpressionName;
     private final int argumentsCount;
@@ -23,6 +24,7 @@ public enum MathFunctionType {
             case SIN: visitor.sin(); return;
             case COS: visitor.cos(); return;
             case SIGNUM: visitor.signum(); return;
+            case IDENTITY: visitor.identity(); return;
         }
         throw new UnsupportedOperationException("accept");
     }

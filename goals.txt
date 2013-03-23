@@ -1,5 +1,7 @@
 +play
--syntax highlight&errors
++syntax highlight&errors
+-implement Math.*
+-find interesting graphics
 -coordinate system
 -drag/scroll viewport
 -save image

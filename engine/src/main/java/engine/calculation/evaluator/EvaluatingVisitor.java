@@ -106,5 +106,11 @@ class EvaluatingVisitor implements FunctionVisitor {
             double x = calculate(args[0]);
             stack.push(Math.signum(x));
         }
+
+        @Override
+        public void identity() {
+            double x = calculate(args[0]);
+            stack.push(x);
+        }
     }
 }

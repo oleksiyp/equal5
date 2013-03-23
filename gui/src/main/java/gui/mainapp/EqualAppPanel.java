@@ -116,8 +116,12 @@ public class EqualAppPanel {
         for (ParsingException.SyntaxError err : errors) {
             try {
                 Highlighter highlighter = equationPad.getHighlighter();
+                int idx = err.getStartIndex();
+                if (idx >= equationPad.getText().length()) {
+                    idx = equationPad.getText().length() - 1;
+                }
                 highlighter.addHighlight(
-                        err.getStartIndex(),
+                        idx,
                         err.getEndIndex(),
                         new RedLineHighlightPainter());
             } catch (BadLocationException e1) {

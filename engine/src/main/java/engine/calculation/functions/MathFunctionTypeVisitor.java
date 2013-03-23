@@ -11,4 +11,6 @@ public interface MathFunctionTypeVisitor {
     void cos();
 
     void signum();
+
+    void identity();
 }
