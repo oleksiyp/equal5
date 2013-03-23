@@ -1,6 +1,8 @@
 package engine.calculation;
 
+import engine.locus.Drawable;
 import engine.locus.PixelDrawable;
+import engine.locus.RowDrawable;
 
 /**
  * User: Oleksiy Pylypenko
@@ -8,9 +10,9 @@ import engine.locus.PixelDrawable;
  */
 public class CalculationResults {
     private final CalculationParameters parameters;
-    private final PixelDrawable[]drawables;
+    private final Drawable[] drawables;
 
-    public CalculationResults(CalculationParameters parameters, PixelDrawable[] drawables) {
+    public CalculationResults(CalculationParameters parameters, Drawable[] drawables) {
         this.parameters = parameters;
         this.drawables = drawables;
     }
@@ -19,7 +21,7 @@ public class CalculationResults {
         return parameters;
     }
 
-    public PixelDrawable[] getDrawables() {
+    public Drawable[] getDrawables() {
         return drawables;
     }
 }

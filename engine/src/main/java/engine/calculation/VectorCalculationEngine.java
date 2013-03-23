@@ -9,7 +9,7 @@ import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
-import engine.locus.PixelDrawable;
+import engine.locus.Drawable;
 import util.Cancelable;
 import util.CancellationRoutine;
 
@@ -41,7 +41,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
         int nEq = equations.length;
 
-        PixelDrawable []ret = new PixelDrawable[nEq];
+        Drawable []ret = new Drawable[nEq];
         Function[] multiFunction = new Function[nEq];
 
         for (int i = 0; i < nEq; i++)

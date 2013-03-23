@@ -7,6 +7,7 @@ import engine.expressions.Function;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 import engine.locus.DrawToImage;
+import engine.locus.Drawable;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
 import org.junit.Before;
@@ -57,8 +58,8 @@ public class VectorCalculationEngineTest {
 
         RectRange range = RectRange.fromViewportSize(size);
         DrawToImage drawer = new DrawToImage(range);
-        for (PixelDrawable drawable : results.getDrawables()) {
-            drawable.draw(range, drawer);
+        for (Drawable drawable : results.getDrawables()) {
+            drawer.draw(drawable.getSize(), drawable);
         }
         try {
             drawer.writePng(new File(DIR, file));

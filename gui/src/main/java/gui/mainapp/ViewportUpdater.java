@@ -8,6 +8,7 @@ import engine.calculation.tasks.*;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.locus.DrawToImage;
+import engine.locus.Drawable;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
 
@@ -28,6 +29,7 @@ public class ViewportUpdater {
 
     private final ThreadFactory factory;
 
+    private final DrawToImage drawToImage = new DrawToImage(new RectRange(0, 0, 500, 500));
 
     private final EngineCalculationTask engineCalcTask;
     private final DelayedCalculationTask delayedCalcTask;
@@ -124,11 +126,12 @@ public class ViewportUpdater {
         CalculationParameters params = lastResults.getParameters();
 
         RectRange range = RectRange.fromViewportSize(params.getSize());
-        DrawToImage drawToImage = new DrawToImage(range);
-        PixelDrawable[] drawables = lastResults.getDrawables();
-        for (PixelDrawable drawable : drawables) {
+        drawToImage.resize(range);
+
+        Drawable[] drawables = lastResults.getDrawables();
+        for (Drawable drawable : drawables) {
             RectRange size = drawable.getSize();
-            drawable.draw(size, drawToImage);
+            drawToImage.draw(size, drawable);
         }
 
         g.drawImage(drawToImage.getImage(),

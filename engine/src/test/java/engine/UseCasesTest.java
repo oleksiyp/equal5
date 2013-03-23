@@ -10,6 +10,7 @@ import engine.expressions.ExpressionParser;
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 import engine.locus.DrawToImage;
+import engine.locus.Drawable;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
 import org.junit.BeforeClass;
@@ -94,8 +95,8 @@ public class UseCasesTest {
             long time = sw.stop().elapsedTime(TimeUnit.MILLISECONDS);
             RectRange range = RectRange.fromViewportSize(size);
             DrawToImage drawToImage = new DrawToImage(range);
-            for (PixelDrawable drawable : results.getDrawables()) {
-                drawable.draw(range, drawToImage);
+            for (Drawable drawable : results.getDrawables()) {
+                drawToImage.draw(range, drawable);
             }
             String filename = String.format("test%03dc%02d.png",
                     useCase.number,

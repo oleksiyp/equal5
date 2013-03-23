@@ -11,20 +11,55 @@ import java.io.IOException;
 * Date: 3/13/13
 * Time: 9:34 AM
 */
-public class DrawToImage implements PixelDrawer {
-    private final BufferedImage image;
+public class DrawToImage implements RowDrawer, PixelDrawer {
+    private BufferedImage image;
 
     public BufferedImage getImage() {
         return image;
     }
 
     public DrawToImage(RectRange size) {
-        image = new BufferedImage(size.getWidth(),
-                size.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        resize(size);
+    }
 
+    public void resize(RectRange size) {
+        if (image != null
+                && image.getWidth() >= size.getWidth()
+                && image.getHeight() >= size.getHeight()) {
+            clear();
+            return;
+        }
+
+        int newW = size.getWidth() * 3 / 2;
+        int newH = size.getHeight() * 3 / 2;
+        image = new BufferedImage(
+                newW,
+                newH,
+                BufferedImage.TYPE_INT_ARGB);
+
+        clear();
+    }
+
+    private void clear() {
         Graphics2D g = image.createGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, size.getWidth(), size.getHeight());
+        try {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, image.getWidth(), image.getHeight());
+        } finally {
+            g.dispose();
+        }
+    }
+
+
+    public void writePng(File file) throws IOException {
+        ImageIO.write(image, "PNG", file);
+    }
+
+    @Override
+    public void drawRow(int y, int start, int end, int[] row) {
+        for (int i = start; i < end; i++) {
+            image.setRGB(row[i], y, 0xFF000000);
+        }
     }
 
     @Override
@@ -32,7 +67,13 @@ public class DrawToImage implements PixelDrawer {
         image.setRGB(x, y, 0xFF000000);
     }
 
-    public void writePng(File file) throws IOException {
-        ImageIO.write(image, "PNG", file);
+    public void draw(RectRange range, Drawable drawable) {
+        if (drawable instanceof RowDrawable) {
+            ((RowDrawable)drawable).draw(range, this);
+        } else if (drawable instanceof PixelDrawable) {
+            ((PixelDrawable)drawable).draw(range, this);
+        } else {
+            throw new UnsupportedOperationException("operation type not supported on '" + drawable + "'");
+        }
     }
 }

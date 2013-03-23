@@ -6,6 +6,7 @@ import engine.calculation.functions.Subtraction;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.locus.DiscreteLocus;
+import engine.locus.Drawable;
 import engine.locus.PixelDrawable;
 import util.Cancelable;
 import util.CancellationRoutine;
@@ -32,7 +33,7 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
     public CalculationResults calculate(CalculationParameters parameters) {
         Equation[] equations = parameters.getEquations();
 
-        PixelDrawable []result = new PixelDrawable[equations.length];
+        Drawable []result = new Drawable[equations.length];
         for (int i = 0; i < equations.length; i++)
         {
             result[i] = buildDiscreteLocus(parameters, equations[i]);
