@@ -112,23 +112,30 @@ public class EqualAppPanel {
     private void showParsingErrors(ParsingException e) {
         resetParsingErrors();
 
+        if (!equationPad.getText().isEmpty()) {
+            highlighErrors(e);
+        }
+        equationPad.repaint();
+    }
+
+    private void highlighErrors(ParsingException e) {
+        int txtLen = equationPad.getText().length();
         List<ParsingException.SyntaxError> errors = e.getErrors();
         for (ParsingException.SyntaxError err : errors) {
             try {
                 Highlighter highlighter = equationPad.getHighlighter();
                 int idx = err.getStartIndex();
-                if (idx >= equationPad.getText().length()) {
-                    idx = equationPad.getText().length() - 1;
+                if (idx >= txtLen) {
+                    idx = txtLen - 1;
                 }
                 highlighter.addHighlight(
                         idx,
                         err.getEndIndex(),
                         new RedLineHighlightPainter());
             } catch (BadLocationException e1) {
-                System.err.println(e1);
+                //skip
             }
         }
-        equationPad.repaint();
     }
 
     public void createUIComponents() {
