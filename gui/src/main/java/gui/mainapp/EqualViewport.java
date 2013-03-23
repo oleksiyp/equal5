@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadFactory;
  * Time: 9:06 PM
  */
 public class EqualViewport extends JComponent  {
-    private Equation equation;
+    private Equation[] equations;
     private ViewportBounds viewportBounds;
     private double t;
 
@@ -47,7 +47,7 @@ public class EqualViewport extends JComponent  {
     }
 
     private void submitRecalc() {
-        if (equation == null || viewportBounds == null) {
+        if (equations == null || viewportBounds == null) {
             return;
         }
         int width = getWidth();
@@ -58,7 +58,7 @@ public class EqualViewport extends JComponent  {
         ViewportSize size = new ViewportSize(width, height);
         updater.setParameters(
                 new CalculationParameters(viewportBounds,
-                        size, t, equation)
+                        size, t, equations)
         );
     }
 
@@ -66,7 +66,7 @@ public class EqualViewport extends JComponent  {
         if (parser == null) {
             return;
         }
-        equation = parser.parseEquation(expression);
+        equations = parser.parseEquations(expression);
         submitRecalc();
     }
 

@@ -6,8 +6,9 @@ package engine.expressions;
 * Time: 3:42 PM
 */
 public enum ClauseType {
-    EQUATION,
-    FUNCTION, // T
+    EQUATIONS,
+    EQUATION, // T
+    EXPRESSION, // T
     TERM, // T
     FACTOR, //
     PARENTS, // T
@@ -15,7 +16,7 @@ public enum ClauseType {
     VARIABLE, // T
     DECIMAL_FLOAT, // T
     EXPONENT, // T
-    ARGUMENTS,
-    MATH_FUNCTION,
+    ARGUMENTS, // T
+    MATH_FUNCTION, // T
     DIGIT // T
 }

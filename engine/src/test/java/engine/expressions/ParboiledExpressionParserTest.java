@@ -38,8 +38,8 @@ public class ParboiledExpressionParserTest {
     }
 
     @Test
-    public void testParseFunction1() throws Exception {
-        Function parsed = parser.parseFunction("2*(1+x+a+3)");
+    public void testParseExpression1() throws Exception {
+        Function parsed = parser.parseExpression("2*(1+x+a+3)");
 
         Function inParents = Addition.sequence(one, xVar, aVar, three);
         Multiplication expected = new Multiplication(two, inParents);
@@ -47,8 +47,8 @@ public class ParboiledExpressionParserTest {
     }
 
     @Test
-    public void testParseFunction2() throws Exception {
-        Function parsed = parser.parseFunction("2*(1+x+a+3-5)");
+    public void testParseExpression2() throws Exception {
+        Function parsed = parser.parseExpression("2*(1+x+a+3-5)");
 
         Function inParents = Addition.sequence(one, xVar, aVar, three);
         inParents = new Subtraction(inParents, five);
@@ -57,24 +57,39 @@ public class ParboiledExpressionParserTest {
         assertEquals(expected, parsed);
     }
 
-    @Test(expected = ParsingException.class)
-    public void testParseFunctionFail1() throws Exception {
-        parseFunction("(");
+    @Test
+    public void testParseExpression3() throws Exception {
+        Assert.assertEquals(
+                new Subtraction(
+                    new Subtraction(new Constant(1), new Constant(2)),
+                        new Constant(3))
+                , parse(ClauseType.EXPRESSION, "1-2-3"));
+        Assert.assertEquals(
+                new Addition(
+                    new Addition(new Constant(1), new Constant(2)),
+                        new Constant(3))
+                , parse(ClauseType.EXPRESSION, "1+2+3"));
+
     }
 
     @Test(expected = ParsingException.class)
-    public void testParseFunctionFail2() throws Exception {
-        parseFunction("1*");
+    public void testParseExpressionFail1() throws Exception {
+        parseExpression("(");
     }
 
     @Test(expected = ParsingException.class)
-    public void testParseFunctionFail3() throws Exception {
-        parseFunction("()");
+    public void testParseExpressionFail2() throws Exception {
+        parseExpression("1*");
     }
 
     @Test(expected = ParsingException.class)
-    public void testParseFunctionFail4() throws Exception {
-        parseFunction("*1");
+    public void testParseExpressionFail3() throws Exception {
+        parseExpression("()");
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testParseExpressionFail4() throws Exception {
+        parseExpression("*1");
     }
 
     // DIGIT
@@ -109,8 +124,8 @@ public class ParboiledExpressionParserTest {
         return new ParboiledExpressionParser().parse(type, string, true);
     }
 
-    private void parseFunction(String expr) throws ParsingException {
-        new ParboiledExpressionParser().parseFunction(expr);
+    private void parseExpression(String expr) throws ParsingException {
+        new ParboiledExpressionParser().parseExpression(expr);
     }
 
     // EXPONENT
@@ -299,6 +314,16 @@ public class ParboiledExpressionParserTest {
         Assert.assertEquals(60, evalExpr(ClauseType.TERM, "2*5*6"), EPS);
         Assert.assertEquals(36*14, evalExpr(ClauseType.TERM, "2*3*6*(6+8)"), EPS);
         Assert.assertEquals(6*42, evalExpr(ClauseType.TERM, "2*3*(42)"), EPS);
+        Assert.assertEquals(
+                new Division(
+                    new Division(new Constant(1), new Constant(2)),
+                        new Constant(3))
+                , parse(ClauseType.TERM, "1/2/3"));
+        Assert.assertEquals(
+                new Multiplication(
+                    new Multiplication(new Constant(1), new Constant(2)),
+                        new Constant(3))
+                , parse(ClauseType.TERM, "1*2*3"));
     }
 
     @Test(expected = ParsingException.class)
@@ -386,4 +411,49 @@ public class ParboiledExpressionParserTest {
     public void testMathFunctionFail4() throws Exception {
         parse(ClauseType.MATH_FUNCTION, "somebadfunc(x)");
     }
+
+    @Test
+    public void testEquation() throws Exception {
+        parse(ClauseType.EQUATION, "x=y");
+        parse(ClauseType.EQUATION, "4=3");
+        parse(ClauseType.EQUATION, "x=y+5");
+        parse(ClauseType.EQUATION, "5<6");
+        parse(ClauseType.EQUATION, "5>=6");
+        parse(ClauseType.EQUATION, "5<=6");
+        parse(ClauseType.EQUATION, "5>6");
+    }
+
+    @Test(expected=ParsingException.class)
+    public void testEquationFail1() throws Exception {
+        parse(ClauseType.EQUATION, "x=y=4");
+    }
+    @Test(expected=ParsingException.class)
+    public void testEquationFail2() throws Exception {
+        parse(ClauseType.EQUATION, "x=");
+    }
+
+    @Test
+    public void testWhitespace() throws Exception {
+        assertEquals(8.0, evalExpr(ClauseType.EXPRESSION, " 5 + 3 "), EPS);
+        assertEquals(2.0, evalExpr(ClauseType.EXPRESSION, " 6 / ( 1 + 2 ) "), EPS);
+        assertEquals(11.0, evalExpr(ClauseType.EXPRESSION, " 3 * 3 + 4 / 2 + sin ( 0 ) "), EPS);
+    }
+
+    @Test
+    public void testEquations() throws Exception {
+        assertEquals(Arrays.asList(
+                new Equation(new Variable("x"), Equation.Type.EQUAL, new Variable("y")),
+                new Equation(new Variable("x"), Equation.Type.LESS, new Multiplication(
+                        new Variable("y"), new Variable("y")))),
+                parse(ClauseType.EQUATIONS, " x= y x<y*y"));
+        assertEquals(Arrays.asList(
+                new Equation(new Variable("x"), Equation.Type.EQUAL, new Addition(new Variable("y"),
+                        new Constant(5))),
+                new Equation(new Addition(new Constant(5),new Variable("x")),
+                        Equation.Type.LESS, new Multiplication(
+                        new Variable("y"), new Variable("y")))),
+                parse(ClauseType.EQUATIONS, " x= y+5 5+x<y*y"));
+    }
+
+
 }

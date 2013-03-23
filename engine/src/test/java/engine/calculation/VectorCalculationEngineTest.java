@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
  * Time: 10:24 PM
  */
 public class VectorCalculationEngineTest {
-    private static final File DIR = new File("testimgs");
+    private static final File DIR = new File("test_images");
 
     private CalculationEngine eng;
 
@@ -42,9 +42,9 @@ public class VectorCalculationEngineTest {
         Equation eq1 = eq("y", "1-(x/2-0.5)*(x/2-0.5)");
         Equation eq2 = eq("(x-0.5)*(x-0.5)+(y-0.5)*(y-0.5)", "0.1");
         Equation eq3 = eq("(x-0.5)*(x-0.5)*2+(y-0.5)*(y-0.5)", "0.1");
-        draw("test1.png", eq1);
-        draw("test2.png", eq2);
-        draw("test3.png", eq3);
+        draw("vector_machine1.png", eq1);
+        draw("vector_machine2.png", eq2);
+        draw("vector_machine3.png", eq3);
     }
 
 
@@ -70,8 +70,8 @@ public class VectorCalculationEngineTest {
     private Equation eq(String left, String right) {
         ParboiledExpressionParser ep = new ParboiledExpressionParser();
         try {
-            Function leftExpr = ep.parseFunction(left);
-            Function rightExpr = ep.parseFunction(right);
+            Function leftExpr = ep.parseExpression(left);
+            Function rightExpr = ep.parseExpression(right);
             return new Equation(leftExpr, Equation.Type.EQUAL, rightExpr);
         } catch (ParsingException e) {
             throw new RuntimeException(e);

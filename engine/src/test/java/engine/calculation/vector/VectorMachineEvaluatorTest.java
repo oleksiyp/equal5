@@ -73,7 +73,7 @@ public class VectorMachineEvaluatorTest {
         Function[]functions = new Function[expressions.length];
         try {
             for (int i = 0; i < expressions.length; i++) {
-                functions[i] = new ParboiledExpressionParser().parseFunction(expressions[i]);
+                functions[i] = new ParboiledExpressionParser().parseExpression(expressions[i]);
             }
         } catch (ParsingException e) {
             throw new RuntimeException(e);
@@ -103,7 +103,7 @@ public class VectorMachineEvaluatorTest {
         sw.reset().start();
         double[][] results;
         try {
-            System.out.println("Function: " + Arrays.toString(functions));
+            System.out.println("Expression: " + Arrays.toString(functions));
             System.out.println("Processing operations:");
             System.out.println("Concurrency: " + concurrency);
             ve.setTimeReporter(new TimeReporter() {

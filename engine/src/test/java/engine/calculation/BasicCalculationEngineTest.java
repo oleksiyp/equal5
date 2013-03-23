@@ -34,14 +34,7 @@ public class BasicCalculationEngineTest {
         CalculationParameters params = new CalculationParameters(
                 new ViewportBounds(0, 0, 1, 1),
                 size, 0, eq);
-        CalculationResults results = eng.calculate(params);
-
-        RectRange range = RectRange.fromViewportSize(size);
-        DrawToImage drawer = new DrawToImage(range);
-        for (PixelDrawable drawable : results.getDrawables()) {
-            drawable.draw(range, drawer);
-        }
-        drawer.writePng(new File("test1.png"));
+        eng.calculate(params);
     }
 
 }

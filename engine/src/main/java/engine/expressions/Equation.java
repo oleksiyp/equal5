@@ -52,6 +52,15 @@ public class Equation implements ParsableObject {
     private final Function leftPart, rightPart;
 
     public Equation(Function leftPart, Type type, Function rightPart) {
+        if (leftPart == null) {
+            throw new IllegalArgumentException("leftPart");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("leftPart");
+        }
+        if (rightPart == null) {
+            throw new IllegalArgumentException("leftPart");
+        }
         this.leftPart = leftPart;
         this.type = type;
         this.rightPart = rightPart;
@@ -68,5 +77,32 @@ public class Equation implements ParsableObject {
 
     public Function getRightPart() {
         return rightPart;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Equation)) return false;
+
+        Equation equation = (Equation) o;
+
+        if (!leftPart.equals(equation.leftPart)) return false;
+        if (!rightPart.equals(equation.rightPart)) return false;
+        if (type != equation.type) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + leftPart.hashCode();
+        result = 31 * result + rightPart.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return leftPart + type.operator + rightPart;
     }
 }

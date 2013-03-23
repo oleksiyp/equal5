@@ -37,14 +37,42 @@ public class ParboiledExpressionParser implements ExpressionParser {
         public Parser() {
         }
 
+        @Override
+        protected Rule fromStringLiteral(String string) {
+            return string.endsWith(" ") ?
+                    Sequence(
+                            String(string.substring(0, string.length() - 1)),
+                            WhiteSpace()) :
+                    String(string);
+        }
+
+        Rule WhiteSpace() {
+            return ZeroOrMore(AnyOf(" \t\f\n\r"));
+        }
+        @Clause(ClauseType.EQUATIONS)
+        public Rule Equations() {
+            Var<List<Equation>> eqs = new Var<List<Equation>>(new ArrayList<Equation>());
+
+            return Sequence(
+                    Equation(),
+                    eqs.get().add(pop(Equation.class)),
+
+                    WhiteSpace(),
+                    Optional(Equations(),
+                            eqs.get().addAll(pop(List.class))),
+
+                    push(eqs.get())
+            );
+        }
         @Clause(ClauseType.EQUATION)
         public Rule Equation() {
             Var<String> op = new Var<String>();
-            return Sequence(Function(),
-                    FirstOf("=", "<", ">", "<=", ">="),
+            return Sequence(Expression(),
+                    FirstOf("=", "<=", ">=", "<", ">"),
                     op.set(match()),
-                    Function(),
-                    push(new Equation(pop(Function.class),
+                    WhiteSpace(),
+                    Expression(),
+                    swap() && push(new Equation(pop(Function.class),
                             Equation.Type.byOperator(op.get()),
                             pop(Function.class)
                     )));
@@ -62,13 +90,14 @@ public class ParboiledExpressionParser implements ExpressionParser {
             }
         }
 
-        @Clause(ClauseType.FUNCTION)
-        public Rule Function() {
+        @Clause(ClauseType.EXPRESSION)
+        public Rule Expression() {
             Var<Character> op = new Var<Character>();
             return Sequence(
                     Term(),
                     ZeroOrMore(AnyOf("+-"),
                             op.set(matchedChar()),
+                            WhiteSpace(),
                             Term(),
                             swap() && push(
                                     op.get() == '+' ?
@@ -83,6 +112,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
                     Factor(),
                     ZeroOrMore(AnyOf("*/"),
                             op.set(matchedChar()),
+                            WhiteSpace(),
                             Factor(),
                             swap() && push(
                                     op.get() == '*' ?
@@ -103,7 +133,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
             return Sequence(
                     OneOrMore(CharRange('a', 'z')),
                     type.set(matchOrDefault("")),
-                    '(', Arguments(), ')',
+                    WhiteSpace(),
+                    "( ", Arguments(), ") ",
                     arguments.set(pop(List.class)),
                     push(mathFuncConstruct(type, arguments)));
 
@@ -137,10 +168,10 @@ public class ParboiledExpressionParser implements ExpressionParser {
             Var<List<Function>> arguments = new Var<List<Function>>(new ArrayList<Function>());
 
             return Sequence(
-                    Function(),
+                    Expression(),
                     arguments.get().add(pop(Function.class)),
 
-                    Optional(',',
+                    Optional(", ",
                             Arguments(),
                             arguments.get().addAll(pop(List.class))),
 
@@ -150,7 +181,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         @Clause(ClauseType.PARENTS)
         public Rule Parents() {
-            return Sequence('(', Function(), ')');
+            return Sequence("( ", Expression(), ") ");
         }
 
         @Clause(ClauseType.CONSTANT)
@@ -159,7 +190,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
                     DecimalFloat(),
                     push(new Constant(
                             Double.parseDouble(
-                                    matchOrDefault("0"))))
+                                    matchOrDefault("0")))),
+                    WhiteSpace()
             );
         }
 
@@ -167,7 +199,9 @@ public class ParboiledExpressionParser implements ExpressionParser {
         public Rule Variable() {
             return Sequence(
                     OneOrMore(CharRange('a','z')),
-                    push(new Variable(matchOrDefault(""))));
+                    push(new Variable(matchOrDefault(""))),
+                    WhiteSpace()
+            );
         }
 
         @SuppressSubnodes
@@ -195,6 +229,10 @@ public class ParboiledExpressionParser implements ExpressionParser {
         public Rule Finalize(Rule rule) {
             return Sequence(rule, EOI);
         }
+
+        public Rule WhiteSpaceStart(Rule rule) {
+            return Sequence(WhiteSpace(), rule);
+        }
     }
 
     private static final Parser parser = Parboiled.createParser(Parser.class);
@@ -219,6 +257,9 @@ public class ParboiledExpressionParser implements ExpressionParser {
         if (type == null) {
             throw new IllegalArgumentException("bad clause type(null)");
         }
+        if (expression == null) {
+            throw new IllegalArgumentException("expression");
+        }
         Rule rule = ruleMap.get(type);
         if (rule == null) {
             throw new IllegalArgumentException("clause method not found. bad clause type: " + type);
@@ -227,6 +268,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
         if (finalize) {
             rule = parser.Finalize(rule);
         }
+
+        rule = parser.WhiteSpaceStart(rule);
 
         ReportingParseRunner<ParsableObject> runner;
         runner = new ReportingParseRunner<ParsableObject>(rule);
@@ -295,12 +338,13 @@ public class ParboiledExpressionParser implements ExpressionParser {
     }
 
     @Override
-    public Function parseFunction(String expression) throws ParsingException {
-        return (Function) parse(ClauseType.FUNCTION, expression, true);
+    public Function parseExpression(String expression) throws ParsingException {
+        return (Function) parse(ClauseType.EXPRESSION, expression, true);
     }
 
     @Override
-    public Equation parseEquation(String expression) throws ParsingException {
-        return (Equation) parse(ClauseType.EQUATION, expression, true);
+    public Equation[] parseEquations(String expression) throws ParsingException {
+        List<Equation> lst = (List<Equation>) parse(ClauseType.EQUATIONS, expression, true);
+        return lst.toArray(new Equation[lst.size()]);
     }
 }

@@ -12,7 +12,6 @@ import engine.expressions.ParsingException;
 import engine.locus.DrawToImage;
 import engine.locus.PixelDrawable;
 import engine.locus.RectRange;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -74,16 +73,16 @@ public class UseCasesTest {
         System.out.printf("%20s ", eqs);
 
         ExpressionParser parser = new ParboiledExpressionParser();
-        Equation equation;
+        Equation []equations;
         try {
-            equation = parser.parseEquation(eqs);
+            equations = parser.parseEquations(eqs);
         } catch (ParsingException ex) {
             fail("syntax error on '" + useCase.equations + "', exception: " + ex);
             return;
         }
 
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
-                equation);
+                equations);
 
         for (int c = 1; c <= MAX_CONCURRENCY; c++) {
             VectorMachineBuilder builder = new VectorMachineBuilder();

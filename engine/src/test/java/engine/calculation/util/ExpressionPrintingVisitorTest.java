@@ -62,7 +62,7 @@ public class ExpressionPrintingVisitorTest {
 
     @Test
     public void testCase3() throws Exception {
-        Function func = new ParboiledExpressionParser().parseFunction("(x+1)*(x+1)+(y+1)*(y+1)-25");
+        Function func = new ParboiledExpressionParser().parseExpression("(x+1)*(x+1)+(y+1)*(y+1)-25");
 
         assertEquals("(x+1.0)*(x+1.0)+(y+1.0)*(y+1.0)-25.0", printUsingVisitor(func));
     }

@@ -81,8 +81,8 @@ public class EqualAppPanel {
     }
 
     private void bindAction(EqualViewModel viewModel,
-                                  KeyStroke key,
-                                  EqualViewModel.ActionType actionType) {
+                            KeyStroke key,
+                            EqualViewModel.ActionType actionType) {
         new ViewModelAction(viewModel, actionType)
                 .putActionMap(root)
                 .bindKey(root, key);
@@ -90,6 +90,10 @@ public class EqualAppPanel {
 
     public void createUIComponents() {
         equalViewport = new EqualViewport();
+    }
+
+    public void beAContentPaneOf(JFrame frame) {
+        frame.setContentPane(root);
     }
 
     /**
@@ -126,56 +130,36 @@ public class EqualAppPanel {
         rightButton.setToolTipText("Move viewport right");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(rightButton, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.ipady = 10;
         panel2.add(spacer1, gbc);
-        playButton = new JButton();
-        playButton.setHorizontalTextPosition(11);
-        playButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/play.png")));
-        playButton.setText(" F6");
-        playButton.setToolTipText("Run time series of graphics by changing \"t\" from 0 to 1 ");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(playButton, gbc);
         zoomInButton = new JButton();
         zoomInButton.setHorizontalTextPosition(10);
         zoomInButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-in.png")));
-        zoomInButton.setText("F7");
+        zoomInButton.setText("F8");
         zoomInButton.setToolTipText("Zoom in viewport");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(zoomInButton, gbc);
         zoomOutButton = new JButton();
         zoomOutButton.setHorizontalTextPosition(11);
         zoomOutButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-out.png")));
-        zoomOutButton.setText("F8");
+        zoomOutButton.setText("F7");
         zoomOutButton.setToolTipText("Zoom out viewport");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(zoomOutButton, gbc);
-        refreshButton = new JButton();
-        refreshButton.setHorizontalTextPosition(10);
-        refreshButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/reload.png")));
-        refreshButton.setText("F5");
-        refreshButton.setToolTipText("Refresh image and set \"t\" to zero");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(refreshButton, gbc);
+        panel2.add(zoomOutButton, gbc);
         leftButton = new JButton();
         leftButton.setHorizontalTextPosition(10);
         leftButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/left-arrow.png")));
@@ -183,7 +167,7 @@ public class EqualAppPanel {
         leftButton.setToolTipText("Move viewport left");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(leftButton, gbc);
         upButton = new JButton();
@@ -193,7 +177,7 @@ public class EqualAppPanel {
         upButton.setToolTipText("Move viewort up");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(upButton, gbc);
         downButton = new JButton();
@@ -203,7 +187,7 @@ public class EqualAppPanel {
         downButton.setToolTipText("Move viewport down");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(downButton, gbc);
         final JScrollPane scrollPane1 = new JScrollPane();
@@ -228,12 +212,22 @@ public class EqualAppPanel {
         timeSlider.putClientProperty("html.disable", Boolean.FALSE);
         timeSlider.putClientProperty("Slider.paintThumbArrowShape", Boolean.FALSE);
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 100.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel4.add(timeSlider, gbc);
+        playButton = new JButton();
+        playButton.setHorizontalTextPosition(11);
+        playButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/play.png")));
+        playButton.setText(" F5");
+        playButton.setToolTipText("Run time series of graphics by changing \"t\" from 0 to 1 ");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel4.add(playButton, gbc);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new BorderLayout(0, 0));
         panel3.add(panel5, BorderLayout.CENTER);
@@ -260,10 +254,6 @@ public class EqualAppPanel {
      */
     public JComponent $$$getRootComponent$$$() {
         return root;
-    }
-
-    public void beAContentPaneOf(JFrame frame) {
-        frame.setContentPane(root);
     }
 
     private class EquationUpdater implements DocumentListener, Runnable {
