@@ -1,0 +1,12 @@
+-coordinate system
+-drag/scroll viewport
+-point selection
+-rebindable keys
+-syntax highlight&errors
+-(re)set bounds
+-set steps
+-play
+-save image
+-save video
+-post image
+-post video
