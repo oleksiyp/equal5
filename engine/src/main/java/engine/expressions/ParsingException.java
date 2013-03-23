@@ -8,6 +8,8 @@ import java.util.List;
  * Time: 11:17 AM
  */
 public class ParsingException extends Exception {
+    private final List<SyntaxError> errors;
+
     public final static class SyntaxError {
         private final boolean oneLiner;
         private final int line;
@@ -54,6 +56,7 @@ public class ParsingException extends Exception {
 
     public ParsingException(List<SyntaxError> errors) {
         super(asMessage(errors));
+        this.errors = errors;
     }
 
     private static String asMessage(List<SyntaxError> errors) {
@@ -80,5 +83,9 @@ public class ParsingException extends Exception {
                     .append(message);
         }
         return builder.toString();
+    }
+
+    public List<SyntaxError> getErrors() {
+        return errors;
     }
 }

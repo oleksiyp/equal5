@@ -2,6 +2,7 @@ package gui.mainapp;
 
 import engine.expressions.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
+import gui.mainapp.editor.RedLineHighlightPainter;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.FrameListener;
@@ -11,11 +12,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 /**
  * User: Oleksiy Pylypenko
@@ -99,6 +102,29 @@ public class EqualAppPanel {
         new ViewModelAction(viewModel, actionType)
                 .putActionMap(root)
                 .bindKey(root, key);
+    }
+
+    private void resetParsingErrors() {
+        Highlighter highlighter = equationPad.getHighlighter();
+        highlighter.removeAllHighlights();
+
+    }
+    private void showParsingErrors(ParsingException e) {
+        resetParsingErrors();
+
+        List<ParsingException.SyntaxError> errors = e.getErrors();
+        for (ParsingException.SyntaxError err : errors) {
+            try {
+                Highlighter highlighter = equationPad.getHighlighter();
+                highlighter.addHighlight(
+                        err.getStartIndex(),
+                        err.getEndIndex(),
+                        new RedLineHighlightPainter());
+            } catch (BadLocationException e1) {
+                System.err.println(e1);
+            }
+        }
+        equationPad.repaint();
     }
 
     public void createUIComponents() {
@@ -330,8 +356,9 @@ public class EqualAppPanel {
                 equalViewport.setViewportBounds(viewModel.getViewportBounds());
                 equalViewport.setT(viewModel.getTAsVariable());
                 equalViewport.setExpression(viewModel.getEquations());
+                resetParsingErrors();
             } catch (ParsingException e) {
-                System.out.println(e);
+                showParsingErrors(e);
             }
         }
 
