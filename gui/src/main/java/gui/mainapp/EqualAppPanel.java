@@ -1,6 +1,6 @@
 package gui.mainapp;
 
-import engine.expressions.ParboiledExpressionParser;
+import engine.expressions.parser.ParboiledExpressionParser;
 import engine.expressions.ParsingException;
 import gui.mainapp.editor.RedLineHighlightPainter;
 import gui.mainapp.viewmodel.*;

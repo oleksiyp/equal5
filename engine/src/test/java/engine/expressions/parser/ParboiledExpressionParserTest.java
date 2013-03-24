@@ -1,14 +1,18 @@
-package engine.expressions;
-
-import static junit.framework.Assert.*;
+package engine.expressions.parser;
 
 import engine.calculation.Arguments;
 import engine.calculation.functions.*;
+import engine.expressions.ClauseType;
+import engine.expressions.Equation;
+import engine.expressions.Function;
+import engine.expressions.ParsingException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * User: Oleksiy Pylypenko
@@ -120,7 +124,7 @@ public class ParboiledExpressionParserTest {
     }
 
     private Object parse(ClauseType type, String string) throws ParsingException {
-        return new ParboiledExpressionParser().parse(type, string, true);
+        return new ParboiledExpressionParser().parse(type, string);
     }
 
     private void parseExpression(String expr) throws ParsingException {

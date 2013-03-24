@@ -36,4 +36,14 @@ public enum MathFunctionType {
     public int getArgumentsCount() {
         return argumentsCount;
     }
+
+    public static MathFunctionType bySignature(String name, int argsCount) {
+        for (MathFunctionType type : MathFunctionType.values()) {
+            if (type.getInExpressionName().equals(name)
+                    && type.getArgumentsCount() == argsCount) {
+                return type;
+            }
+        }
+        return null;
+    }
 }

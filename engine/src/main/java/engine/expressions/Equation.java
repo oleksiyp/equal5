@@ -43,7 +43,7 @@ public class Equation implements ParsableObject {
                     return t;
                 }
             }
-            throw new IllegalArgumentException("Equation.Type.byOperator(str = '" + str + "')");
+            return null;
         }
     }
 

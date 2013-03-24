@@ -4,7 +4,7 @@ import engine.calculation.functions.Addition;
 import engine.calculation.functions.Constant;
 import engine.calculation.functions.Multiplication;
 import engine.expressions.Function;
-import engine.expressions.ParboiledExpressionParser;
+import engine.expressions.parser.ParboiledExpressionParser;
 import org.junit.Test;
 
 import java.io.PrintWriter;
