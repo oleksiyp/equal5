@@ -11,7 +11,7 @@ public enum ClauseType {
     EXPRESSION, // T
     TERM, // T
     FACTOR, //
-    PARENTS, // T
+    PARENTHESES, // T
     CONSTANT, // T
     VARIABLE, // T
     DECIMAL_FLOAT, // T

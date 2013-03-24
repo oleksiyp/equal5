@@ -21,6 +21,29 @@ import static org.parboiled.support.ParseTreeUtils.*;
  * Time: 2:10 AM
  */
 public class ExpressionBuilder {
+    // rule names
+    public static final String WHOLE_SENTENCE = "WholeSentence";
+    public static final String EQUATIONS = "Equations";
+    public static final String EQUATION = "Equation";
+    public static final String EXPRESSION = "Expression";
+    public static final String EQUALITY_SIGN = "EqualitySign";
+    public static final String TERM = "Term";
+    public static final String OPERATOR = "Operator";
+    public static final String FACTOR = "Factor";
+    public static final String PARENTHESES = "Parentheses";
+    public static final String CONSTANT = "Constant";
+    public static final String MATH_FUNC = "MathFunc";
+    public static final String VARIABLE = "Variable";
+    public static final String NAME = "Name";
+    public static final String ARGUMENTS = "Arguments";
+    public static final String WHITE_SPACE = "WhiteSpace";
+    public static final String EOI = "EOI";
+    // pathes
+    public static final String ZERO_OR_MORE_SEQUENCE_EQUATION = "ZeroOrMore/Sequence/Equation";
+    public static final String TAIL_OPERATOR_TERM = "Tail/OperatorTerm";
+    public static final String TAIL_OPERATOR_FACTOR = "Tail/OperatorFactor";
+    public static final String TAIL_COMMA_EXPRESSION_EXPRESSION = "Tail/CommaExpression/Expression";
+
     private final List<ParseError> errors = new ArrayList<ParseError>();
     private final InputBuffer inputBuffer;
 
@@ -34,11 +57,11 @@ public class ExpressionBuilder {
 
     public Object build(ClauseType clauseType, Node<Object> node)
             throws ParsingFailureException {
-        if ("WholeSentence".equals(node.getLabel())) {
+        if (WHOLE_SENTENCE.equals(node.getLabel())) {
             final Node<Object> childNode = findNode(node.getChildren(),
                     new SkipWhitespaceOrEOIPredicate());
             if (childNode == null) {
-                throw error(node, "[WholeSentence] do not contain '"  + clauseType + "'");
+                throw runtimeError(node, "[WholeSentence] do not contain '"  + clauseType + "'");
             }
             return buildVariety(clauseType, childNode);
         }
@@ -52,7 +75,7 @@ public class ExpressionBuilder {
             case EXPRESSION: return expression(node);
             case TERM: return term(node);
             case FACTOR: return factor(node);
-            case PARENTS: return parents(node);
+            case PARENTHESES: return parentheses(node);
             case CONSTANT: return constant(node);
             case VARIABLE: return variable(node);
             case MATH_FUNCTION: return mathFunc(node);
@@ -62,7 +85,7 @@ public class ExpressionBuilder {
 //            DIGIT // T
         }
 
-        throw error(node, "clause type '" + clauseType + "' not handled");
+        throw runtimeError(node, "clause type '" + clauseType + "' not handled");
     }
 
     private ParsingFailureException error(Node<Object> node, String message) {
@@ -71,26 +94,29 @@ public class ExpressionBuilder {
         return new ParsingFailureException(error);
     }
 
+    private RuntimeException runtimeError(Node<Object> node, String message) {
+        return new RuntimeException(message);
+    }
+
     private void errorAndContinue(Node<Object> node, String message) {
-        TreeNodeError error = new TreeNodeError(inputBuffer, node, message);
-        errors.add(error);
+        errors.add(new TreeNodeError(inputBuffer, node, message));
     }
 
     public Equation[] equations(Node<Object> node)
             throws ParsingFailureException {
-        if (!"Equations".equals(node.getLabel())) {
-            errorAndContinue(node, "[Equations] mismatch");
+        if (!EQUATIONS.equals(node.getLabel())) {
+            throw runtimeError(node, "[Equations] mismatch");
         }
 
-        Node<Object> firstEq = findNodeByPath(node, "Equation");
+        Node<Object> firstEq = findNodeByPath(node, EQUATION);
         if (firstEq == null) {
-            throw error(node, "[Equation] not found");
+            throw runtimeError(node, "[Equation] not found");
         }
 
         List<Node<Object>> equationNodes = new ArrayList<Node<Object>>();
         equationNodes.add(firstEq);
 
-        collectNodesByPath(node, "ZeroOrMore/Sequence/Equation", equationNodes);
+        collectNodesByPath(node, ZERO_OR_MORE_SEQUENCE_EQUATION, equationNodes);
 
         Equation[] result = new Equation[equationNodes.size()];
         int i = 0;
@@ -102,23 +128,23 @@ public class ExpressionBuilder {
     }
 
     public Equation equation(Node<Object> node) throws ParsingFailureException {
-        if (!"Equation".equals(node.getLabel())) {
-            errorAndContinue(node, "[Equation] mismatch");
+        if (!EQUATION.equals(node.getLabel())) {
+            throw runtimeError(node, "[Equation] mismatch");
         }
 
         List<Node<Object>> expressionParts = new ArrayList<Node<Object>>();
-        collectNodesByPath(node, "Expression", expressionParts);
+        collectNodesByPath(node, EXPRESSION, expressionParts);
 
         if (expressionParts.size() < 2) {
-            throw error(node, "at least two [Expression] should be in [Equation]");
+            throw runtimeError(node, "at least two [Expression] should be in [Equation]");
         }
         if (expressionParts.size() != 2) {
-            errorAndContinue(node, "only two [Expression] should be in [Equation]");
+            throw runtimeError(node, "only two [Expression] should be in [Equation]");
         }
 
-        Node<Object> signNode = findNodeByPath(node, "EqualitySign");
+        Node<Object> signNode = findNodeByPath(node, EQUALITY_SIGN);
         if (signNode == null) {
-            throw error(node, "[EqualitySign] not found in [Equation]");
+            throw runtimeError(node, "[EqualitySign] not found in [Equation]");
         }
 
         Node<Object> leftNode = expressionParts.get(0);
@@ -127,8 +153,7 @@ public class ExpressionBuilder {
         String sign = getNodeText(signNode, inputBuffer);
         Equation.Type type = Equation.Type.byOperator(sign);
         if (type == null) {
-            errorAndContinue(signNode, "bad equation operator '" + sign + "'");
-            type = Equation.Type.EQUAL;
+            throw runtimeError(signNode, "bad equation operator '" + sign + "'");
         }
 
         Function left = expression(leftNode);
@@ -137,26 +162,26 @@ public class ExpressionBuilder {
     }
 
     private Function expression(Node<Object> node) throws ParsingFailureException {
-        if (!"Expression".equals(node.getLabel())) {
-            errorAndContinue(node, "[Expression] mismatch");
+        if (!EXPRESSION.equals(node.getLabel())) {
+            throw runtimeError(node, "[Expression] mismatch");
         }
-        Node<Object> firstTermNode = findNodeByPath(node, "Term");
+        Node<Object> firstTermNode = findNodeByPath(node, TERM);
         if (firstTermNode == null) {
-            throw error(node, "first [Term] not found in [Expression]");
+            throw runtimeError(node, "first [Term] not found in [Expression]");
         }
 
         Function result = term(firstTermNode);
 
         List<Node<Object>> opTermNodes = new ArrayList<Node<Object>>();
-        collectNodesByPath(node, "Tail/OperatorTerm", opTermNodes);
+        collectNodesByPath(node, TAIL_OPERATOR_TERM, opTermNodes);
         for (Node<Object> opTermNode : opTermNodes) {
-            Node<Object> opNode = findNodeByPath(opTermNode, "Operator");
+            Node<Object> opNode = findNodeByPath(opTermNode, OPERATOR);
             if (opNode == null) {
-                throw error(opTermNode, "[OperatorTerm] should contain [Operator]");
+                throw runtimeError(opTermNode, "[OperatorTerm] should contain [Operator]");
             }
-            Node<Object> termNode = findNodeByPath(opTermNode, "Term");
+            Node<Object> termNode = findNodeByPath(opTermNode, TERM);
             if (termNode == null) {
-                throw error(opTermNode, "[OperatorTerm] should contain [Term]");
+                throw runtimeError(opTermNode, "[OperatorTerm] should contain [Term]");
             }
 
             Function termFunc = term(termNode);
@@ -167,7 +192,7 @@ public class ExpressionBuilder {
             } else if ("-".equals(op)) {
                 result = new Subtraction(result, termFunc);
             } else {
-                throw error(opNode, "[Operator] should be '+' or '-'");
+                throw runtimeError(opNode, "[Operator] should be '+' or '-'");
             }
         }
 
@@ -175,26 +200,26 @@ public class ExpressionBuilder {
     }
 
     private Function term(Node<Object> node) throws ParsingFailureException {
-        if (!"Term".equals(node.getLabel())) {
-            errorAndContinue(node, "[Term] mismatch");
+        if (!TERM.equals(node.getLabel())) {
+            throw runtimeError(node, "[Term] mismatch");
         }
-        Node<Object> firstFactorNode = findNodeByPath(node, "Factor");
+        Node<Object> firstFactorNode = findNodeByPath(node, FACTOR);
         if (firstFactorNode == null) {
-            throw error(node, "first [Factor] not found in [Term]");
+            throw runtimeError(node, "first [Factor] not found in [Term]");
         }
 
         Function result = factor(firstFactorNode);
 
         List<Node<Object>> opFactorNodes = new ArrayList<Node<Object>>();
-        collectNodesByPath(node, "Tail/OperatorFactor", opFactorNodes);
+        collectNodesByPath(node, TAIL_OPERATOR_FACTOR, opFactorNodes);
         for (Node<Object> opFactorNode : opFactorNodes) {
-            Node<Object> opNode = findNodeByPath(opFactorNode, "Operator");
+            Node<Object> opNode = findNodeByPath(opFactorNode, OPERATOR);
             if (opNode == null) {
-                throw error(opFactorNode, "[OperatorFactor] should contain [Operator]");
+                throw runtimeError(opFactorNode, "[OperatorFactor] should contain [Operator]");
             }
-            Node<Object> factorNode = findNodeByPath(opFactorNode, "Factor");
+            Node<Object> factorNode = findNodeByPath(opFactorNode, FACTOR);
             if (factorNode == null) {
-                throw error(opFactorNode, "[OperatorFactor] should contain [Factor]");
+                throw runtimeError(opFactorNode, "[OperatorFactor] should contain [Factor]");
             }
 
             Function factorFunc = factor(factorNode);
@@ -205,7 +230,7 @@ public class ExpressionBuilder {
             } else if ("/".equals(op)) {
                 result = new Division(result, factorFunc);
             } else {
-                throw error(opNode, "[Operator] should be '*' or '/'");
+                throw runtimeError(opNode, "[Operator] should be '*' or '/'");
             }
         }
 
@@ -213,62 +238,62 @@ public class ExpressionBuilder {
     }
 
     private Function factor(Node<Object> node) throws ParsingFailureException {
-        if (!"Factor".equals(node.getLabel())) {
-            errorAndContinue(node, "[Factor] mismatch");
+        if (!FACTOR.equals(node.getLabel())) {
+            throw runtimeError(node, "[Factor] mismatch");
         }
         if (node.getChildren().size() < 1) {
-            throw error(node, "[Factor] should contain at least one child");
+            throw runtimeError(node, "[Factor] should contain at least one child");
         } else if (node.getChildren().size() != 1) {
-            errorAndContinue(node, "[Factor] should contain one child");
+            throw runtimeError(node, "[Factor] should contain one child");
         }
 
         Node<Object> firstSubNode = node.getChildren().get(0);
         String label = firstSubNode.getLabel();
-        if ("Constant".equals(label)) {
+        if (CONSTANT.equals(label)) {
             return constant(firstSubNode);
-        } else if ("MathFunc".equals(label)) {
+        } else if (MATH_FUNC.equals(label)) {
             return mathFunc(firstSubNode);
-        } else if ("Variable".equals(label)) {
+        } else if (VARIABLE.equals(label)) {
             return variable(firstSubNode);
-        } else if ("Parents".equals(label)) {
-            return parents(firstSubNode);
+        } else if (PARENTHESES.equals(label)) {
+            return parentheses(firstSubNode);
         } else {
-            throw error(node, "[Factor] should contain [Constant], [MathFunc], " +
-                    "[Variables], [Parents]");
+            throw runtimeError(node, "[Factor] should contain [Constant], [MathFunc], " +
+                    "[Variables], [Parentheses]");
         }
     }
 
-    private Function parents(Node<Object> node) throws ParsingFailureException {
-        if (!"Parents".equals(node.getLabel())) {
-            errorAndContinue(node, "[Parents] mismatch");
+    private Function parentheses(Node<Object> node) throws ParsingFailureException {
+        if (!PARENTHESES.equals(node.getLabel())) {
+            throw runtimeError(node, "[Parentheses] mismatch");
         }
-        Node<Object> exprNode = findNodeByPath(node, "Expression");
+        Node<Object> exprNode = findNodeByPath(node, EXPRESSION);
         if (exprNode == null) {
-            throw error(node, "[Expression] should be in [Parents]");
+            throw runtimeError(node, "[Expression] should be in [Parentheses]");
         }
         return expression(exprNode);
     }
 
     private Function variable(Node<Object> node) {
-        if (!"Variable".equals(node.getLabel())) {
-            errorAndContinue(node, "[Variable] mismatch");
+        if (!VARIABLE.equals(node.getLabel())) {
+            throw runtimeError(node, "[Variable] mismatch");
         }
         String name = getNodeText(node, inputBuffer);
         return new Variable(name);
     }
 
     private Function mathFunc(Node<Object> node) throws ParsingFailureException {
-        if (!"MathFunc".equals(node.getLabel())) {
-            errorAndContinue(node, "[MathFunc] mismatch");
+        if (!MATH_FUNC.equals(node.getLabel())) {
+            throw runtimeError(node, "[MathFunc] mismatch");
         }
-        Node<Object> nameNode = findNodeByPath(node, "Name");
+        Node<Object> nameNode = findNodeByPath(node, NAME);
         if (nameNode == null) {
-            throw error(node, "[Name] should be in [MathFunc]");
+            throw runtimeError(node, "[Name] should be in [MathFunc]");
         }
 
-        Node<Object> argumentsNode = findNodeByPath(node, "Arguments");
+        Node<Object> argumentsNode = findNodeByPath(node, ARGUMENTS);
         if (argumentsNode == null) {
-            throw error(node, "[Arguments] should be in [MathFunc]");
+            throw runtimeError(node, "[Arguments] should be in [MathFunc]");
         }
 
         Function []args = arguments(argumentsNode);
@@ -277,28 +302,29 @@ public class ExpressionBuilder {
 
         MathFunctionType type = MathFunctionType.bySignature(name, args.length);
         if (type == null) {
-            throw error(nameNode, "Function matching [Name] = '" + name
-                    + "' and [Arguments] count = " + args.length +
-                    " no found");
+            errorAndContinue(nameNode, "Unknown function '" + name
+                    + "' with " + args.length +
+                    " argument(s)");
+            return new MathFunction(MathFunctionType.IDENTITY, new Constant(0));
         }
 
         return new MathFunction(type, args);
     }
 
     private Function[] arguments(Node<Object> node) throws ParsingFailureException {
-        if (!"Arguments".equals(node.getLabel())) {
-            errorAndContinue(node, "[Arguments] mismatch");
+        if (!ARGUMENTS.equals(node.getLabel())) {
+            throw runtimeError(node, "[Arguments] mismatch");
         }
 
-        Node<Object> firstExprNode = findNodeByPath(node, "Expression");
+        Node<Object> firstExprNode = findNodeByPath(node, EXPRESSION);
         if (firstExprNode == null) {
-            throw error(node, "first [Expression] not found in [Arguments]");
+            throw runtimeError(node, "first [Expression] not found in [Arguments]");
         }
 
         List<Node<Object>> argExprNodes = new ArrayList<Node<Object>>();
         argExprNodes.add(firstExprNode);
 
-        collectNodesByPath(node, "Tail/CommaExpression/Expression", argExprNodes);
+        collectNodesByPath(node, TAIL_COMMA_EXPRESSION_EXPRESSION, argExprNodes);
         List<Function> result = new ArrayList<Function>();
 
         for (Node<Object> exprNode : argExprNodes) {
@@ -309,15 +335,15 @@ public class ExpressionBuilder {
     }
 
     private Function constant(Node<Object> node) {
-        if (!"Constant".equals(node.getLabel())) {
-            errorAndContinue(node, "[Constant] mismatch");
+        if (!CONSTANT.equals(node.getLabel())) {
+            throw runtimeError(node, "[Constant] mismatch");
         }
         String strValue = getNodeText(node, inputBuffer);
         double value = 0;
         try{
             value = Double.parseDouble(strValue);
         } catch (NumberFormatException ex) {
-            errorAndContinue(node, "Bad double literal: '" + strValue + "'");
+            throw runtimeError(node, "Bad double literal: '" + strValue + "'");
         }
         return new Constant(value);
     }
@@ -326,8 +352,8 @@ public class ExpressionBuilder {
     private static class SkipWhitespaceOrEOIPredicate implements Predicate<Node<Object>> {
         @Override
         public boolean apply(Node<Object> input) {
-            return !("WhiteSpace".equals(input.getLabel())
-                    || "EOI".equals(input.getLabel()));
+            return !(WHITE_SPACE.equals(input.getLabel())
+                    || EOI.equals(input.getLabel()));
         }
     }
 }

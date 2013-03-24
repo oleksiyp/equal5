@@ -8,8 +8,8 @@ import engine.expressions.parser.ParsingException;
  * Syntax passed to this methods should be following:
  *
  * Number <- Constant | Variable
- * Parents <- '(' Expression ')'
- * Factor <- Number | Parents
+ * Parentheses <- '(' Expression ')'
+ * Factor <- Number | Parentheses
  * Term <- Factor ( ('*' | '/') Factor ) *
  * Expression <- Term ( ('+' | '-') Term ) *
  * Equation <- Expression ( '=' | '<' | '>' ) Expression

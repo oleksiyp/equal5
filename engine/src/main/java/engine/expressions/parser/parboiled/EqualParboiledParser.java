@@ -64,7 +64,7 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Constant(),
                 MathFunc(),
                 Variable(),
-                Parents());
+                Parentheses());
     }
 
     @Clause(ClauseType.MATH_FUNCTION)
@@ -93,8 +93,8 @@ class EqualParboiledParser extends BaseParser<Object> {
         );
     }
 
-    @Clause(ClauseType.PARENTS)
-    public Rule Parents() {
+    @Clause(ClauseType.PARENTHESES)
+    public Rule Parentheses() {
         return Sequence("( ",
                 Expression(),
                 ") ");

@@ -1,7 +1,5 @@
 package engine.expressions.parser;
 
-import engine.expressions.parser.SyntaxError;
-
 import java.util.List;
 
 /**

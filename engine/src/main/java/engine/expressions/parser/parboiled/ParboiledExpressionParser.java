@@ -15,10 +15,9 @@ import org.parboiled.parserunners.RecoveringParseRunner;
 import org.parboiled.support.*;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static engine.expressions.parser.parboiled.HumanReadable.hr;
 
 /**
  * User: Oleksiy Pylypenko
@@ -70,6 +69,10 @@ public class ParboiledExpressionParser implements ExpressionParser {
             res = builder.build(type, result.parseTreeRoot);
         } catch (ParsingFailureException e) {
             // skip
+        } catch (RuntimeException e) {
+            if (result.parseErrors.isEmpty()) {
+                throw e;
+            }
         }
 
         list.addAll(builder.getErrors());
@@ -95,14 +98,19 @@ public class ParboiledExpressionParser implements ExpressionParser {
         Position pos = buf.getPosition(error.getStartIndex());
         int line = pos.line;
         int col = pos.column;
-        if (message == null) {
+        if (error instanceof InvalidInputError) {
+            InvalidInputError iiError = (InvalidInputError) error;
+            List<MatcherPath> matchers = iiError.getFailedMatchers();
+            Collection<String> nonTerms = scanMatchers(matchers,
+                    "Variable",
+                    "Constant",
+                    "Parentheses",
+                    "MathFunc",
+                    "Expression");
+            message = "Insert " + hr(nonTerms);
+        } else if (message == null) {
             String badExpr = nearChars(error, buf);
             message = "syntax error near \"" + badExpr + "\"";
-            if (error instanceof InvalidInputError) {
-                InvalidInputError iiError = (InvalidInputError) error;
-                List<MatcherPath> matchers = iiError.getFailedMatchers();
-                message += ", failed matchers: " + matchers;
-            }
         }
 
         boolean oneLiner = buf.getLineCount() <= 1;
@@ -120,6 +128,24 @@ public class ParboiledExpressionParser implements ExpressionParser {
                 error.getStartIndex() - delta,
                 error.getEndIndex() - delta,
                 message);
+    }
+
+    private Collection<String> scanMatchers(List<MatcherPath> matcherPaths,
+                                      String ...terminals) {
+        Set<String> result = new TreeSet<String>();
+        for (MatcherPath path : matcherPaths) {
+            while (path != null) {
+                if (path.element != null
+                        && path.element.matcher != null) {
+                    int idx = Arrays.asList(terminals).indexOf(path.element.matcher.getLabel());
+                    if (idx != -1) {
+                        result.add(path.element.matcher.getLabel());
+                    }
+                }
+                path = path.parent;
+            }
+        }
+        return result;
     }
 
     private String nearChars(ParseError error, InputBuffer buf) {

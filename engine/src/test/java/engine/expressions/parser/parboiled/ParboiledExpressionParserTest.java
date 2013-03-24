@@ -6,7 +6,6 @@ import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -264,32 +263,32 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testParents() throws Exception {
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "(123)"), EPS);
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "((123))"), EPS);
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTS, "(((123)))"), EPS);
-        Assert.assertEquals(11, evalExpr(ClauseType.PARENTS, "(((5+6)))"), EPS);
-        Assert.assertEquals(76, evalExpr(ClauseType.PARENTS, "(((5+6)+(3+2)*(8+5)))"), EPS);
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(123)"), EPS);
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "((123))"), EPS);
+        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(((123)))"), EPS);
+        Assert.assertEquals(11, evalExpr(ClauseType.PARENTHESES, "(((5+6)))"), EPS);
+        Assert.assertEquals(76, evalExpr(ClauseType.PARENTHESES, "(((5+6)+(3+2)*(8+5)))"), EPS);
     }
 
     @Test(expected = ParsingException.class)
     public void testParentsFail1() throws Exception {
-        evalExpr(ClauseType.PARENTS, "(");
+        evalExpr(ClauseType.PARENTHESES, "(");
     }
     @Test(expected = ParsingException.class)
     public void testParentsFail2() throws Exception {
-        evalExpr(ClauseType.PARENTS, ")");
+        evalExpr(ClauseType.PARENTHESES, ")");
     }
     @Test(expected = ParsingException.class)
     public void testParentsFail3() throws Exception {
-        evalExpr(ClauseType.PARENTS, ")(");
+        evalExpr(ClauseType.PARENTHESES, ")(");
     }
     @Test(expected = ParsingException.class)
     public void testParentsFail4() throws Exception {
-        evalExpr(ClauseType.PARENTS, "(()");
+        evalExpr(ClauseType.PARENTHESES, "(()");
     }
     @Test(expected = ParsingException.class)
     public void testParentsFail5() throws Exception {
-        evalExpr(ClauseType.PARENTS, "((5)(5))");
+        evalExpr(ClauseType.PARENTHESES, "((5)(5))");
     }
 
     private double evalExpr(ClauseType type, String expr) throws ParsingException {
