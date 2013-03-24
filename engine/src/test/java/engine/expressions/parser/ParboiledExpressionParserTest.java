@@ -5,7 +5,6 @@ import engine.calculation.functions.*;
 import engine.expressions.ClauseType;
 import engine.expressions.Equation;
 import engine.expressions.Function;
-import engine.expressions.ParsingException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;

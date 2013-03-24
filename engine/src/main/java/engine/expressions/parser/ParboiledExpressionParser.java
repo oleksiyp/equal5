@@ -4,6 +4,7 @@ import engine.expressions.*;
 import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.buffers.InputBuffer;
+import org.parboiled.errors.BasicParseError;
 import org.parboiled.errors.InvalidInputError;
 import org.parboiled.errors.ParseError;
 import org.parboiled.parserunners.RecoveringParseRunner;
@@ -74,8 +75,8 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
     private void checkForErrors(List<ParseError> errorList) throws ParsingException {
         if (!errorList.isEmpty()) {
-            List<ParsingException.SyntaxError> strErrors;
-            strErrors = new ArrayList<ParsingException.SyntaxError>();
+            List<SyntaxError> strErrors;
+            strErrors = new ArrayList<SyntaxError>();
 
             for (ParseError error : errorList) {
                 strErrors.add(createSyntaxError(error));
@@ -84,7 +85,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
     }
 
-    private ParsingException.SyntaxError createSyntaxError(ParseError error) {
+    private SyntaxError createSyntaxError(ParseError error) {
         String message = error.getErrorMessage();
         InputBuffer buf = error.getInputBuffer();
         Position pos = buf.getPosition(error.getStartIndex());
@@ -102,12 +103,18 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         boolean oneLiner = buf.getLineCount() <= 1;
 
-        return new ParsingException.SyntaxError(
+
+        int delta = 0;
+        if (error instanceof BasicParseError) {
+            delta = ((BasicParseError)error).getIndexDelta();
+        }
+
+        return new SyntaxError(
                 oneLiner,
                 line,
                 col,
-                error.getStartIndex(),
-                error.getEndIndex(),
+                error.getStartIndex() - delta,
+                error.getEndIndex() - delta,
                 message);
     }
 

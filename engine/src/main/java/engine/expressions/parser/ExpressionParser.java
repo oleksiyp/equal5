@@ -1,4 +1,8 @@
-package engine.expressions;
+package engine.expressions.parser;
+
+import engine.expressions.Equation;
+import engine.expressions.Function;
+import engine.expressions.parser.ParsingException;
 
 /**
  * Syntax passed to this methods should be following:

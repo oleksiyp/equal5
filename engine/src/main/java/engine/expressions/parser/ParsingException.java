@@ -1,4 +1,6 @@
-package engine.expressions;
+package engine.expressions.parser;
+
+import engine.expressions.parser.SyntaxError;
 
 import java.util.List;
 
@@ -9,50 +11,6 @@ import java.util.List;
  */
 public class ParsingException extends Exception {
     private final List<SyntaxError> errors;
-
-    public final static class SyntaxError {
-        private final boolean oneLiner;
-        private final int line;
-        private final int column;
-        private final int startIndex;
-        private final int endIndex;
-        private final String message;
-
-        public SyntaxError(boolean oneLiner, int line, int column,
-                           int startIndex, int endIndex,
-                           String message) {
-            this.oneLiner = oneLiner;
-            this.line = line;
-            this.column = column;
-            this.startIndex = startIndex;
-            this.endIndex = endIndex;
-            this.message = message;
-        }
-
-        public int getLine() {
-            return line;
-        }
-
-        public int getColumn() {
-            return column;
-        }
-
-        public int getStartIndex() {
-            return startIndex;
-        }
-
-        public int getEndIndex() {
-            return endIndex;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public boolean isOneLiner() {
-            return oneLiner;
-        }
-    }
 
     public ParsingException(List<SyntaxError> errors) {
         super(asMessage(errors));

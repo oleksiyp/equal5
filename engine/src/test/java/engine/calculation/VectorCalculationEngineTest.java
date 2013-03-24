@@ -5,7 +5,7 @@ import engine.calculation.vector.VectorMachineEvaluator;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.parser.ParboiledExpressionParser;
-import engine.expressions.ParsingException;
+import engine.expressions.parser.ParsingException;
 import engine.locus.DrawToImage;
 import engine.locus.Drawable;
 import engine.locus.RectRange;

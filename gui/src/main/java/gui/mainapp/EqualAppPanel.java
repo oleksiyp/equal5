@@ -1,7 +1,8 @@
 package gui.mainapp;
 
+import engine.expressions.parser.SyntaxError;
 import engine.expressions.parser.ParboiledExpressionParser;
-import engine.expressions.ParsingException;
+import engine.expressions.parser.ParsingException;
 import gui.mainapp.editor.RedLineHighlightPainter;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.EqualViewport;
@@ -120,8 +121,8 @@ public class EqualAppPanel {
 
     private void highlighErrors(ParsingException e) {
         int txtLen = equationPad.getText().length();
-        List<ParsingException.SyntaxError> errors = e.getErrors();
-        for (ParsingException.SyntaxError err : errors) {
+        List<SyntaxError> errors = e.getErrors();
+        for (SyntaxError err : errors) {
             try {
                 Highlighter highlighter = equationPad.getHighlighter();
                 int idx = err.getStartIndex();

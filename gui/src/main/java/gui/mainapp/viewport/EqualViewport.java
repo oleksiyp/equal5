@@ -4,8 +4,8 @@ import engine.calculation.CalculationParameters;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import engine.expressions.Equation;
-import engine.expressions.ExpressionParser;
-import engine.expressions.ParsingException;
+import engine.expressions.parser.ExpressionParser;
+import engine.expressions.parser.ParsingException;
 
 import javax.swing.*;
 import java.awt.*;
