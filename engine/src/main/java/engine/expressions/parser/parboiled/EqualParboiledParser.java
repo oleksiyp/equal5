@@ -1,6 +1,6 @@
-package engine.expressions.parser;
+package engine.expressions.parser.parboiled;
 
-import engine.expressions.ClauseType;
+import engine.expressions.parser.ClauseType;
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;

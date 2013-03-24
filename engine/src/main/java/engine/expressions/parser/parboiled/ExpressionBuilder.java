@@ -1,9 +1,10 @@
-package engine.expressions.parser;
+package engine.expressions.parser.parboiled;
 
 import engine.calculation.functions.*;
-import engine.expressions.ClauseType;
 import engine.expressions.Equation;
 import engine.expressions.Function;
+import engine.expressions.parser.ClauseType;
+import engine.expressions.parser.TreeNodeError;
 import org.parboiled.Node;
 import org.parboiled.buffers.InputBuffer;
 import org.parboiled.common.Predicate;

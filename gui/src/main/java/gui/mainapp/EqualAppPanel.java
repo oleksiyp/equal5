@@ -1,7 +1,7 @@
 package gui.mainapp;
 
 import engine.expressions.parser.SyntaxError;
-import engine.expressions.parser.ParboiledExpressionParser;
+import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import gui.mainapp.editor.RedLineHighlightPainter;
 import gui.mainapp.viewmodel.*;

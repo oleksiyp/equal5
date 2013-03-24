@@ -1,6 +1,6 @@
-package engine.expressions.parser;
+package engine.expressions.parser.parboiled;
 
-import engine.expressions.ClauseType;
+import engine.expressions.parser.ClauseType;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

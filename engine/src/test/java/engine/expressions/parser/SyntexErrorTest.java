@@ -1,6 +1,6 @@
 package engine.expressions.parser;
 
-import engine.expressions.ClauseType;
+import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
 

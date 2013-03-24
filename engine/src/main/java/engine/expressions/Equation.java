@@ -4,7 +4,7 @@ package engine.expressions;
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:32 PM
  */
-public class Equation implements ParsableObject {
+public class Equation {
     public interface TypeVisitor<T> {
         T less();
 

@@ -7,7 +7,7 @@ import engine.calculation.functions.*;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
-import engine.expressions.parser.ParboiledExpressionParser;
+import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import org.junit.Before;
 import org.junit.Test;
