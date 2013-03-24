@@ -10,6 +10,13 @@ public enum MathFunctionType {
     COS("cos", 1),
     SIGNUM("sign", 1),
     IDENTITY("id", 1);
+    // Math functions:
+    // sin, cos, tan, asin, acos, atan,
+    // toRadians, toDegrees, exp, log, log10, sqrt, cbrt
+    // IEEEremainder, ceil, floor, rint,
+    // atan2, pow, round, random, abs, max,
+    // min, ulp, signum, sinh, cosh, tanh
+    // hypot, expm1, log1p, scalb,
 
     private final String inExpressionName;
     private final int argumentsCount;
