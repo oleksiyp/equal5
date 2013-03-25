@@ -55,7 +55,7 @@ public class EqualAppPanel {
 
         syntaxErrorDisplay = new SyntaxErrorDisplay(errorLabel, equationPad);
 
-        equalViewport.setParser(new ParboiledExpressionParser());
+        equalViewport.setParser(configureParser());
 
         player = new Player();
         viewListener = new EqualAppPanelViewListener();
@@ -81,6 +81,18 @@ public class EqualAppPanel {
         equalViewport.setDelayedRecalculation(true);
 
         timeSlider.addChangeListener(new TimeSliderUpdater());
+    }
+
+    private ParboiledExpressionParser configureParser() {
+        ParboiledExpressionParser parser = new ParboiledExpressionParser();
+
+        HashMap<String, Double> knownConstants = new HashMap<String, Double>();
+        knownConstants.put("pi", Math.PI);
+        knownConstants.put("e", Math.E);
+
+        parser.setKnownConstants(knownConstants);
+        parser.setVarList(Arrays.asList("x", "y", "t"));
+        return parser;
     }
 
     private void bindButtonAction(EqualViewModel viewModel,

@@ -11,7 +11,9 @@ import org.parboiled.common.Predicate;
 import org.parboiled.errors.ParseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.parboiled.support.ParseTreeUtils.*;
 
@@ -47,8 +49,30 @@ public class ExpressionBuilder {
     private final List<ParseError> errors = new ArrayList<ParseError>();
     private final InputBuffer inputBuffer;
 
+    private List<String> varList = null;
+    private Map<String, Double> knownConstants = new HashMap<String, Double>();
+
     public ExpressionBuilder(InputBuffer inputBuffer) {
         this.inputBuffer = inputBuffer;
+    }
+
+    public List<String> getVarList() {
+        return varList;
+    }
+
+    public void setVarList(List<String> varList) {
+        this.varList = varList;
+    }
+
+    public Map<String, Double> getKnownConstants() {
+        return knownConstants;
+    }
+
+    public void setKnownConstants(Map<String, Double> knownConstants) {
+        if (knownConstants == null) {
+            throw new IllegalArgumentException("knownConstants");
+        }
+        this.knownConstants = knownConstants;
     }
 
     public List<ParseError> getErrors() {
@@ -286,7 +310,7 @@ public class ExpressionBuilder {
         return expression(exprNode);
     }
 
-    private Function variable(Node<Object> node) {
+    private Function variable(Node<Object> node) throws ParsingFailureException {
         if (!VARIABLE.equals(node.getLabel())) {
             throw runtimeError(node, "[Variable] mismatch");
         }
@@ -295,6 +319,14 @@ public class ExpressionBuilder {
             throw runtimeError(node, "[Name] should be in [Variable]");
         }
         String name = getNodeText(nameNode, inputBuffer);
+        if (knownConstants.containsKey(name)) {
+            return new Constant(knownConstants.get(name));
+        }
+
+        if (varList != null && !varList.contains(name)) {
+            throw error(nameNode, "Unknown variable or known constant '" + name + "'");
+        }
+
         return new Variable(name);
     }
 

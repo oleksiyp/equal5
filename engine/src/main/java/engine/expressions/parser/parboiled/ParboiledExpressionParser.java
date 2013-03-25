@@ -41,6 +41,28 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
     }
 
+    private Map<String, Double> knownConstants = new HashMap<String, Double>();
+    private List<String> varList = null;
+
+    public Map<String, Double> getKnownConstants() {
+        return knownConstants;
+    }
+
+    public void setKnownConstants(Map<String, Double> knownConstants) {
+        if (knownConstants == null) {
+            throw new IllegalArgumentException("knownConstants");
+        }
+        this.knownConstants = knownConstants;
+    }
+
+    public List<String> getVarList() {
+        return varList;
+    }
+
+    public void setVarList(List<String> varList) {
+        this.varList = varList;
+    }
+
     public Object parse(ClauseType type,
                         String expression) throws ParsingException {
         if (type == null) {
@@ -64,6 +86,10 @@ public class ParboiledExpressionParser implements ExpressionParser {
         ArrayList<ParseError> list = new ArrayList<ParseError>(result.parseErrors);
 
         ExpressionBuilder builder = new ExpressionBuilder(result.inputBuffer);
+
+        builder.setKnownConstants(knownConstants);
+        builder.setVarList(varList);
+
         Object res = null;
         try {
             res = builder.build(type, result.parseTreeRoot);

@@ -2,7 +2,8 @@
 +syntax highlight&errors
 +implement Math.*
 +add t+, t- buttons
--pi, e constants
+b+unknown variables is not warned
++pi, e constants
 -coordinate system
 -equation systems
 -auto-complete
@@ -19,7 +20,4 @@
 -rebindable keys
 -(re)set bounds
 -point selection
-
-bugs:
--diagonal line rendering have artifacts
--unknown variables is not warned
+b-diagonal line rendering have artifacts
