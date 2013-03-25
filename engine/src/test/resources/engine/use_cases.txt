@@ -11,3 +11,135 @@ x*x+y*y=5
 3. Dots
 -10 10 -10 10
 sin(y)*cos(x)=0.8
+
+4. Identity function
+-10 10 -10 10
+y=id(x)
+
+5. Sine function
+-10 10 -10 10
+y=sin(x)
+
+6. Cosine function
+-10 10 -10 10
+y=cos(x)
+
+7. Tangent function
+-10 10 -10 10
+y=tan(x)
+
+8. ArcSine function
+-10 10 -10 10
+y=asin(x)
+
+9. ArcCosine function
+-10 10 -10 10
+y=acos(x)
+
+10. ArcTangent function
+-10 10 -10 10
+y=atan(x)
+
+11. Exponent function
+-10 10 -10 10
+y=exp(x)
+
+12. Log function
+-10 10 -10 10
+y=log(x)
+
+13. Square root function
+-10 10 -10 10
+y=sqrt(x)
+
+14. Remainder function #1
+-10 10 -10 10
+y=remainder(x, 5)
+
+15. Remainder function #2
+-10 10 -10 10
+y=remainder(5, x)
+
+16. Ceil function
+-10 10 -10 10
+y=ceil(x)
+
+17. Floor function
+-10 10 -10 10
+y=floor(x)
+
+18. ArcTangent coordinate function #1
+-10 10 -10 10
+y=atan(x, 1)
+
+19. ArcTangent coordinate function #2
+-10 10 -10 10
+y=atan(1, x)
+
+20. Power function #1
+-10 10 -10 10
+y=pow(x, 2)
+
+21. Power function #2
+-10 10 -10 10
+y=pow(2, x)
+
+22. Round function
+-10 10 -10 10
+y=round(x)
+
+23. Round function
+-10 10 -10 10
+y=random()
+
+24. Absolute function
+-10 10 -10 10
+y=abs(x)
+
+25. Maximum function #1
+-10 10 -10 10
+y=max(x, 5)
+
+26. Maximum function #2
+-10 10 -10 10
+y=max(5, x)
+
+27. Minimum function #1
+-10 10 -10 10
+y=min(x, 5)
+
+28. Minimum function #2
+-10 10 -10 10
+y=min(5, x)
+
+29. Signum function
+-10 10 -10 10
+y=sign(x)
+
+30. Hyperbolic sine function
+-10 10 -10 10
+y=sinh(x)
+
+31. Hyperbolic cosine function
+-10 10 -10 10
+y=cosh(x)
+
+32. Hyperbolic tangent function
+-10 10 -10 10
+y=tanh(x)
+
+33. Hypot function #1
+-10 10 -10 10
+y=hypot(x, 5)
+
+34. Hypot function
+-10 10 -10 10
+y=hypot(5, x)
+
+35. expm1 function
+-10 10 -10 10
+y=expm1(x)
+
+36. log1p function
+-10 10 -10 10
+y=log1p(x)

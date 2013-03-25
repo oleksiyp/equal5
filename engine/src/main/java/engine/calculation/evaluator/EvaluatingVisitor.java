@@ -79,14 +79,20 @@ class EvaluatingVisitor implements FunctionVisitor {
         final Function[] args = mathFunction.getArguments();
         mathFunction
                 .getType()
-                .accept(new MathFunctionCalcVisitor(args));
+                .accept(new MathCalcVisitor(args));
     }
 
-    private class MathFunctionCalcVisitor implements MathFunctionTypeVisitor {
+    private class MathCalcVisitor implements MathFunctionTypeVisitor {
         private final Function[] args;
 
-        public MathFunctionCalcVisitor(Function[] args) {
+        public MathCalcVisitor(Function[] args) {
             this.args = args;
+        }
+
+        @Override
+        public void identity() {
+            double x = calculate(args[0]);
+            stack.push(x);
         }
 
         @Override
@@ -102,15 +108,152 @@ class EvaluatingVisitor implements FunctionVisitor {
         }
 
         @Override
+        public void tan() {
+            double x = calculate(args[0]);
+            stack.push(Math.tan(x));
+        }
+
+        @Override
+        public void asin() {
+            double x = calculate(args[0]);
+            stack.push(Math.asin(x));
+        }
+
+        @Override
+        public void acos() {
+            double x = calculate(args[0]);
+            stack.push(Math.acos(x));
+        }
+
+        @Override
+        public void atan() {
+            double x = calculate(args[0]);
+            stack.push(Math.atan(x));
+        }
+
+        @Override
+        public void exp() {
+            double x = calculate(args[0]);
+            stack.push(Math.exp(x));
+        }
+
+        @Override
+        public void log() {
+            double x = calculate(args[0]);
+            stack.push(Math.log(x));
+        }
+
+        @Override
+        public void sqrt() {
+            double x = calculate(args[0]);
+            stack.push(Math.log(x));
+        }
+
+        @Override
+        public void remainder() {
+            double x = calculate(args[0]);
+            double y = calculate(args[1]);
+            stack.push(Math.IEEEremainder(x, y));
+        }
+
+        @Override
+        public void ceil() {
+            double x = calculate(args[0]);
+            stack.push(Math.ceil(x));
+        }
+
+        @Override
+        public void floor() {
+            double x = calculate(args[0]);
+            stack.push(Math.floor(x));
+        }
+
+        @Override
+        public void atan2() {
+            double x = calculate(args[0]);
+            double y = calculate(args[1]);
+            stack.push(Math.atan2(x, y));
+        }
+
+        @Override
+        public void pow() {
+            double x = calculate(args[0]);
+            double y = calculate(args[1]);
+            stack.push(Math.pow(x, y));
+        }
+
+        @Override
+        public void round() {
+            double x = calculate(args[0]);
+            stack.push((double) Math.round(x));
+        }
+
+        @Override
+        public void random() {
+            stack.push(Math.random());
+        }
+
+        @Override
+        public void abs() {
+            double x = calculate(args[0]);
+            stack.push(Math.abs(x));
+        }
+
+        @Override
+        public void max() {
+            double x = calculate(args[0]);
+            double y = calculate(args[1]);
+            stack.push(Math.max(x, y));
+        }
+
+        @Override
+        public void min() {
+            double x = calculate(args[0]);
+            double y = calculate(args[1]);
+            stack.push(Math.min(x, y));
+        }
+
+        @Override
         public void signum() {
             double x = calculate(args[0]);
             stack.push(Math.signum(x));
         }
 
         @Override
-        public void identity() {
+        public void sinh() {
             double x = calculate(args[0]);
-            stack.push(x);
+            stack.push(Math.sinh(x));
+        }
+
+        @Override
+        public void cosh() {
+            double x = calculate(args[0]);
+            stack.push(Math.cosh(x));
+        }
+
+        @Override
+        public void tanh() {
+            double x = calculate(args[0]);
+            stack.push(Math.tanh(x));
+        }
+
+        @Override
+        public void hypot() {
+            double x = calculate(args[0]);
+            double y = calculate(args[0]);
+            stack.push(Math.hypot(x, y));
+        }
+
+        @Override
+        public void expm1() {
+            double x = calculate(args[0]);
+            stack.push(Math.expm1(x));
+        }
+
+        @Override
+        public void log1p() {
+            double x = calculate(args[0]);
+            stack.push(Math.log1p(x));
         }
     }
 }

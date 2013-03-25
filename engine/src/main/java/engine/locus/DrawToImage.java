@@ -51,8 +51,22 @@ public class DrawToImage implements RowDrawer, PixelDrawer {
     }
 
 
-    public void writePng(File file) throws IOException {
-        ImageIO.write(image, "PNG", file);
+    public void writePng(File file, RectRange range) throws IOException {
+        BufferedImage cropImg = new BufferedImage(
+                range.getWidth(),
+                range.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = cropImg.createGraphics();
+        try {
+            g.drawImage(image,
+                    0, 0, range.getWidth(), range.getHeight(),
+                    range.getMinX(), range.getMinY(),
+                    range.getWidth(), range.getHeight(),
+                    null);
+        } finally {
+            g.dispose();
+        }
+        ImageIO.write(cropImg, "PNG", file);
     }
 
     @Override

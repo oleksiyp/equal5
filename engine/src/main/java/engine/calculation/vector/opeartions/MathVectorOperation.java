@@ -20,7 +20,7 @@ public class MathVectorOperation extends VectorOperation {
 
     @Override
     public void apply(int size, double[][] data) {
-        type.accept(new MathVectorCalc(size, data));
+        type.accept(new MathVectorCalcVisitor(size, data));
     }
 
     @Override
@@ -38,44 +38,241 @@ public class MathVectorOperation extends VectorOperation {
         calculatedSlots[resultSlot] = true;
     }
 
-    private class MathVectorCalc implements MathFunctionTypeVisitor {
+    private class MathVectorCalcVisitor implements MathFunctionTypeVisitor {
         private final int size;
-        private final double[][] data;
         private final double[] resultVector;
-        private final double[] inputVector;
+        private final double[][] inputVectors;
 
-        public MathVectorCalc(int size, double[][] data) {
+        public MathVectorCalcVisitor(int size, double[][] data) {
             this.size = size;
-            this.data = data;
 
             resultVector = data[resultSlot];
-            inputVector = data[slots[0]];
+
+            int nSlots = slots.length;
+
+            inputVectors = new double[nSlots][];
+            for (int i = 0; i < nSlots; i++) {
+                inputVectors[i] = data[slots[i]];
+            }
+        }
+
+
+        @Override
+        public void identity() {
+            System.arraycopy(inputVectors[0], 0, resultVector, 0, size);
         }
 
         @Override
         public void sin() {
+            double[] x = inputVectors[0];
             for (int i = 0; i < size; i++) {
-                resultVector[i] = Math.sin(inputVector[i]);
+                resultVector[i] = Math.sin(x[i]);
             }
         }
 
         @Override
         public void cos() {
+            double[] x = inputVectors[0];
             for (int i = 0; i < size; i++) {
-                resultVector[i] = Math.cos(inputVector[i]);
+                resultVector[i] = Math.sin(x[i]);
+            }
+        }
+
+        @Override
+        public void tan() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.tan(x[i]);
+            }
+        }
+
+        @Override
+        public void asin() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.asin(x[i]);
+            }
+        }
+
+        @Override
+        public void acos() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.acos(x[i]);
+            }
+        }
+
+        @Override
+        public void atan() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.atan(x[i]);
+            }
+        }
+
+        @Override
+        public void exp() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.exp(x[i]);
+            }
+        }
+
+        @Override
+        public void log() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.log(x[i]);
+            }
+        }
+
+        @Override
+        public void sqrt() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.log(x[i]);
+            }
+        }
+
+        @Override
+        public void remainder() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.IEEEremainder(x[i], y[i]);
+            }
+        }
+
+        @Override
+        public void ceil() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.ceil(x[i]);
+            }
+        }
+
+        @Override
+        public void floor() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.floor(x[i]);
+            }
+        }
+
+        @Override
+        public void atan2() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.atan2(x[i], y[i]);
+            }
+        }
+
+        @Override
+        public void pow() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.pow(x[i], y[i]);
+            }
+        }
+
+        @Override
+        public void round() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.round(x[i]);
+            }
+        }
+
+        @Override
+        public void random() {
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.random();
+            }
+        }
+
+        @Override
+        public void abs() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.abs(x[i]);
+            }
+        }
+
+        @Override
+        public void max() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.max(x[i], y[i]);
+            }
+        }
+
+        @Override
+        public void min() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.min(x[i], y[i]);
             }
         }
 
         @Override
         public void signum() {
+            double[] x = inputVectors[0];
             for (int i = 0; i < size; i++) {
-                resultVector[i] = Math.signum(inputVector[i]);
+                resultVector[i] = Math.signum(x[i]);
             }
         }
 
         @Override
-        public void identity() {
-            System.arraycopy(inputVector, 0, resultVector, 0, size);
+        public void sinh() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.sinh(x[i]);
+            }
+        }
+
+        @Override
+        public void cosh() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.cosh(x[i]);
+            }
+        }
+
+        @Override
+        public void tanh() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.tanh(x[i]);
+            }
+        }
+
+        @Override
+        public void hypot() {
+            double[] x = inputVectors[0];
+            double[] y = inputVectors[1];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.hypot(x[i], y[i]);
+            }
+        }
+
+        @Override
+        public void expm1() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.expm1(x[i]);
+            }
+        }
+
+        @Override
+        public void log1p() {
+            double[] x = inputVectors[0];
+            for (int i = 0; i < size; i++) {
+                resultVector[i] = Math.log1p(x[i]);
+            }
         }
     }
 }

@@ -124,7 +124,15 @@ public class ParboiledExpressionParserTest {
     }
 
     private Object parse(ClauseType type, String string) throws ParsingException {
-        return new ParboiledExpressionParser().parse(type, string);
+        Object obj = new ParboiledExpressionParser().parse(type, string);
+        if (type == ClauseType.ARGUMENTS) {
+            Function []args = (Function[]) obj;
+            return Arrays.asList(args);
+        } else if (type == ClauseType.EQUATIONS) {
+            Equation []args = (Equation[]) obj;
+            return Arrays.asList(args);
+        }
+        return obj;
     }
 
     private void parseExpression(String expr) throws ParsingException {
@@ -213,10 +221,6 @@ public class ParboiledExpressionParserTest {
     @Test(expected = ParsingException.class)
     public void testVariableFail4() throws Exception {
         parse(ClauseType.VARIABLE, "");
-    }
-    @Test(expected = ParsingException.class)
-    public void testVariableFail5() throws Exception {
-        parse(ClauseType.VARIABLE, "a0");
     }
 
     @Test

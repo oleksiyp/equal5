@@ -61,7 +61,7 @@ public class VectorCalculationEngineTest {
             drawer.draw(drawable.getSize(), drawable);
         }
         try {
-            drawer.writePng(new File(DIR, file));
+            drawer.writePng(new File(DIR, file), range);
         } catch (IOException e) {
             fail("IOException: " + e);
         }

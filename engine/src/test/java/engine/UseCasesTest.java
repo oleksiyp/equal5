@@ -100,7 +100,7 @@ public class UseCasesTest {
             String filename = String.format("test%03dc%02d.png",
                     useCase.number,
                     c);
-            drawToImage.writePng(new File(DIR, filename));
+            drawToImage.writePng(new File(DIR, filename), range);
 
             System.out.printf("%8d", time);
         }

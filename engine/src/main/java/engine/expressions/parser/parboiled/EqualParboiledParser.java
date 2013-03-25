@@ -70,7 +70,7 @@ class EqualParboiledParser extends BaseParser<Object> {
     @Clause(ClauseType.MATH_FUNCTION)
     public Rule MathFunc() {
         return Sequence(
-                OneOrMore(CharRange('a', 'z')).label("Name"),
+                Identifier().label("Name"),
                 WhiteSpace(),
 
                 "( ",
@@ -83,12 +83,12 @@ class EqualParboiledParser extends BaseParser<Object> {
 
     @Clause(ClauseType.ARGUMENTS)
     public Rule Arguments() {
-        return Sequence(
+        return Optional(
                 Expression(),
                 ZeroOrMore(
                         Sequence(
-                        ", ",
-                        Expression()).label("CommaExpression")
+                                ", ",
+                                Expression()).label("CommaExpression")
                 ).label("Tail")
         );
     }
@@ -109,11 +109,23 @@ class EqualParboiledParser extends BaseParser<Object> {
     }
 
     @Clause(ClauseType.VARIABLE)
-    @SuppressSubnodes
     public Rule Variable() {
         return Sequence(
-                OneOrMore(CharRange('a', 'z')),
+                Identifier().label("Name"),
                 WhiteSpace()
+        );
+    }
+
+    @SuppressSubnodes
+    public Rule Identifier() {
+        return Sequence(
+            CharRange('a', 'z'),
+            ZeroOrMore(
+                    FirstOf(
+                        CharRange('a', 'z'),
+                        CharRange('0', '9')
+                    )
+            )
         );
     }
 
@@ -152,7 +164,7 @@ class EqualParboiledParser extends BaseParser<Object> {
     }
 
     Rule WhiteSpace() {
-        return ZeroOrMore(AnyOf(" \t\f\n\r"));
+        return ZeroOrMore(AnyOf(" \t\f\n\r")).suppressNode();
     }
 
     public Rule WholeSentence(Rule rule) {

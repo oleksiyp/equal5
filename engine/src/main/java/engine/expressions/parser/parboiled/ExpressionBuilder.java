@@ -42,7 +42,7 @@ public class ExpressionBuilder {
     public static final String ZERO_OR_MORE_SEQUENCE_EQUATION = "ZeroOrMore/Sequence/Equation";
     public static final String TAIL_OPERATOR_TERM = "Tail/OperatorTerm";
     public static final String TAIL_OPERATOR_FACTOR = "Tail/OperatorFactor";
-    public static final String TAIL_COMMA_EXPRESSION_EXPRESSION = "Tail/CommaExpression/Expression";
+    public static final String SEQUENCE_TAIL_COMMA_EXPRESSION_EXPRESSION = "Sequence/Tail/CommaExpression/Expression";
 
     private final List<ParseError> errors = new ArrayList<ParseError>();
     private final InputBuffer inputBuffer;
@@ -79,13 +79,25 @@ public class ExpressionBuilder {
             case CONSTANT: return constant(node);
             case VARIABLE: return variable(node);
             case MATH_FUNCTION: return mathFunc(node);
-//            ARGUMENTS, // T
-//            DECIMAL_FLOAT, // T
-//            EXPONENT, // T
-//            DIGIT // T
+            case ARGUMENTS: return arguments(node);
+            case DECIMAL_FLOAT: return decimalFloat(node);
+            case EXPONENT: return exponent(node);
+            case DIGIT: return digit(node);
         }
 
         throw runtimeError(node, "clause type '" + clauseType + "' not handled");
+    }
+
+    private Object decimalFloat(Node<Object> node) {
+        return Double.parseDouble(getNodeText(node, inputBuffer));
+    }
+
+    private Object exponent(Node<Object> node) {
+        return getNodeText(node, inputBuffer);
+    }
+
+    private Object digit(Node<Object> node) {
+        return getNodeText(node, inputBuffer);
     }
 
     private ParsingFailureException error(Node<Object> node, String message) {
@@ -278,7 +290,11 @@ public class ExpressionBuilder {
         if (!VARIABLE.equals(node.getLabel())) {
             throw runtimeError(node, "[Variable] mismatch");
         }
-        String name = getNodeText(node, inputBuffer);
+        Node<Object> nameNode = findNodeByPath(node, NAME);
+        if (nameNode == null) {
+            throw runtimeError(node, "[Name] should be in [Variable]");
+        }
+        String name = getNodeText(nameNode, inputBuffer);
         return new Variable(name);
     }
 
@@ -316,15 +332,15 @@ public class ExpressionBuilder {
             throw runtimeError(node, "[Arguments] mismatch");
         }
 
-        Node<Object> firstExprNode = findNodeByPath(node, EXPRESSION);
+        Node<Object> firstExprNode = findNodeByPath(node, "Sequence/Expression");
         if (firstExprNode == null) {
-            throw runtimeError(node, "first [Expression] not found in [Arguments]");
+            return new Function[0];
         }
 
         List<Node<Object>> argExprNodes = new ArrayList<Node<Object>>();
         argExprNodes.add(firstExprNode);
 
-        collectNodesByPath(node, TAIL_COMMA_EXPRESSION_EXPRESSION, argExprNodes);
+        collectNodesByPath(node, SEQUENCE_TAIL_COMMA_EXPRESSION_EXPRESSION, argExprNodes);
         List<Function> result = new ArrayList<Function>();
 
         for (Node<Object> exprNode : argExprNodes) {

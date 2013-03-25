@@ -57,10 +57,19 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
 
     @Override
     public void visit(final MathFunction mathFunction) {
-        mathFunction
-                .getType()
-                .accept(new MathFunctionPrintingVisitor(
-                        mathFunction.getArguments()));
+        writer.write(mathFunction.getType().getInExpressionName());
+        writeArguments(mathFunction.getArguments());
+    }
+
+    private void writeArguments(Function[] arguments) {
+        writer.write("(");
+        for (int i = 0; i < arguments.length; i++) {
+            arguments[i].accept(ExpressionPrintingVisitor.this);
+            if (i > 0) {
+                writer.write(", ");
+            }
+        }
+        writer.write(")");
     }
 
 
@@ -86,49 +95,6 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
         priorities.pop();
         if (brackets.pop()) {
             writer.outputCloseBracket();
-        }
-    }
-
-    private class MathFunctionPrintingVisitor implements MathFunctionTypeVisitor {
-        private final Function[] arguments;
-
-        public MathFunctionPrintingVisitor(Function[] arguments) {
-            this.arguments = arguments;
-        }
-
-        @Override
-        public void sin() {
-            writer.write("sin");
-            writeArguments();
-        }
-
-        @Override
-        public void cos() {
-            writer.write("cos");
-            writeArguments();
-        }
-
-        @Override
-        public void signum() {
-            writer.write("signum");
-            writeArguments();
-        }
-
-        @Override
-        public void identity() {
-            writer.write("id");
-            writeArguments();
-        }
-
-        private void writeArguments() {
-            writer.write("(");
-            for (int i = 0; i < arguments.length; i++) {
-                arguments[i].accept(ExpressionPrintingVisitor.this);
-                if (i > 0) {
-                    writer.write(", ");
-                }
-            }
-            writer.write(")");
         }
     }
 }

@@ -1,6 +1,6 @@
 +play
 +syntax highlight&errors
--implement Math.*
++implement Math.*
 -find interesting graphics
 -coordinate system
 -drag/scroll viewport
@@ -12,3 +12,6 @@
 -rebindable keys
 -(re)set bounds
 -point selection
+
+bugs:
+-diagonal line rendering have artifacts
