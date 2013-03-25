@@ -40,6 +40,9 @@ public class MathFunction extends AbstractFunction {
 
         MathFunction that = (MathFunction) o;
 
+        if (type == MathFunctionType.RANDOM) return false;
+        if (that.type == MathFunctionType.RANDOM) return false;
+
         if (!Arrays.equals(arguments, that.arguments)) return false;
         if (type != that.type) return false;
 

@@ -6,6 +6,10 @@
 -coordinate system
 -drag/scroll viewport
 -add t+, t- buttons
+-aspect ratio fixation
+-equation systems
+-color graphics
+-pi, e constants
 -add menu
 -save image
 -save video
@@ -18,3 +22,4 @@
 
 bugs:
 -diagonal line rendering have artifacts
+-unknown variables is not warned
