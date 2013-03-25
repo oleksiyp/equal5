@@ -1,9 +1,7 @@
 package gui.mainapp;
 
-import engine.expressions.parser.SyntaxError;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
-import gui.mainapp.editor.RedLineHighlightPainter;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.FrameListener;
@@ -13,13 +11,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.*;
-import java.util.List;
 
 /**
  * User: Oleksiy Pylypenko
@@ -43,15 +38,20 @@ public class EqualAppPanel {
     private JLabel variablesLabel;
 
     private EqualViewport equalViewport;
+    private JLabel errorLabel;
 
     private final EqualViewModel viewModel;
     private final Player player;
     private final EqualAppPanelViewListener viewListener;
 
+    private final SyntaxErrorDisplay syntaxErrorDisplay;
+
     public EqualAppPanel(final EqualViewModel viewModel) {
         this.viewModel = viewModel;
 
         $$$setupUI$$$();
+
+        syntaxErrorDisplay = new SyntaxErrorDisplay(errorLabel, equationPad);
 
         equalViewport.setParser(new ParboiledExpressionParser());
 
@@ -105,40 +105,6 @@ public class EqualAppPanel {
                 .bindKey(root, key);
     }
 
-    private void resetParsingErrors() {
-        Highlighter highlighter = equationPad.getHighlighter();
-        highlighter.removeAllHighlights();
-
-    }
-    private void showParsingErrors(ParsingException e) {
-        resetParsingErrors();
-
-        if (!equationPad.getText().isEmpty()) {
-            highlighErrors(e);
-        }
-        equationPad.repaint();
-    }
-
-    private void highlighErrors(ParsingException e) {
-        int txtLen = equationPad.getText().length();
-        List<SyntaxError> errors = e.getErrors();
-        for (SyntaxError err : errors) {
-            try {
-                Highlighter highlighter = equationPad.getHighlighter();
-                int idx = err.getStartIndex();
-                if (idx >= txtLen) {
-                    idx = txtLen - 1;
-                }
-                highlighter.addHighlight(
-                        idx,
-                        err.getEndIndex(),
-                        new RedLineHighlightPainter());
-            } catch (BadLocationException e1) {
-                //skip
-            }
-        }
-    }
-
     public void createUIComponents() {
         equalViewport = new EqualViewport();
     }
@@ -158,9 +124,21 @@ public class EqualAppPanel {
         createUIComponents();
         root = new JPanel();
         root.setLayout(new BorderLayout(0, 0));
+        final JToolBar toolBar1 = new JToolBar();
+        root.add(toolBar1, BorderLayout.SOUTH);
+        constantsLabel = new JLabel();
+        constantsLabel.setText("LEFT(-10) TOP(10) RIGHT(10) BOTTOM(-10) STEPS(100) WIDTH(800) HEIGHT(600)");
+        toolBar1.add(constantsLabel);
+        final JToolBar.Separator toolBar$Separator1 = new JToolBar.Separator();
+        toolBar1.add(toolBar$Separator1);
+        variablesLabel = new JLabel();
+        variablesLabel.setText("t(0)");
+        toolBar1.add(variablesLabel);
+        final JSplitPane splitPane1 = new JSplitPane();
+        root.add(splitPane1, BorderLayout.CENTER);
         sidePanel = new JPanel();
         sidePanel.setLayout(new BorderLayout(0, 0));
-        root.add(sidePanel, BorderLayout.WEST);
+        splitPane1.setLeftComponent(sidePanel);
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridBagLayout());
         sidePanel.add(panel1, BorderLayout.SOUTH);
@@ -241,21 +219,31 @@ public class EqualAppPanel {
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(downButton, gbc);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new BorderLayout(0, 0));
+        sidePanel.add(panel3, BorderLayout.CENTER);
         final JScrollPane scrollPane1 = new JScrollPane();
-        sidePanel.add(scrollPane1, BorderLayout.CENTER);
+        panel3.add(scrollPane1, BorderLayout.CENTER);
         scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Equations"));
         equationPad = new JTextArea();
         equationPad.setColumns(30);
         equationPad.setText("coords(5,1)\ny=\n");
         equationPad.putClientProperty("html.disable", Boolean.TRUE);
         scrollPane1.setViewportView(equationPad);
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new BorderLayout(0, 0));
-        root.add(panel3, BorderLayout.CENTER);
+        errorLabel = new JLabel();
+        errorLabel.setBackground(new Color(-13108));
+        errorLabel.setEnabled(true);
+        errorLabel.setForeground(new Color(-6737152));
+        errorLabel.setOpaque(true);
+        errorLabel.setText("<html>Please correct expression: <ul> <li>insert variable or constant</li> </ul>");
+        panel3.add(errorLabel, BorderLayout.SOUTH);
         final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridBagLayout());
-        panel3.add(panel4, BorderLayout.SOUTH);
-        panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "'t' control"));
+        panel4.setLayout(new BorderLayout(0, 0));
+        splitPane1.setRightComponent(panel4);
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridBagLayout());
+        panel4.add(panel5, BorderLayout.SOUTH);
+        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "'t' control"));
         timeSlider = new JSlider();
         timeSlider.setSnapToTicks(true);
         timeSlider.setValue(0);
@@ -268,7 +256,7 @@ public class EqualAppPanel {
         gbc.weightx = 100.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel4.add(timeSlider, gbc);
+        panel5.add(timeSlider, gbc);
         playButton = new JButton();
         playButton.setHorizontalTextPosition(11);
         playButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/play.png")));
@@ -278,26 +266,16 @@ public class EqualAppPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel4.add(playButton, gbc);
-        final JPanel panel5 = new JPanel();
-        panel5.setLayout(new BorderLayout(0, 0));
-        panel3.add(panel5, BorderLayout.CENTER);
-        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Viewport"));
+        panel5.add(playButton, gbc);
         final JPanel panel6 = new JPanel();
         panel6.setLayout(new BorderLayout(0, 0));
-        panel6.setBackground(Color.white);
-        panel5.add(panel6, BorderLayout.CENTER);
-        panel6.add(equalViewport, BorderLayout.CENTER);
-        final JToolBar toolBar1 = new JToolBar();
-        root.add(toolBar1, BorderLayout.SOUTH);
-        constantsLabel = new JLabel();
-        constantsLabel.setText("LEFT(-10) TOP(10) RIGHT(10) BOTTOM(-10) STEPS(100) WIDTH(800) HEIGHT(600)");
-        toolBar1.add(constantsLabel);
-        final JToolBar.Separator toolBar$Separator1 = new JToolBar.Separator();
-        toolBar1.add(toolBar$Separator1);
-        variablesLabel = new JLabel();
-        variablesLabel.setText("t(0)");
-        toolBar1.add(variablesLabel);
+        panel4.add(panel6, BorderLayout.CENTER);
+        panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Viewport"));
+        final JPanel panel7 = new JPanel();
+        panel7.setLayout(new BorderLayout(0, 0));
+        panel7.setBackground(Color.white);
+        panel6.add(panel7, BorderLayout.CENTER);
+        panel7.add(equalViewport, BorderLayout.CENTER);
     }
 
     /**
@@ -368,9 +346,10 @@ public class EqualAppPanel {
                 equalViewport.setViewportBounds(viewModel.getViewportBounds());
                 equalViewport.setT(viewModel.getTAsVariable());
                 equalViewport.setExpression(viewModel.getEquations());
-                resetParsingErrors();
+                syntaxErrorDisplay.hide();
+
             } catch (ParsingException e) {
-                showParsingErrors(e);
+                syntaxErrorDisplay.show(e);
             }
         }
 
@@ -407,6 +386,7 @@ public class EqualAppPanel {
             state.accept(player);
         }
     }
+
     private class Player implements PlayStateVisitor, FrameListener {
 
         @Override
