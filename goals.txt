@@ -2,8 +2,11 @@
 +syntax highlight&errors
 +implement Math.*
 -find interesting graphics
+-auto-complete
 -coordinate system
 -drag/scroll viewport
+-add t+, t- buttons
+-add menu
 -save image
 -save video
 -post image
