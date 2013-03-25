@@ -2,7 +2,7 @@
 +syntax highlight&errors
 +implement Math.*
 +add t+, t- buttons
-b+unknown variables is not warned
+b+unknown variables are not warned
 +pi, e constants
 -coordinate system
 -equation systems
