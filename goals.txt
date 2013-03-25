@@ -1,15 +1,15 @@
 +play
 +syntax highlight&errors
 +implement Math.*
--find interesting graphics
--auto-complete
--coordinate system
--drag/scroll viewport
 -add t+, t- buttons
--aspect ratio fixation
--equation systems
--color graphics
 -pi, e constants
+-coordinate system
+-equation systems
+-auto-complete
+-drag/scroll viewport
+-aspect ratio fixation
+-color graphics
+-find interesting graphics
 -add menu
 -save image
 -save video
