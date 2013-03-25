@@ -15,5 +15,7 @@ play.png
 zoom-in.png
 zoom-out.png
 reload.png
+next.png
+previous.png
 
 -----------------------

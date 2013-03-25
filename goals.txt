@@ -9,6 +9,8 @@ b+unknown variables are not warned
 -auto-complete
 -drag/scroll viewport
 -aspect ratio fixation
+-pools of vectors
+-128K vector computation
 -color graphics
 -find interesting graphics
 -add menu
