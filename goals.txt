@@ -1,7 +1,7 @@
 +play
 +syntax highlight&errors
 +implement Math.*
--add t+, t- buttons
++add t+, t- buttons
 -pi, e constants
 -coordinate system
 -equation systems

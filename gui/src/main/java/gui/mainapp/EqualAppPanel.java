@@ -39,6 +39,8 @@ public class EqualAppPanel {
 
     private EqualViewport equalViewport;
     private JLabel errorLabel;
+    private JButton decrementTButton;
+    private JButton incrementTButton;
 
     private final EqualViewModel viewModel;
     private final Player player;
@@ -62,17 +64,12 @@ public class EqualAppPanel {
         bindButtonAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), ActionType.PLAY);
         bindButtonAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), ActionType.ZOOM_IN);
         bindButtonAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F7"), ActionType.ZOOM_OUT);
+        bindButtonAction(viewModel, decrementTButton, KeyStroke.getKeyStroke("F3"), ActionType.LOWER_T);
+        bindButtonAction(viewModel, incrementTButton, KeyStroke.getKeyStroke("F4"), ActionType.RAISE_T);
         bindButtonAction(viewModel, leftButton, KeyStroke.getKeyStroke("F9"), ActionType.LEFT);
         bindButtonAction(viewModel, upButton, KeyStroke.getKeyStroke("F10"), ActionType.UP);
         bindButtonAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), ActionType.DOWN);
         bindButtonAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), ActionType.RIGHT);
-
-        bindAction(viewModel,
-                KeyStroke.getKeyStroke("F3"),
-                ActionType.LOWER_T);
-        bindAction(viewModel,
-                KeyStroke.getKeyStroke("F4"),
-                ActionType.RAISE_T);
 
         equationPad
                 .getDocument()
@@ -135,6 +132,7 @@ public class EqualAppPanel {
         variablesLabel.setText("t(0)");
         toolBar1.add(variablesLabel);
         final JSplitPane splitPane1 = new JSplitPane();
+        splitPane1.setDividerLocation(350);
         root.add(splitPane1, BorderLayout.CENTER);
         sidePanel = new JPanel();
         sidePanel.setLayout(new BorderLayout(0, 0));
@@ -159,13 +157,13 @@ public class EqualAppPanel {
         rightButton.setToolTipText("Move viewport right");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(rightButton, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.ipady = 10;
         panel2.add(spacer1, gbc);
@@ -176,7 +174,7 @@ public class EqualAppPanel {
         zoomInButton.setToolTipText("Zoom in viewport");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(zoomInButton, gbc);
         zoomOutButton = new JButton();
@@ -186,7 +184,7 @@ public class EqualAppPanel {
         zoomOutButton.setToolTipText("Zoom out viewport");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(zoomOutButton, gbc);
         leftButton = new JButton();
@@ -196,7 +194,7 @@ public class EqualAppPanel {
         leftButton.setToolTipText("Move viewport left");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(leftButton, gbc);
         upButton = new JButton();
@@ -206,7 +204,7 @@ public class EqualAppPanel {
         upButton.setToolTipText("Move viewort up");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(upButton, gbc);
         downButton = new JButton();
@@ -216,9 +214,29 @@ public class EqualAppPanel {
         downButton.setToolTipText("Move viewport down");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(downButton, gbc);
+        decrementTButton = new JButton();
+        decrementTButton.setHorizontalTextPosition(10);
+        decrementTButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/previous.png")));
+        decrementTButton.setText("F3");
+        decrementTButton.setToolTipText("Decrement parameter \"t\"");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(decrementTButton, gbc);
+        incrementTButton = new JButton();
+        incrementTButton.setHorizontalTextPosition(11);
+        incrementTButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/next.png")));
+        incrementTButton.setText("F4");
+        incrementTButton.setToolTipText("Increment parameter \"t\"");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(incrementTButton, gbc);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new BorderLayout(0, 0));
         sidePanel.add(panel3, BorderLayout.CENTER);
@@ -243,7 +261,7 @@ public class EqualAppPanel {
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridBagLayout());
         panel4.add(panel5, BorderLayout.SOUTH);
-        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "'t' control"));
+        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Player"));
         timeSlider = new JSlider();
         timeSlider.setSnapToTicks(true);
         timeSlider.setValue(0);

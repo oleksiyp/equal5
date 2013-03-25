@@ -32,7 +32,9 @@
       </toolbar>
       <splitpane id="9e760">
         <constraints border-constraint="Center"/>
-        <properties/>
+        <properties>
+          <dividerLocation value="350"/>
+        </properties>
         <border type="none"/>
         <children>
           <grid id="b9ea4" binding="sidePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
@@ -57,7 +59,7 @@
                     <children>
                       <component id="39695" class="javax.swing.JButton" binding="rightButton">
                         <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -69,13 +71,13 @@
                       </component>
                       <vspacer id="17971">
                         <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0" ipady="10"/>
                         </constraints>
                       </vspacer>
                       <component id="a7b57" class="javax.swing.JButton" binding="zoomInButton">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -87,7 +89,7 @@
                       </component>
                       <component id="a864d" class="javax.swing.JButton" binding="zoomOutButton">
                         <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -99,7 +101,7 @@
                       </component>
                       <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -111,7 +113,7 @@
                       </component>
                       <component id="89653" class="javax.swing.JButton" binding="upButton">
                         <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -123,7 +125,7 @@
                       </component>
                       <component id="c5f5f" class="javax.swing.JButton" binding="downButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -131,6 +133,30 @@
                           <icon value="gui/mainapp/down-arrow.png"/>
                           <text value="F11"/>
                           <toolTipText value="Move viewport down"/>
+                        </properties>
+                      </component>
+                      <component id="c4c0c" class="javax.swing.JButton" binding="decrementTButton">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <horizontalTextPosition value="10"/>
+                          <icon value="gui/mainapp/previous.png"/>
+                          <text value="F3"/>
+                          <toolTipText value="Decrement parameter &quot;t&quot;"/>
+                        </properties>
+                      </component>
+                      <component id="53498" class="javax.swing.JButton" binding="incrementTButton">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <horizontalTextPosition value="11"/>
+                          <icon value="gui/mainapp/next.png"/>
+                          <text value="F4"/>
+                          <toolTipText value="Increment parameter &quot;t&quot;"/>
                         </properties>
                       </component>
                     </children>
@@ -183,7 +209,7 @@
               <grid id="67443" layout-manager="GridBagLayout">
                 <constraints border-constraint="South"/>
                 <properties/>
-                <border type="etched" title="'t' control"/>
+                <border type="etched" title="Player"/>
                 <children>
                   <component id="448e1" class="javax.swing.JSlider" binding="timeSlider">
                     <constraints>
