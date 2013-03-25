@@ -44,6 +44,10 @@ public enum MathFunctionType {
 
     private final String inExpressionName;
     private final int argumentsCount;
+    private boolean withSideEffects = false;
+    static {
+        RANDOM.withSideEffects = true;
+    }
 
     MathFunctionType(String inExpressionName, int argumentsCount) {
         this.inExpressionName = inExpressionName;
@@ -89,6 +93,10 @@ public enum MathFunctionType {
 
     public int getArgumentsCount() {
         return argumentsCount;
+    }
+
+    public boolean isWithSideEffects() {
+        return withSideEffects;
     }
 
     public static MathFunctionType bySignature(String name, int argsCount) {
