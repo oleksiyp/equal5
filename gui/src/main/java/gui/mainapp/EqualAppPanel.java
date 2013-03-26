@@ -3,8 +3,12 @@ package gui.mainapp;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import gui.mainapp.viewmodel.*;
+import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.FrameListener;
+import util.ActionBeanControl;
+import util.BeanControl;
+import util.Bindings;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,8 +16,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
 /**
@@ -41,6 +47,9 @@ public class EqualAppPanel {
     private JLabel errorLabel;
     private JButton decrementTButton;
     private JButton incrementTButton;
+    private JCheckBox coordinateSystemCheckBox;
+    private JCheckBox gridCheckBox;
+    private JCheckBox aspectRatioCheckBox;
 
     private final EqualViewModel viewModel;
     private final Player player;
@@ -81,6 +90,37 @@ public class EqualAppPanel {
         equalViewport.setDelayedRecalculation(true);
 
         timeSlider.addChangeListener(new TimeSliderUpdater());
+
+        PropertyChangeListener listener;
+
+        coordinateSystemCheckBox.setAction(checkBoxAction(coordinateSystemCheckBox,
+                equalViewport
+                    .getCoordinateSystem()
+                    .getOptions(),
+                CoordinateSystem.OptionProperties.VISIBLE_PROPERTY));
+
+        gridCheckBox.setAction(checkBoxAction(gridCheckBox,
+                equalViewport
+                    .getCoordinateSystem()
+                    .getOptions(),
+                CoordinateSystem.OptionProperties.SHOW_GRID_PROPERTY));
+    }
+
+    private Action checkBoxAction(JCheckBox checkBox,
+                                  BeanControl control, String property) {
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        };
+
+        action.putValue(Action.NAME, checkBox.getText());
+
+        Bindings.bind(new ActionBeanControl(action),
+                Action.SELECTED_KEY,
+                control, property);
+
+        return action;
     }
 
     private ParboiledExpressionParser configureParser() {
@@ -150,23 +190,18 @@ public class EqualAppPanel {
         sidePanel.setLayout(new BorderLayout(0, 0));
         splitPane1.setLeftComponent(sidePanel);
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridBagLayout());
+        panel1.setLayout(new BorderLayout(0, 0));
         sidePanel.add(panel1, BorderLayout.SOUTH);
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridBagLayout());
-        GridBagConstraints gbc;
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        panel1.add(panel2, gbc);
+        panel1.add(panel2, BorderLayout.CENTER);
         panel2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Controls"));
         rightButton = new JButton();
         rightButton.setHorizontalTextPosition(11);
         rightButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/right-arrow.png")));
         rightButton.setText("F12");
         rightButton.setToolTipText("Move viewport right");
+        GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -179,26 +214,6 @@ public class EqualAppPanel {
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.ipady = 10;
         panel2.add(spacer1, gbc);
-        zoomInButton = new JButton();
-        zoomInButton.setHorizontalTextPosition(10);
-        zoomInButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-in.png")));
-        zoomInButton.setText("F8");
-        zoomInButton.setToolTipText("Zoom in viewport");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(zoomInButton, gbc);
-        zoomOutButton = new JButton();
-        zoomOutButton.setHorizontalTextPosition(11);
-        zoomOutButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-out.png")));
-        zoomOutButton.setText("F7");
-        zoomOutButton.setToolTipText("Zoom out viewport");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(zoomOutButton, gbc);
         leftButton = new JButton();
         leftButton.setHorizontalTextPosition(10);
         leftButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/left-arrow.png")));
@@ -249,11 +264,61 @@ public class EqualAppPanel {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(incrementTButton, gbc);
+        zoomOutButton = new JButton();
+        zoomOutButton.setHorizontalTextPosition(10);
+        zoomOutButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-out.png")));
+        zoomOutButton.setText("F7");
+        zoomOutButton.setToolTipText("Zoom out viewport");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(zoomOutButton, gbc);
+        zoomInButton = new JButton();
+        zoomInButton.setHorizontalTextPosition(11);
+        zoomInButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/zoom-in.png")));
+        zoomInButton.setText("F8");
+        zoomInButton.setToolTipText("Zoom in viewport");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(zoomInButton, gbc);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new BorderLayout(0, 0));
-        sidePanel.add(panel3, BorderLayout.CENTER);
+        panel3.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 5;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(panel3, gbc);
+        coordinateSystemCheckBox = new JCheckBox();
+        coordinateSystemCheckBox.setText("coord. sys.");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel3.add(coordinateSystemCheckBox, gbc);
+        gridCheckBox = new JCheckBox();
+        gridCheckBox.setText("grid");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel3.add(gridCheckBox, gbc);
+        aspectRatioCheckBox = new JCheckBox();
+        aspectRatioCheckBox.setText("aspect ratio");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel3.add(aspectRatioCheckBox, gbc);
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new BorderLayout(0, 0));
+        sidePanel.add(panel4, BorderLayout.CENTER);
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1, BorderLayout.CENTER);
+        panel4.add(scrollPane1, BorderLayout.CENTER);
         scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Equations"));
         equationPad = new JTextArea();
         equationPad.setText("coords(5,1)\ny=\n");
@@ -265,14 +330,14 @@ public class EqualAppPanel {
         errorLabel.setForeground(new Color(-6737152));
         errorLabel.setOpaque(true);
         errorLabel.setText("<html>Please correct expression: <ul> <li>insert variable or constant</li> </ul>");
-        panel3.add(errorLabel, BorderLayout.SOUTH);
-        final JPanel panel4 = new JPanel();
-        panel4.setLayout(new BorderLayout(0, 0));
-        splitPane1.setRightComponent(panel4);
+        panel4.add(errorLabel, BorderLayout.SOUTH);
         final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridBagLayout());
-        panel4.add(panel5, BorderLayout.SOUTH);
-        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Player"));
+        panel5.setLayout(new BorderLayout(0, 0));
+        splitPane1.setRightComponent(panel5);
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new GridBagLayout());
+        panel5.add(panel6, BorderLayout.SOUTH);
+        panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Player"));
         timeSlider = new JSlider();
         timeSlider.setSnapToTicks(true);
         timeSlider.setValue(0);
@@ -285,7 +350,7 @@ public class EqualAppPanel {
         gbc.weightx = 100.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel5.add(timeSlider, gbc);
+        panel6.add(timeSlider, gbc);
         playButton = new JButton();
         playButton.setHorizontalTextPosition(11);
         playButton.setIcon(new ImageIcon(getClass().getResource("/gui/mainapp/play.png")));
@@ -295,16 +360,16 @@ public class EqualAppPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel5.add(playButton, gbc);
-        final JPanel panel6 = new JPanel();
-        panel6.setLayout(new BorderLayout(0, 0));
-        panel4.add(panel6, BorderLayout.CENTER);
-        panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Viewport"));
+        panel6.add(playButton, gbc);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new BorderLayout(0, 0));
-        panel7.setBackground(Color.white);
-        panel6.add(panel7, BorderLayout.CENTER);
-        panel7.add(equalViewport, BorderLayout.CENTER);
+        panel5.add(panel7, BorderLayout.CENTER);
+        panel7.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Viewport"));
+        final JPanel panel8 = new JPanel();
+        panel8.setLayout(new BorderLayout(0, 0));
+        panel8.setBackground(Color.white);
+        panel7.add(panel8, BorderLayout.CENTER);
+        panel8.add(equalViewport, BorderLayout.CENTER);
     }
 
     /**
@@ -468,4 +533,5 @@ public class EqualAppPanel {
             viewModel.setViewportSize(equalViewport.getSize());
         }
     }
+
 }

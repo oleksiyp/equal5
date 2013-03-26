@@ -5,6 +5,7 @@
 b+unknown variables are not warned
 +pi, e constants
 +coordinate system
++fast options in Control
 a-coordinate system labels
 -equation systems
 -auto-complete

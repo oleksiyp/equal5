@@ -44,16 +44,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="6e8f5" layout-manager="GridBagLayout">
+              <grid id="6e8f5" layout-manager="BorderLayout" hgap="0" vgap="0">
                 <constraints border-constraint="South"/>
                 <properties/>
                 <border type="none"/>
                 <children>
                   <grid id="ffbc9" layout-manager="GridBagLayout">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="1.0" weighty="1.0"/>
-                    </constraints>
+                    <constraints border-constraint="Center"/>
                     <properties/>
                     <border type="etched" title="Controls"/>
                     <children>
@@ -75,30 +72,6 @@
                           <gridbag weightx="0.0" weighty="0.0" ipady="10"/>
                         </constraints>
                       </vspacer>
-                      <component id="a7b57" class="javax.swing.JButton" binding="zoomInButton">
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                          <gridbag weightx="0.0" weighty="0.0"/>
-                        </constraints>
-                        <properties>
-                          <horizontalTextPosition value="10"/>
-                          <icon value="gui/mainapp/zoom-in.png"/>
-                          <text value="F8"/>
-                          <toolTipText value="Zoom in viewport"/>
-                        </properties>
-                      </component>
-                      <component id="a864d" class="javax.swing.JButton" binding="zoomOutButton">
-                        <constraints>
-                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                          <gridbag weightx="0.0" weighty="0.0"/>
-                        </constraints>
-                        <properties>
-                          <horizontalTextPosition value="11"/>
-                          <icon value="gui/mainapp/zoom-out.png"/>
-                          <text value="F7"/>
-                          <toolTipText value="Zoom out viewport"/>
-                        </properties>
-                      </component>
                       <component id="66eaa" class="javax.swing.JButton" binding="leftButton">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -159,6 +132,67 @@
                           <toolTipText value="Increment parameter &quot;t&quot;"/>
                         </properties>
                       </component>
+                      <component id="a864d" class="javax.swing.JButton" binding="zoomOutButton">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <horizontalTextPosition value="10"/>
+                          <icon value="gui/mainapp/zoom-out.png"/>
+                          <text value="F7"/>
+                          <toolTipText value="Zoom out viewport"/>
+                        </properties>
+                      </component>
+                      <component id="a7b57" class="javax.swing.JButton" binding="zoomInButton">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <horizontalTextPosition value="11"/>
+                          <icon value="gui/mainapp/zoom-in.png"/>
+                          <text value="F8"/>
+                          <toolTipText value="Zoom in viewport"/>
+                        </properties>
+                      </component>
+                      <grid id="e1b2d" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="0" column="2" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="68b6d" class="javax.swing.JCheckBox" binding="coordinateSystemCheckBox">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
+                            <properties>
+                              <text value="coord. sys."/>
+                            </properties>
+                          </component>
+                          <component id="42ab3" class="javax.swing.JCheckBox" binding="gridCheckBox" default-binding="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
+                            <properties>
+                              <text value="grid"/>
+                            </properties>
+                          </component>
+                          <component id="d27bd" class="javax.swing.JCheckBox" binding="aspectRatioCheckBox" default-binding="true">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
+                            <properties>
+                              <text value="aspect ratio"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
                     </children>
                   </grid>
                 </children>

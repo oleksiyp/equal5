@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.concurrent.ThreadFactory;
 
 /**
@@ -39,6 +41,15 @@ public class EqualViewport extends JComponent  {
 
         updater.addFrameListener(new RepaintFrameListener());
         updater.start();
+
+        coordinateSystem
+                .getOptions()
+                .addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        repaint();
+                    }
+                });
 
         addComponentListener(new RecalcOnResizeListener());
     }
