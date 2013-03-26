@@ -115,4 +115,14 @@ public class ViewportBounds {
     public double getYDelta(int divisor) {
         return getHeight() / divisor;
     }
+
+    public double projectX(double xVal, ViewportSize viewportSize) {
+        double v = (xVal - left) / (right - left);
+        return v * viewportSize.getWidth();
+    }
+
+    public double projectY(double yVal, ViewportSize viewportSize) {
+        double v = (yVal - top) / (bottom - top);
+        return v * viewportSize.getHeight();
+    }
 }

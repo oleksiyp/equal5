@@ -13,6 +13,12 @@ public class CalculationResults {
     private final Drawable[] drawables;
 
     public CalculationResults(CalculationParameters parameters, Drawable[] drawables) {
+        if (parameters == null) {
+            throw new IllegalArgumentException("parameters");
+        }
+        if (drawables == null) {
+            throw new IllegalArgumentException("drawables");
+        }
         this.parameters = parameters;
         this.drawables = drawables;
     }

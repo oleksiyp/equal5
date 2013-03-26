@@ -1,6 +1,7 @@
 package gui.mainapp.viewport;
 
 import engine.calculation.CalculationParameters;
+import engine.calculation.CalculationResults;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import engine.expressions.Equation;
@@ -29,8 +30,12 @@ public class EqualViewport extends JComponent  {
     private volatile boolean recalculateEachSubmit;
     private volatile boolean delayedRecalculation;
 
+    private final CoordinateSystem coordinateSystem;
+
     public EqualViewport() {
         updater = new ViewportUpdater(new SomeThreadFactory());
+
+        coordinateSystem = new CoordinateSystem();
 
         updater.addFrameListener(new RepaintFrameListener());
         updater.start();
@@ -81,6 +86,10 @@ public class EqualViewport extends JComponent  {
         this.delayedRecalculation = delayedRecalculation;
     }
 
+    public CoordinateSystem getCoordinateSystem() {
+        return coordinateSystem;
+    }
+
     public void setExpression(String expression) throws ParsingException {
         if (parser == null) {
             return;
@@ -97,6 +106,12 @@ public class EqualViewport extends JComponent  {
     protected void paintComponent(Graphics g) {
         int width = getWidth();
         int height = getHeight();
+        CalculationResults results = updater.getResults();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, width, height);
+        if (results != null) {
+            coordinateSystem.draw(g, results.getParameters());
+        }
         updater.paint(g, width, height);
     }
 

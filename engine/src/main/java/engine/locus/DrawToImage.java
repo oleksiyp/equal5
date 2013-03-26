@@ -12,6 +12,7 @@ import java.io.IOException;
 * Time: 9:34 AM
 */
 public class DrawToImage implements RowDrawer, PixelDrawer {
+    public static final AlphaComposite CLEAR_COMPOSITE = AlphaComposite.getInstance(AlphaComposite.CLEAR);
     private BufferedImage image;
 
     public BufferedImage getImage() {
@@ -43,8 +44,10 @@ public class DrawToImage implements RowDrawer, PixelDrawer {
     private void clear() {
         Graphics2D g = image.createGraphics();
         try {
-            g.setColor(Color.WHITE);
+            Composite saveComposite = g.getComposite();
+            g.setComposite(CLEAR_COMPOSITE);
             g.fillRect(0, 0, image.getWidth(), image.getHeight());
+            g.setComposite(saveComposite);
         } finally {
             g.dispose();
         }
@@ -58,6 +61,8 @@ public class DrawToImage implements RowDrawer, PixelDrawer {
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = cropImg.createGraphics();
         try {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, range.getWidth(), range.getHeight());
             g.drawImage(image,
                     0, 0, range.getWidth(), range.getHeight(),
                     range.getMinX(), range.getMinY(),

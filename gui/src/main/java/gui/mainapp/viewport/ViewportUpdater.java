@@ -123,12 +123,14 @@ public class ViewportUpdater {
         delayedCalcTask.calculate(delayed ? DELAY : 0, parameters);
     }
 
+    public CalculationResults getResults() {
+        return results;
+    }
+
     public void paint(Graphics g, int width, int height) {
         CalculationResults lastResults = results;
 
         if (lastResults == null) {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, width, height);
             return;
         }
 
