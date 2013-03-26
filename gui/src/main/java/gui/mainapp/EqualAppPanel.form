@@ -176,7 +176,6 @@
                       <component id="ebbb6" class="javax.swing.JTextArea" binding="equationPad">
                         <constraints/>
                         <properties>
-                          <columns value="30"/>
                           <text value="coords(5,1)&#10;y=&#10;" noi18n="true"/>
                         </properties>
                         <clientProperties>

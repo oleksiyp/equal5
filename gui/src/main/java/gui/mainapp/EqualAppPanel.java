@@ -256,7 +256,6 @@ public class EqualAppPanel {
         panel3.add(scrollPane1, BorderLayout.CENTER);
         scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Equations"));
         equationPad = new JTextArea();
-        equationPad.setColumns(30);
         equationPad.setText("coords(5,1)\ny=\n");
         equationPad.putClientProperty("html.disable", Boolean.TRUE);
         scrollPane1.setViewportView(equationPad);
