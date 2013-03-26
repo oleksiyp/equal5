@@ -6,13 +6,14 @@ b+unknown variables are not warned
 +pi, e constants
 +coordinate system
 +fast options in Control
++aspect ratio fixation
+b-resize shows for a second images without respect to aspect ratio
 a-coordinate system labels
 -equation systems
 -auto-complete
 -maximum dependency injection
 -configuration file
 -drag/scroll viewport
--aspect ratio fixation
 -pools of vectors
 -128K vector computation
 -color graphics

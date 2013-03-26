@@ -26,11 +26,11 @@ public class CoordinateSystem {
         return options;
     }
 
-    public void draw(Graphics g, CalculationParameters params) {
+    public void draw(Graphics g, ViewportSize size, ViewportBounds bounds) {
         if (!options.isVisible()) {
             return;
         }
-        new PaintInstance(g, params).draw();
+        new PaintInstance(g, size, bounds).draw();
     }
 
     enum LineType {
@@ -41,15 +41,13 @@ public class CoordinateSystem {
 
     class PaintInstance {
         private final Graphics g;
-        private final CalculationParameters params;
         private final ViewportBounds bounds;
         private final ViewportSize size;
 
-        public PaintInstance(Graphics g, CalculationParameters params) {
+        public PaintInstance(Graphics g, ViewportSize size, ViewportBounds bounds) {
             this.g = g;
-            this.params = params;
-            bounds = params.getBounds();
-            size = params.getSize();
+            this.size = size;
+            this.bounds = bounds;
         }
 
         private void draw() {

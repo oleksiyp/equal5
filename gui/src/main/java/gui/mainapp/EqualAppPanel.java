@@ -1,5 +1,6 @@
 package gui.mainapp;
 
+import engine.calculation.ViewportSize;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import gui.mainapp.viewmodel.*;
@@ -99,11 +100,23 @@ public class EqualAppPanel {
                     .getOptions(),
                 CoordinateSystem.OptionProperties.VISIBLE_PROPERTY));
 
-        gridCheckBox.setAction(checkBoxAction(gridCheckBox,
+        Action gridAction = checkBoxAction(gridCheckBox,
+                equalViewport
+                        .getCoordinateSystem()
+                        .getOptions(),
+                CoordinateSystem.OptionProperties.SHOW_GRID_PROPERTY);
+        Bindings.bind(new ActionBeanControl(gridAction),
+                ActionBeanControl.ENABLED,
                 equalViewport
                     .getCoordinateSystem()
                     .getOptions(),
-                CoordinateSystem.OptionProperties.SHOW_GRID_PROPERTY));
+                CoordinateSystem.OptionProperties.VISIBLE_PROPERTY);
+        gridCheckBox.setAction(gridAction);
+
+        aspectRatioCheckBox.setAction(checkBoxAction(
+                aspectRatioCheckBox,
+                viewModel,
+                "keepAspect"));
     }
 
     private Action checkBoxAction(JCheckBox checkBox,
@@ -436,7 +449,12 @@ public class EqualAppPanel {
         @Override
         public void viewport() {
             try {
-                equalViewport.setSize(viewModel.getViewportSize());
+                Dimension dim = viewModel
+                        .getViewportSize()
+                        .toDimension();
+                if (!dim.equals(equalViewport.getSize())) {
+                    equalViewport.setSize(dim);
+                }
                 equalViewport.setViewportBounds(viewModel.getViewportBounds());
                 equalViewport.setT(viewModel.getTAsVariable());
                 equalViewport.setExpression(viewModel.getEquations());
@@ -522,15 +540,17 @@ public class EqualAppPanel {
         }
     }
 
-    private class ViewportResizeUpdater extends ComponentAdapter implements Runnable {
+    private class ViewportResizeUpdater extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
-            viewListener.withDisabled(InterfacePart.VIEWPORT, this);
-        }
-
-        @Override
-        public void run() {
-            viewModel.setViewportSize(equalViewport.getSize());
+            Dimension dim = equalViewport.getSize();
+            int width = (int) Math.round(dim.getWidth());
+            int height = (int) Math.round(dim.getHeight());
+            if (width < 0 || height < 0) {
+                width = height = 0;
+            }
+            viewModel.setViewportSize(
+                    new ViewportSize(width, height));
         }
     }
 

@@ -1,12 +1,14 @@
 package engine.calculation;
 
+import java.awt.*;
+
 public class ViewportSize {
     private final int width;
     private final int height;
 
     public ViewportSize(int width, int height) {
-        if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException("width or height is not positive");
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("width or height is negative");
         }
         this.width = width;
         this.height = height;
@@ -38,5 +40,14 @@ public class ViewportSize {
         int result = width;
         result = 31 * result + height;
         return result;
+    }
+
+    public Dimension toDimension() {
+        return new Dimension(width, height);
+    }
+
+
+    public boolean isEmpty() {
+        return width == 0 || height == 0;
     }
 }

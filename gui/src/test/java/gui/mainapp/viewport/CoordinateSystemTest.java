@@ -23,23 +23,21 @@ public class CoordinateSystemTest {
 
     @Test
     public void testDraw() throws Exception {
-        CalculationParameters parameters = new CalculationParameters(
-                new ViewportBounds(-12, -12, 12, 12),
-                new ViewportSize(500, 500),
-                0);
+        ViewportBounds bounds = new ViewportBounds(-12, -12, 12, 12);
+        ViewportSize size = new ViewportSize(500, 500);
         CoordinateSystem system = new CoordinateSystem();
         BufferedImage img = new BufferedImage(
-                parameters.getSize().getWidth(),
-                parameters.getSize().getHeight(),
+                size.getWidth(),
+                size.getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
 
         Graphics g = img.getGraphics();
         try {
             g.setColor(Color.WHITE);
             g.fillRect(0, 0,
-                    parameters.getSize().getWidth(),
-                    parameters.getSize().getHeight());
-            system.draw(g, parameters);
+                    size.getWidth(),
+                    size.getHeight());
+            system.draw(g, size, bounds);
         }finally {
             g.dispose();
         }

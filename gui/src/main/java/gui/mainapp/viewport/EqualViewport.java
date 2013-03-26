@@ -50,8 +50,6 @@ public class EqualViewport extends JComponent  {
                         repaint();
                     }
                 });
-
-        addComponentListener(new RecalcOnResizeListener());
     }
 
     public void setViewportBounds(ViewportBounds viewportBounds) {
@@ -68,17 +66,21 @@ public class EqualViewport extends JComponent  {
         if (equations == null || viewportBounds == null) {
             return;
         }
-        int width = getWidth();
-        int height = getHeight();
-        if (width <= 0 || height <= 0) {
-            return;
-        }
-        ViewportSize size = new ViewportSize(width, height);
+        ViewportSize size = getViewportSize();
         updater.setParameters(
                 new CalculationParameters(viewportBounds,
                         size, t, equations),
                 recalculateEachSubmit,
                 delayedRecalculation);
+    }
+
+    private ViewportSize getViewportSize() {
+        int width = getWidth();
+        int height = getHeight();
+        if (width < 0 || height < 0) {
+            width = height = 0;
+        }
+        return new ViewportSize(width, height);
     }
 
     public boolean isRecalculateEachSubmit() {
@@ -117,11 +119,11 @@ public class EqualViewport extends JComponent  {
     protected void paintComponent(Graphics g) {
         int width = getWidth();
         int height = getHeight();
-        CalculationResults results = updater.getResults();
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
-        if (results != null) {
-            coordinateSystem.draw(g, results.getParameters());
+        ViewportSize size = getViewportSize();
+        if (viewportBounds != null && !size.isEmpty()) {
+            coordinateSystem.draw(g, size, viewportBounds);
         }
         updater.paint(g, width, height);
     }
@@ -148,13 +150,6 @@ public class EqualViewport extends JComponent  {
         @Override
         public void frameDone() {
             repaint();
-        }
-    }
-
-    private class RecalcOnResizeListener extends ComponentAdapter {
-        @Override
-        public void componentResized(ComponentEvent e) {
-            submitCalculation();
         }
     }
 }
