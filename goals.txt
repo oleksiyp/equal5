@@ -8,6 +8,8 @@ b+unknown variables are not warned
 a-coordinate system labels
 -equation systems
 -auto-complete
+-maximum dependency injection
+-configuration file
 -drag/scroll viewport
 -aspect ratio fixation
 -pools of vectors
