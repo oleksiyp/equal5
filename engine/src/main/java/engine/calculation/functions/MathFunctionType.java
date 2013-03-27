@@ -6,33 +6,33 @@ package engine.calculation.functions;
 * Time: 1:55 PM
 */
 public enum MathFunctionType {
-    IDENTITY("id", 1),
-    SIN("sin", 1),
-    COS("cos", 1),
-    TAN("tan", 1),
-    ASIN("asin", 1),
-    ACOS("acos", 1),
-    ATAN("atan", 1),
-    EXP("exp", 1),
-    LOG("log", 1),
-    SQRT("sqrt", 1),
-    REMAINDER("remainder", 2),
-    CEIL("ceil", 1),
-    FLOOR("floor", 1),
-    ATAN2("atan", 2),
-    POW("pow", 2),
-    ROUND("round", 1),
-    RANDOM("random", 0),
-    ABS("abs", 1),
-    MAX("max", 2),
-    MIN("min", 2),
-    SIGNUM("sign", 1),
-    SINH("sinh", 1),
-    COSH("cosh", 1),
-    TANH("tanh", 1),
-    HYPOT("hypot", 2),
-    EXPM1("expm1", 1),
-    LOG1P("log1p", 1);
+    IDENTITY("id", 1, "id(x)"),
+    SIN("sin", 1, "sin(x)"),
+    COS("cos", 1, "cos(x)"),
+    TAN("tan", 1, "tan(x)"),
+    ASIN("asin", 1, "asin(x)"),
+    ACOS("acos", 1, "acos(x)"),
+    ATAN("atan", 1, "atan(x)"),
+    EXP("exp", 1, "exp(x)"),
+    LOG("log", 1, "log(x)"),
+    SQRT("sqrt", 1, "sqrt(x)"),
+    REMAINDER("remainder", 2, "remainder(quotient, divisor)"),
+    CEIL("ceil", 1, "ceil(x)"),
+    FLOOR("floor", 1, "floor(x)"),
+    ATAN2("atan", 2, "atan(y, x)"),
+    POW("pow", 2, "pow(x, degree)"),
+    ROUND("round", 1, "round(x)"),
+    RANDOM("random", 0, "random()"),
+    ABS("abs", 1, "abs(x)"),
+    MAX("max", 2, "max(a,b)"),
+    MIN("min", 2, "min(a,b)"),
+    SIGNUM("sign", 1, "sign(x)"),
+    SINH("sinh", 1, "sinh(x)"),
+    COSH("cosh", 1, "cosh(x)"),
+    TANH("tanh", 1, "tanh(x)"),
+    HYPOT("hypot", 2, "hypot(c1, c2)"),
+    EXPM1("expm1", 1, "expm1(1)"),
+    LOG1P("log1p", 1, "log1p(1)");
 
     // Math functions:
     // sin, cos, tan, asin, acos, atan,
@@ -44,14 +44,16 @@ public enum MathFunctionType {
 
     private final String inExpressionName;
     private final int argumentsCount;
+    private final String signature;
     private boolean withSideEffects = false;
     static {
         RANDOM.withSideEffects = true;
     }
 
-    MathFunctionType(String inExpressionName, int argumentsCount) {
+    MathFunctionType(String inExpressionName, int argumentsCount, String signature) {
         this.inExpressionName = inExpressionName;
         this.argumentsCount = argumentsCount;
+        this.signature = signature;
     }
 
     public void accept(MathFunctionTypeVisitor visitor) {
@@ -97,6 +99,10 @@ public enum MathFunctionType {
 
     public boolean isWithSideEffects() {
         return withSideEffects;
+    }
+
+    public String getSignature() {
+        return signature;
     }
 
     public static MathFunctionType bySignature(String name, int argsCount) {

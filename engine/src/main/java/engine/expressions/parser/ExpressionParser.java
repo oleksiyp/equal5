@@ -5,6 +5,9 @@ import engine.expressions.Function;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.auto_complete.AutocompletionParser;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Syntax passed to this methods should be following:
  *
@@ -25,4 +28,12 @@ public interface ExpressionParser {
 
     AutocompletionParser createAutocompletionParser()
             throws UnsupportedOperationException;
+
+    void setKnownConstants(Map<String, Double> knownConstants);
+
+    void setVarList(List<String> varList);
+
+    Map<String, Double> getKnownConstants();
+
+    List<String> getVarList();
 }

@@ -26,10 +26,12 @@ public class ParboiledExpressionParser implements ExpressionParser {
     private Map<String, Double> knownConstants = new HashMap<String, Double>();
     private List<String> varList = null;
 
+    @Override
     public Map<String, Double> getKnownConstants() {
         return knownConstants;
     }
 
+    @Override
     public void setKnownConstants(Map<String, Double> knownConstants) {
         if (knownConstants == null) {
             throw new IllegalArgumentException("knownConstants");
@@ -37,10 +39,12 @@ public class ParboiledExpressionParser implements ExpressionParser {
         this.knownConstants = knownConstants;
     }
 
+    @Override
     public List<String> getVarList() {
         return varList;
     }
 
+    @Override
     public void setVarList(List<String> varList) {
         this.varList = varList;
     }

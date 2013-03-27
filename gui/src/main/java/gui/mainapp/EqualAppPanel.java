@@ -7,6 +7,7 @@ import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.FrameListener;
+import javafx.scene.input.KeyCode;
 import util.ActionBeanControl;
 import util.BeanControl;
 import util.Bindings;
@@ -17,9 +18,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
@@ -57,20 +56,31 @@ public class EqualAppPanel {
     private final EqualAppPanelViewListener viewListener;
 
     private final SyntaxErrorDisplay syntaxErrorDisplay;
+    private final AutoCompleter autoCompleter;
 
     public EqualAppPanel(final EqualViewModel viewModel) {
         this.viewModel = viewModel;
 
         $$$setupUI$$$();
 
+        // syntax error display
         syntaxErrorDisplay = new SyntaxErrorDisplay(errorLabel, equationPad);
 
-        equalViewport.setParser(configureParser());
+        // parser used for expression parsing
+        ParboiledExpressionParser parser = configureParser();
+        equalViewport.setParser(parser);
 
+        // autocompleter
+        autoCompleter = new AutoCompleter(equationPad, parser);
+
+        // player
         player = new Player();
+
+        // listener connecting EqualAppPanel <-> EqualViewModel
         viewListener = new EqualAppPanelViewListener();
         viewModel.addViewListener(viewListener);
 
+        // keyboard bindings
         bindButtonAction(viewModel, playButton, KeyStroke.getKeyStroke("F5"), ActionType.PLAY);
         bindButtonAction(viewModel, zoomInButton, KeyStroke.getKeyStroke("F8"), ActionType.ZOOM_IN);
         bindButtonAction(viewModel, zoomOutButton, KeyStroke.getKeyStroke("F7"), ActionType.ZOOM_OUT);
@@ -81,12 +91,14 @@ public class EqualAppPanel {
         bindButtonAction(viewModel, downButton, KeyStroke.getKeyStroke("F11"), ActionType.DOWN);
         bindButtonAction(viewModel, rightButton, KeyStroke.getKeyStroke("F12"), ActionType.RIGHT);
 
+        // updater if document changed
         equationPad
                 .getDocument()
                 .addDocumentListener(
                         new EquationUpdater(viewModel));
 
-        equalViewport.addComponentListener(new ViewportResizeUpdater());
+        //
+        equalViewport.addComponentListener(new ViewportSizeListener());
         equalViewport.setRecalculateEachSubmit(false);
         equalViewport.setDelayedRecalculation(true);
 
@@ -117,6 +129,23 @@ public class EqualAppPanel {
                 aspectRatioCheckBox,
                 viewModel,
                 "keepAspect"));
+
+        String text = equationPad.getText();
+        if (text.matches("y\\s*=")) {
+            equationPad.setCaretPosition(text.length());
+        }
+
+        equationPad.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (KeyEvent.VK_SPACE == e.getKeyCode()
+                        && e.isControlDown()) {
+                    e.consume();
+
+                    autoCompleter.run();
+                }
+            }
+        });
     }
 
     private Action checkBoxAction(JCheckBox checkBox,
@@ -540,7 +569,7 @@ public class EqualAppPanel {
         }
     }
 
-    private class ViewportResizeUpdater extends ComponentAdapter {
+    private class ViewportSizeListener extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {
             Dimension dim = equalViewport.getSize();

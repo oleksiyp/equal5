@@ -156,25 +156,13 @@ class EqualAutocompleteRules {
     }
 
     public void run(List<MatcherPath> matcherPaths) {
-        Set<MatcherPath> worked = new HashSet<MatcherPath>();
         for (Rule rule : rules) {
             for (MatcherPath path : matcherPaths) {
                 if (rule.match(path)) {
                     rule.execute(this);
-                    worked.add(path);
                     break;
                 }
             }
-            for (MatcherPath p2 : matcherPaths) {
-                if (rule.match(p2)) {
-                    worked.add(p2);
-                }
-            }
-        }
-        ArrayList<MatcherPath> paths = new ArrayList<MatcherPath>(matcherPaths);
-        paths.remove(worked);
-        for (MatcherPath path : paths) {
-            System.out.println(path);
         }
     }
 }

@@ -27,20 +27,29 @@ public class ParboiledAutocompletionParserTest {
     }
 
     @Test
-    public void testCompleteExpression() throws Exception {
-        String str = "x * x+( pi/e+y ) *y<=pow(5,2)";
+    public void testCompletionsManually() throws Exception {
+        printCompletions("x * x+( pi/e+y ) *y<=pow(5,2)");
+    }
 
+    private void printCompletions(String str) {
+        System.out.println("Completions for expression '" + str + "':");
         for (int i = 0; i <= str.length(); i++)
         {
             String expr = str.substring(0, i);
-            System.out.println();
-            System.out.println("Expression: '" + expr + "'");
+            System.out.println("\"" + expr + "\"");
             autoComplete(expr);
-            System.out.println(variants);
+            printVariants();
         }
+    }
 
-//        testContainsCompletion("+", "-", "*", "/");
-//        testHaveFunctionNameCompletion("x");
+    private void printVariants() {
+        for (int i = 0; i < variants.size(); i++) {
+            if (i != 0) {
+                System.out.print(", ");
+            }
+            System.out.print(variants.get(i));
+        }
+        System.out.println();
     }
 
     private void testCompletion(Completion ...completion) {

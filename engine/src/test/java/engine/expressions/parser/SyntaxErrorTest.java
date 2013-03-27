@@ -68,7 +68,7 @@ public class SyntaxErrorTest {
     }
 
     @Test
-    public void testExpressions() throws Exception {
+    public void testExpressionsManually() throws Exception {
         showErrors(ClauseType.EXPRESSION, "1+");
         showErrors(ClauseType.EXPRESSION, "1*(5+");
         showErrors(ClauseType.EXPRESSION, "1-3*");
@@ -81,7 +81,7 @@ public class SyntaxErrorTest {
     }
 
     @Test
-    public void testEquations() throws Exception {
+    public void testEquationsManually() throws Exception {
         showErrors(ClauseType.EQUATIONS, "y= x=");
         showErrors(ClauseType.EQUATIONS, "y= x= y=");
         showErrors(ClauseType.EQUATIONS, "y= x= y= x=");

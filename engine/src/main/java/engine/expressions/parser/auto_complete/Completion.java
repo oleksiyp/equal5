@@ -56,4 +56,17 @@ public class Completion {
     public String toString() {
         return type + (prefix.isEmpty() ? "" : "(" + prefix + ")");
     }
+
+    public void accept(CompletionVisitor visitor) {
+        switch (type) {
+            case FUNCTION_NAME: visitor.functionName(prefix); break;
+            case VARIABLE_NAME: visitor.variableName(prefix); break;
+            case EQUALITY_SIGN: visitor.equalitySign(prefix); break;
+            case FACTOR_OPERATOR: visitor.factorOperator(); break;
+            case TERM_OPERATOR: visitor.termOperator(); break;
+            case CLOSE_BRACKET: visitor.closeBracket(); break;
+            case OPEN_BRACKET: visitor.openBracket(); break;
+            case NUMBER: visitor.number(prefix); break;
+        }
+    }
 }
