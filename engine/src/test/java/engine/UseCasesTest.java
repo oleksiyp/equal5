@@ -52,9 +52,7 @@ public class UseCasesTest {
         static {
             System.out.println("Look '" + DIR + "' directory for image results");
             System.out.printf("%20s ", "EQUATION");
-            for (int i = 1; i <= MAX_CONCURRENCY; i++) {
-                System.out.printf("%8s", i + " CORE");
-            }
+            System.out.printf("%-8s", "TIME");
             System.out.println();
         }
     }
@@ -85,9 +83,8 @@ public class UseCasesTest {
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
                 equations);
 
-        for (int c = 1; c <= MAX_CONCURRENCY; c++) {
             VectorMachineBuilder builder = new VectorMachineBuilder();
-            builder.setConcurrency(c, executor);
+            builder.setConcurrency(1, executor);
             VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
             CalculationEngine engine = new VectorCalculationEngine(evaluator);
             Stopwatch sw = new Stopwatch().start();
@@ -98,13 +95,11 @@ public class UseCasesTest {
             for (Drawable drawable : results.getDrawables()) {
                 drawToImage.draw(range, drawable);
             }
-            String filename = String.format("test%03dc%02d.png",
-                    useCase.number,
-                    c);
+            String filename = String.format("test%03d.png",
+                    useCase.number);
             drawToImage.writePng(new File(DIR, filename), range);
 
             System.out.printf("%8d", time);
-        }
         System.out.println(" ms");
     }
 

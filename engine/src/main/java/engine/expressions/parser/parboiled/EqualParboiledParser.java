@@ -63,8 +63,8 @@ class EqualParboiledParser extends BaseParser<Object> {
     public Rule Equation() {
         return Sequence(
                 Expression(),
-                FirstOf("=", "<=", ">=", "<", ">").label("EqualitySign"),
                 WhiteSpace(),
+                FirstOf("=", "<=", ">=", "<", ">").label("EqualitySign"),
                 Expression());
     }
 
@@ -74,8 +74,8 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Term(),
 
                 ZeroOrMore(Sequence(
-                        AnyOf("+-").label("Operator"),
                         WhiteSpace(),
+                        AnyOf("+-").label("Operator"),
                         Term()).label("OperatorTerm")
                 ).label("Tail"));
     }
@@ -87,8 +87,8 @@ class EqualParboiledParser extends BaseParser<Object> {
 
                 ZeroOrMore(
                         Sequence(
-                                AnyOf("*/").label("Operator"),
                                 WhiteSpace(),
+                                AnyOf("*/").label("Operator"),
                                 Factor()).label("OperatorFactor")
                 ).label("Tail"));
     }
@@ -105,16 +105,17 @@ class EqualParboiledParser extends BaseParser<Object> {
     @Clause(ClauseType.MATH_FUNCTION)
     public Rule MathFunc() {
         return Sequence(
+                WhiteSpace(),
                 Identifier().label("Name"),
-                WhiteSpace(),
 
-                "(",
                 WhiteSpace(),
+                "(",
 
                 Arguments(),
 
-                ")",
-                WhiteSpace());
+                WhiteSpace(),
+                ")"
+        );
 
 
     }
@@ -125,9 +126,8 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Expression(),
                 ZeroOrMore(
                         Sequence(
-
-                                ",",
                                 WhiteSpace(),
+                                ",",
 
                                 Expression()).label("CommaExpression")
                 ).label("Tail")
@@ -137,28 +137,29 @@ class EqualParboiledParser extends BaseParser<Object> {
     @Clause(ClauseType.PARENTHESES)
     public Rule Parentheses() {
         return Sequence(
-                "(",
                 WhiteSpace(),
+                "(",
 
                 Expression(),
 
-                ")",
-                WhiteSpace());
+                WhiteSpace(),
+                ")"
+        );
     }
 
     @Clause(ClauseType.CONSTANT)
     @SuppressSubnodes
     public Rule Constant() {
         return Sequence(
-                DecimalFloat(),
-                WhiteSpace());
+                WhiteSpace(),
+                DecimalFloat());
     }
 
     @Clause(ClauseType.VARIABLE)
     public Rule Variable() {
         return Sequence(
-                Identifier().label("Name"),
-                WhiteSpace());
+                WhiteSpace(),
+                Identifier().label("Name"));
     }
 
     @SuppressSubnodes
@@ -211,13 +212,12 @@ class EqualParboiledParser extends BaseParser<Object> {
         return ZeroOrMore(AnyOf(" \t\f\n\r")).suppressSubnodes().suppressNode();
     }
 
-    @Label("WhiteSpace")
     Rule CompulsoryWhiteSpace() {
         return OneOrMore(AnyOf(" \t\f\n\r")).suppressSubnodes().suppressNode();
     }
 
     public Rule WholeSentence(Rule rule) {
-        return Sequence(WhiteSpace(), rule, EOI);
+        return Sequence(rule, WhiteSpace(), EOI);
     }
 
 }
