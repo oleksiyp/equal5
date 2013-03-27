@@ -4,6 +4,7 @@ import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.expressions.Equation;
 import engine.expressions.Function;
+import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.locus.DrawToImage;
@@ -70,8 +71,8 @@ public class VectorCalculationEngineTest {
     private Equation eq(String left, String right) {
         ParboiledExpressionParser ep = new ParboiledExpressionParser();
         try {
-            Function leftExpr = ep.parseExpression(left);
-            Function rightExpr = ep.parseExpression(right);
+            Function leftExpr = (Function) ep.parse(ClauseType.EXPRESSION, left);
+            Function rightExpr = (Function) ep.parse(ClauseType.EXPRESSION, right);
             return new Equation(leftExpr, Equation.Type.EQUAL, rightExpr);
         } catch (ParsingException e) {
             throw new RuntimeException(e);

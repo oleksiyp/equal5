@@ -42,7 +42,7 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testParseExpression1() throws Exception {
-        Function parsed = parser.parseExpression("2*(1+x+a+3)");
+        Function parsed = (Function) parse(ClauseType.EXPRESSION, "2*(1+x+a+3)");
 
         Function inParents = Addition.sequence(one, xVar, aVar, three);
         Multiplication expected = new Multiplication(two, inParents);
@@ -51,7 +51,7 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testParseExpression2() throws Exception {
-        Function parsed = parser.parseExpression("2*(1+x+a+3-5)");
+        Function parsed = (Function) parse(ClauseType.EXPRESSION, "2*(1+x+a+3-5)");
 
         Function inParents = Addition.sequence(one, xVar, aVar, three);
         inParents = new Subtraction(inParents, five);
@@ -77,22 +77,22 @@ public class ParboiledExpressionParserTest {
 
     @Test(expected = ParsingException.class)
     public void testParseExpressionFail1() throws Exception {
-        parseExpression("(");
+        parse(ClauseType.EXPRESSION, "(");
     }
 
     @Test(expected = ParsingException.class)
     public void testParseExpressionFail2() throws Exception {
-        parseExpression("1*");
+        parse(ClauseType.EXPRESSION, "1*");
     }
 
     @Test(expected = ParsingException.class)
     public void testParseExpressionFail3() throws Exception {
-        parseExpression("()");
+        parse(ClauseType.EXPRESSION, "()");
     }
 
     @Test(expected = ParsingException.class)
     public void testParseExpressionFail4() throws Exception {
-        parseExpression("*1");
+        parse(ClauseType.EXPRESSION, "*1");
     }
 
     // DIGIT
@@ -133,10 +133,6 @@ public class ParboiledExpressionParserTest {
             return Arrays.asList(args);
         }
         return obj;
-    }
-
-    private void parseExpression(String expr) throws ParsingException {
-        new ParboiledExpressionParser().parseExpression(expr);
     }
 
     // EXPONENT

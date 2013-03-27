@@ -1,11 +1,10 @@
 package engine.expressions.parser.parboiled;
 
-import engine.expressions.*;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.SyntaxError;
-import org.parboiled.Parboiled;
+import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.parboiled.Rule;
 import org.parboiled.buffers.InputBuffer;
 import org.parboiled.errors.BasicParseError;
@@ -14,7 +13,6 @@ import org.parboiled.errors.ParseError;
 import org.parboiled.parserunners.RecoveringParseRunner;
 import org.parboiled.support.*;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static engine.expressions.parser.parboiled.HumanReadable.hr;
@@ -25,22 +23,6 @@ import static engine.expressions.parser.parboiled.HumanReadable.hr;
  * Time: 11:24 AM
  */
 public class ParboiledExpressionParser implements ExpressionParser {
-    private static final EqualParboiledParser parser = Parboiled.createParser(EqualParboiledParser.class);
-    private static final Map<ClauseType, Rule> ruleMap = new HashMap<ClauseType, Rule>();
-    static {
-
-        for (Method method : EqualParboiledParser.class.getMethods()) {
-            if (method.isAnnotationPresent(Clause.class)) {
-                Clause clause = method.getAnnotation(Clause.class);
-                try {
-                    ruleMap.put(clause.value(), (Rule) method.invoke(parser));
-                } catch (Exception e) {
-                    throw new RuntimeException("clause method invocation problem", e);
-                }
-            }
-        }
-    }
-
     private Map<String, Double> knownConstants = new HashMap<String, Double>();
     private List<String> varList = null;
 
@@ -63,20 +45,24 @@ public class ParboiledExpressionParser implements ExpressionParser {
         this.varList = varList;
     }
 
-    public Object parse(ClauseType type,
+    @Override
+    public Object parse(ClauseType clause,
                         String expression) throws ParsingException {
-        if (type == null) {
-            throw new IllegalArgumentException("bad clause type(null)");
+        if (clause == null) {
+            throw new IllegalArgumentException("bad clause clause(null)");
         }
         if (expression == null) {
             throw new IllegalArgumentException("expression");
         }
-        Rule rule = ruleMap.get(type);
+
+        EqualParboiledParser epp = EqualParboiledParser.INSTANCE;
+
+        Rule rule = epp.getRuleMap().get(clause);
         if (rule == null) {
-            throw new IllegalArgumentException("clause method not found. bad clause type: " + type);
+            throw new UnsupportedOperationException("clause '" + clause + "' is not handled");
         }
 
-        rule = parser.WholeSentence(rule);
+        rule = epp.WholeSentence(rule);
 
         RecoveringParseRunner<Object> runner;
         runner = new RecoveringParseRunner<Object>(rule);
@@ -92,7 +78,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         Object res = null;
         try {
-            res = builder.build(type, result.parseTreeRoot);
+            res = builder.build(clause, result.parseTreeRoot);
         } catch (ParsingFailureException e) {
             // skip
         } catch (RuntimeException e) {
@@ -191,12 +177,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
     }
 
     @Override
-    public Function parseExpression(String expression) throws ParsingException {
-        return (Function) parse(ClauseType.EXPRESSION, expression);
-    }
-
-    @Override
-    public Equation[] parseEquations(String expression) throws ParsingException {
-        return (Equation[]) parse(ClauseType.EQUATIONS, expression);
+    public AutocompletionParser createAutocompletionParser() throws UnsupportedOperationException {
+        return new ParboiledAutocompletionParser();
     }
 }

@@ -7,10 +7,10 @@ b+unknown variables are not warned
 +coordinate system
 +fast options in Control
 +aspect ratio fixation
+-auto-complete
 b-resize shows for a second images without respect to aspect ratio
 a-coordinate system labels
 -equation systems
--auto-complete
 -maximum dependency injection
 -configuration file
 -drag/scroll viewport

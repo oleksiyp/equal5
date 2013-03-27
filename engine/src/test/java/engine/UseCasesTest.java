@@ -6,6 +6,7 @@ import engine.calculation.vector.VectorEvaluator;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.expressions.Equation;
+import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
@@ -75,7 +76,7 @@ public class UseCasesTest {
         ExpressionParser parser = new ParboiledExpressionParser();
         Equation []equations;
         try {
-            equations = parser.parseEquations(eqs);
+            equations = (Equation[]) parser.parse(ClauseType.EQUATIONS, eqs);
         } catch (ParsingException ex) {
             fail("syntax error on '" + useCase.equations + "', exception: " + ex);
             return;

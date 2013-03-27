@@ -5,6 +5,7 @@ import engine.calculation.CalculationResults;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import engine.expressions.Equation;
+import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
 
@@ -22,6 +23,8 @@ import java.util.concurrent.ThreadFactory;
  * Time: 9:06 PM
  */
 public class EqualViewport extends JComponent  {
+    public static final ClauseType TOP_CLAUSE = ClauseType.EQUATIONS;
+
     private Equation[] equations;
     private ViewportBounds viewportBounds;
     private double t;
@@ -107,7 +110,7 @@ public class EqualViewport extends JComponent  {
         if (parser == null) {
             return;
         }
-        equations = parser.parseEquations(expression);
+        equations = (Equation[]) parser.parse(TOP_CLAUSE, expression);
         submitCalculation();
     }
 

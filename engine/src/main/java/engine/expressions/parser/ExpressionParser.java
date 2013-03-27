@@ -3,6 +3,7 @@ package engine.expressions.parser;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.parser.ParsingException;
+import engine.expressions.parser.auto_complete.AutocompletionParser;
 
 /**
  * Syntax passed to this methods should be following:
@@ -19,9 +20,9 @@ import engine.expressions.parser.ParsingException;
  * Time: 11:15 AM
  */
 public interface ExpressionParser {
-    Function parseExpression(String expression)
-            throws ParsingException;
+    Object parse(ClauseType clause,
+                 String expression) throws ParsingException;
 
-    Equation[] parseEquations(String expression)
-            throws ParsingException;
+    AutocompletionParser createAutocompletionParser()
+            throws UnsupportedOperationException;
 }

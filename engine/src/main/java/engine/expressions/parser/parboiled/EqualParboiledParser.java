@@ -2,9 +2,17 @@ package engine.expressions.parser.parboiled;
 
 import engine.expressions.parser.ClauseType;
 import org.parboiled.BaseParser;
+import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
+import org.parboiled.annotations.Label;
 import org.parboiled.annotations.SuppressSubnodes;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
 * User: Oleksiy Pylypenko
@@ -13,7 +21,33 @@ import org.parboiled.annotations.SuppressSubnodes;
 */
 @BuildParseTree
 class EqualParboiledParser extends BaseParser<Object> {
-    public EqualParboiledParser() {
+    public static final EqualParboiledParser INSTANCE = Parboiled.createParser(EqualParboiledParser.class);
+
+    public static final Pattern EXTRACT_FINAL_ID_PATTERN = Pattern.compile("([a-z][a-z\\d]*)$");
+
+    private final Map<ClauseType, Rule> ruleMap = new HashMap<ClauseType, Rule>();
+
+    EqualParboiledParser() {
+        initRuleMap();
+    }
+
+    private void initRuleMap() {
+        for (Method method : EqualParboiledParser.class.getMethods()) {
+            if (method.isAnnotationPresent(Clause.class)) {
+                Clause clause = method.getAnnotation(Clause.class);
+                try {
+                    ClauseType type = clause.value();
+                    Rule rule = (Rule) method.invoke(this);
+                    ruleMap.put(type, rule);
+                } catch (Exception e) {
+                    throw new RuntimeException("clause method invocation problem", e);
+                }
+            }
+        }
+    }
+
+    public Map<ClauseType, Rule> getRuleMap() {
+        return ruleMap;
     }
 
     @Clause(ClauseType.EQUATIONS)
@@ -21,9 +55,10 @@ class EqualParboiledParser extends BaseParser<Object> {
         return Sequence(
                 Equation(),
                 ZeroOrMore(
-                    WhiteSpace(),
-                    Equation()));
+                        CompulsoryWhiteSpace(),
+                        Equation()));
     }
+
     @Clause(ClauseType.EQUATION)
     public Rule Equation() {
         return Sequence(
@@ -51,10 +86,10 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Factor(),
 
                 ZeroOrMore(
-                    Sequence(
-                        AnyOf("*/").label("Operator"),
-                        WhiteSpace(),
-                        Factor()).label("OperatorFactor")
+                        Sequence(
+                                AnyOf("*/").label("Operator"),
+                                WhiteSpace(),
+                                Factor()).label("OperatorFactor")
                 ).label("Tail"));
     }
 
@@ -73,11 +108,14 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Identifier().label("Name"),
                 WhiteSpace(),
 
-                "( ",
+                "(",
+                WhiteSpace(),
 
                 Arguments(),
 
-                ") ");
+                ")",
+                WhiteSpace());
+
 
     }
 
@@ -87,7 +125,10 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Expression(),
                 ZeroOrMore(
                         Sequence(
-                                ", ",
+
+                                ",",
+                                WhiteSpace(),
+
                                 Expression()).label("CommaExpression")
                 ).label("Tail")
         );
@@ -95,9 +136,14 @@ class EqualParboiledParser extends BaseParser<Object> {
 
     @Clause(ClauseType.PARENTHESES)
     public Rule Parentheses() {
-        return Sequence("( ",
+        return Sequence(
+                "(",
+                WhiteSpace(),
+
                 Expression(),
-                ") ");
+
+                ")",
+                WhiteSpace());
     }
 
     @Clause(ClauseType.CONSTANT)
@@ -112,21 +158,28 @@ class EqualParboiledParser extends BaseParser<Object> {
     public Rule Variable() {
         return Sequence(
                 Identifier().label("Name"),
-                WhiteSpace()
-        );
+                WhiteSpace());
     }
 
     @SuppressSubnodes
     public Rule Identifier() {
         return Sequence(
-            CharRange('a', 'z'),
-            ZeroOrMore(
-                    FirstOf(
-                        CharRange('a', 'z'),
-                        CharRange('0', '9')
-                    )
-            )
+                CharRange('a', 'z'),
+                ZeroOrMore(
+                        FirstOf(
+                                CharRange('a', 'z'),
+                                CharRange('0', '9')
+                        )
+                )
         );
+    }
+
+    public static String extractFinalId(String expression) {
+        Matcher matcher = EXTRACT_FINAL_ID_PATTERN.matcher(expression);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
     }
 
     @SuppressSubnodes
@@ -154,17 +207,13 @@ class EqualParboiledParser extends BaseParser<Object> {
         return CharRange('0', '9');
     }
 
-    @Override
-    protected Rule fromStringLiteral(String string) {
-        return string.endsWith(" ") ?
-                Sequence(
-                        String(string.substring(0, string.length() - 1)),
-                        WhiteSpace()) :
-                String(string);
+    Rule WhiteSpace() {
+        return ZeroOrMore(AnyOf(" \t\f\n\r")).suppressSubnodes().suppressNode();
     }
 
-    Rule WhiteSpace() {
-        return ZeroOrMore(AnyOf(" \t\f\n\r")).suppressNode();
+    @Label("WhiteSpace")
+    Rule CompulsoryWhiteSpace() {
+        return OneOrMore(AnyOf(" \t\f\n\r")).suppressSubnodes().suppressNode();
     }
 
     public Rule WholeSentence(Rule rule) {

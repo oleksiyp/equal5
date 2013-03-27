@@ -4,6 +4,8 @@ import engine.calculation.functions.Addition;
 import engine.calculation.functions.Constant;
 import engine.calculation.functions.Multiplication;
 import engine.expressions.Function;
+import engine.expressions.parser.ClauseType;
+import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import org.junit.Test;
 
@@ -62,8 +64,13 @@ public class ExpressionPrintingVisitorTest {
 
     @Test
     public void testCase3() throws Exception {
-        Function func = new ParboiledExpressionParser().parseExpression("(x+1)*(x+1)+(y+1)*(y+1)-25");
+        Function func = (Function) parse("(x+1)*(x+1)+(y+1)*(y+1)-25");
 
         assertEquals("(x+1.0)*(x+1.0)+(y+1.0)*(y+1.0)-25.0", printUsingVisitor(func));
+    }
+
+    private Object parse(String expression) throws ParsingException {
+        return new ParboiledExpressionParser().parse(ClauseType.EXPRESSION,
+                expression);
     }
 }
