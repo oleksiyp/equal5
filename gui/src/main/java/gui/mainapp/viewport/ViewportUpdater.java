@@ -1,9 +1,6 @@
 package gui.mainapp.viewport;
 
-import engine.calculation.CalculationEngine;
-import engine.calculation.CalculationParameters;
-import engine.calculation.CalculationResults;
-import engine.calculation.VectorCalculationEngine;
+import engine.calculation.*;
 import engine.calculation.tasks.*;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
@@ -55,7 +52,7 @@ class ViewportUpdater {
 
         vmBuilder = new VectorMachineBuilder();
         VectorMachineEvaluator evaluator = new VectorMachineEvaluator(vmBuilder);
-        CalculationEngine engine = new VectorCalculationEngine(evaluator);
+        CalculationEngine engine = new VectorCalculationEngine2(evaluator);
 
         EngineCalculationTask engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
         delayedCalcTask = new DelayedCalculationTask(engineCalcTask, DELAY);

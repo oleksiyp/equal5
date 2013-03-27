@@ -2,6 +2,8 @@ package engine;
 
 import com.google.common.base.Stopwatch;
 import engine.calculation.*;
+import engine.calculation.evaluator.FunctionEvaluator;
+import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.vector.VectorEvaluator;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
@@ -52,7 +54,9 @@ public class UseCasesTest {
         static {
             System.out.println("Look '" + DIR + "' directory for image results");
             System.out.printf("%20s ", "EQUATION");
-            System.out.printf("%-8s", "TIME");
+            System.out.printf("%-8s", "BASIC");
+            System.out.printf("%-8s", "VECTOR");
+            System.out.printf("%-8s", "VECTOR2");
             System.out.println();
         }
     }
@@ -83,24 +87,58 @@ public class UseCasesTest {
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
                 equations);
 
-            VectorMachineBuilder builder = new VectorMachineBuilder();
-            builder.setConcurrency(1, executor);
-            VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
-            CalculationEngine engine = new VectorCalculationEngine(evaluator);
-            Stopwatch sw = new Stopwatch().start();
-            CalculationResults results = engine.calculate(params);
-            long time = sw.stop().elapsedTime(TimeUnit.MILLISECONDS);
-            RectRange range = RectRange.fromViewportSize(size);
-            DrawToImage drawToImage = new DrawToImage(range);
-            for (Drawable drawable : results.getDrawables()) {
-                drawToImage.draw(range, drawable);
-            }
-            String filename = String.format("test%03d.png",
-                    useCase.number);
-            drawToImage.writePng(new File(DIR, filename), range);
+        long time;
+        time = calculateAndWrite(params,
+                createBasicEngine(),
+                String.format("test%03db.png",
+                useCase.number));
+        System.out.printf("%8s", time + " ms");
 
-            System.out.printf("%8d", time);
-        System.out.println(" ms");
+        time = calculateAndWrite(params,
+                createVectorEngine(),
+                String.format("test%03dv.png",
+                useCase.number));
+        System.out.printf("%8s", time + " ms");
+
+        time = calculateAndWrite(params,
+                createVectorEngine2(),
+                String.format("test%03dv2.png",
+                useCase.number));
+        System.out.printf("%8s", time + " ms");
+        System.out.println("");
+    }
+
+    private long calculateAndWrite(CalculationParameters params, CalculationEngine engine, String filename) throws IOException {
+        engine.calculate(params);
+        Stopwatch sw = new Stopwatch().start();
+        CalculationResults results = engine.calculate(params);
+        long time = sw.stop().elapsedTime(TimeUnit.MILLISECONDS);
+        RectRange range = RectRange.fromViewportSize(size);
+        DrawToImage drawToImage = new DrawToImage(range);
+        for (Drawable drawable : results.getDrawables()) {
+            drawToImage.draw(range, drawable);
+        }
+        drawToImage.writePng(new File(DIR, filename), range);
+        return time;
+    }
+
+    private CalculationEngine createBasicEngine() {
+        FunctionEvaluator evaluator = new ImmediateFunctionEvaluator();
+        return new BasicCalculationEngine(evaluator);
+    }
+
+    private CalculationEngine createVectorEngine() {
+        VectorMachineBuilder builder = new VectorMachineBuilder();
+        builder.setConcurrency(1, executor);
+        VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
+        return new VectorCalculationEngine(evaluator);
+    }
+
+    private CalculationEngine createVectorEngine2() {
+        VectorMachineBuilder builder = new VectorMachineBuilder();
+        builder.setConcurrency(1, executor);
+        VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
+        return new VectorCalculationEngine2(evaluator);
     }
 
     private static EqualUseCase []useCases;

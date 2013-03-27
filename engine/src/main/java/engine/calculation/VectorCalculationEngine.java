@@ -13,8 +13,7 @@ import engine.locus.DiscreteLocus;
 import engine.locus.Drawable;
 import util.Cancelable;
 import util.CancellationRoutine;
-
-import java.util.Arrays;
+import util.VectorUtils;
 
 /**
  * User: Oleksiy Pylypenko
@@ -84,7 +83,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
             double[][] matrix = evaluator.calculate(arguments);
 
             if (prevMatrix == null) {
-                prevMatrix = copy(matrix);
+                prevMatrix = VectorUtils.copy(matrix);
                 continue;
             }
 
@@ -98,7 +97,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
                         .accept(new LocusRowDiffVisitor(row, prevRow));
             }
 
-            prevMatrix = copy(matrix);
+            prevMatrix = VectorUtils.copy(matrix);
         }
 
         for (int i = 0; i < nEq; i++) {
@@ -106,15 +105,6 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
         }
 
         return new CalculationResults(parameters, ret);
-    }
-
-    private static double[][] copy(double[][] input) {
-        double [][]ret = new double[input.length][];
-        for (int i = 0; i < input.length; i++) {
-            double[] values = input[i];
-            ret[i] = Arrays.copyOf(values, values.length);
-        }
-        return ret;
     }
 
     private class XYTVectorArguments implements VectorArguments {
