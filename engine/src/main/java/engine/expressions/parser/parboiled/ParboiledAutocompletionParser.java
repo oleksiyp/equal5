@@ -9,8 +9,6 @@ import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.MatcherPath;
 import org.parboiled.support.ParsingResult;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,7 +19,6 @@ import java.util.regex.Pattern;
  * Time: 12:34 PM
  */
 public class ParboiledAutocompletionParser implements AutocompletionParser {
-
     public static final Pattern LESS_OR_GREATER_IN_THE_END_PATTERN = Pattern.compile("(<|>)$");
 
     @Override

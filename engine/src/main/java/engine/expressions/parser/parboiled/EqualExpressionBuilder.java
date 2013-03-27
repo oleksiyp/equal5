@@ -22,7 +22,7 @@ import static org.parboiled.support.ParseTreeUtils.*;
  * Date: 3/24/13
  * Time: 2:10 AM
  */
-public class ExpressionBuilder {
+public class EqualExpressionBuilder {
     // rule names
     public static final String WHOLE_SENTENCE = "WholeSentence";
     public static final String EQUATIONS = "Equations";
@@ -52,7 +52,7 @@ public class ExpressionBuilder {
     private List<String> varList = null;
     private Map<String, Double> knownConstants = new HashMap<String, Double>();
 
-    public ExpressionBuilder(InputBuffer inputBuffer) {
+    public EqualExpressionBuilder(InputBuffer inputBuffer) {
         this.inputBuffer = inputBuffer;
     }
 

@@ -8,7 +8,7 @@ import org.parboiled.Node;
  * Date: 3/24/13
  * Time: 2:13 AM
  */
-public class ParsingFailureException extends Throwable {
+class ParsingFailureException extends Throwable {
     private final TreeNodeError error;
 
     public ParsingFailureException(TreeNodeError error) {

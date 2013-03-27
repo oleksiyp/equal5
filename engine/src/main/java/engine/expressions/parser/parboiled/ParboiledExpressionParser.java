@@ -71,7 +71,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         ArrayList<ParseError> list = new ArrayList<ParseError>(result.parseErrors);
 
-        ExpressionBuilder builder = new ExpressionBuilder(result.inputBuffer);
+        EqualExpressionBuilder builder = new EqualExpressionBuilder(result.inputBuffer);
 
         builder.setKnownConstants(knownConstants);
         builder.setVarList(varList);
