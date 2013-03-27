@@ -9,6 +9,7 @@ b+unknown variables are not warned
 +aspect ratio fixation
 +auto-complete
 b-resize shows for a second images without respect to aspect ratio
+b-F8 do not work
 a-coordinate system labels
 -equation systems
 -maximum dependency injection

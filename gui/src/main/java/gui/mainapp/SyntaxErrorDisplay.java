@@ -51,7 +51,7 @@ public class SyntaxErrorDisplay {
 
     private String composeMessage(ParsingException e) {
         StringBuilder builder = new StringBuilder();
-        builder.append("<html>Please correct the expression ");
+        builder.append("<html>Please correct syntax errors ");
         Set<String> messages = new TreeSet<String>();
         for (SyntaxError error : e.getErrors()) {
             messages.add(error.getMessage());

@@ -117,13 +117,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         if (error instanceof InvalidInputError) {
             InvalidInputError iiError = (InvalidInputError) error;
             List<MatcherPath> matchers = iiError.getFailedMatchers();
-            Collection<String> nonTerms = scanMatchers(matchers,
-                    "Variable",
-                    "Constant",
-                    "Parentheses",
-                    "MathFunc",
-                    "Expression");
-            message = "Insert " + hr(nonTerms);
+            message = "Incorrect expression";
         } else if (message == null) {
             String badExpr = nearChars(error, buf);
             message = "syntax error near \"" + badExpr + "\"";
@@ -144,24 +138,6 @@ public class ParboiledExpressionParser implements ExpressionParser {
                 error.getStartIndex() - delta,
                 error.getEndIndex() - delta,
                 message);
-    }
-
-    private Collection<String> scanMatchers(List<MatcherPath> matcherPaths,
-                                      String ...terminals) {
-        Set<String> result = new TreeSet<String>();
-        for (MatcherPath path : matcherPaths) {
-            while (path != null) {
-                if (path.element != null
-                        && path.element.matcher != null) {
-                    int idx = Arrays.asList(terminals).indexOf(path.element.matcher.getLabel());
-                    if (idx != -1) {
-                        result.add(path.element.matcher.getLabel());
-                    }
-                }
-                path = path.parent;
-            }
-        }
-        return result;
     }
 
     private String nearChars(ParseError error, InputBuffer buf) {
