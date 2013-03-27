@@ -106,29 +106,36 @@ public class EqualAppPanel {
 
         PropertyChangeListener listener;
 
-        coordinateSystemCheckBox.setAction(checkBoxAction(coordinateSystemCheckBox,
+        Action coordSysAction = checkBoxAction(coordinateSystemCheckBox,
                 equalViewport
-                    .getCoordinateSystem()
-                    .getOptions(),
-                CoordinateSystem.OptionProperties.VISIBLE_PROPERTY));
+                        .getCoordinateSystem()
+                        .getOptions(),
+                CoordinateSystem.OptionProperties.VISIBLE_PROPERTY);
+        coordinateSystemCheckBox.setAction(coordSysAction);
 
         Action gridAction = checkBoxAction(gridCheckBox,
                 equalViewport
                         .getCoordinateSystem()
                         .getOptions(),
                 CoordinateSystem.OptionProperties.SHOW_GRID_PROPERTY);
+
         Bindings.bind(new ActionBeanControl(gridAction),
                 ActionBeanControl.ENABLED,
                 equalViewport
-                    .getCoordinateSystem()
-                    .getOptions(),
+                        .getCoordinateSystem()
+                        .getOptions(),
                 CoordinateSystem.OptionProperties.VISIBLE_PROPERTY);
         gridCheckBox.setAction(gridAction);
 
-        aspectRatioCheckBox.setAction(checkBoxAction(
+        Action aspectAction = checkBoxAction(
                 aspectRatioCheckBox,
                 viewModel,
-                "keepAspect"));
+                "keepAspect");
+        aspectRatioCheckBox.setAction(aspectAction);
+
+        coordinateSystemCheckBox.setMnemonic('c');
+        gridCheckBox.setMnemonic('g');
+        aspectRatioCheckBox.setMnemonic('a');
 
         String text = equationPad.getText();
         if (text.matches("y\\s*=")) {
@@ -337,6 +344,7 @@ public class EqualAppPanel {
         panel2.add(panel3, gbc);
         coordinateSystemCheckBox = new JCheckBox();
         coordinateSystemCheckBox.setText("coord. sys.");
+        coordinateSystemCheckBox.setToolTipText("Shows coordinate system");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -344,13 +352,16 @@ public class EqualAppPanel {
         panel3.add(coordinateSystemCheckBox, gbc);
         gridCheckBox = new JCheckBox();
         gridCheckBox.setText("grid");
+        gridCheckBox.setToolTipText("Shows grid");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         panel3.add(gridCheckBox, gbc);
         aspectRatioCheckBox = new JCheckBox();
+        aspectRatioCheckBox.setLabel("aspect ratio");
         aspectRatioCheckBox.setText("aspect ratio");
+        aspectRatioCheckBox.setToolTipText("Shows aspect ratio");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;

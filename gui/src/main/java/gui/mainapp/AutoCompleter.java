@@ -17,7 +17,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -106,6 +105,7 @@ public class AutoCompleter {
         int idx = list.getSelectedIndex();
         if (idx > 0) {
             list.setSelectedIndex(idx - 1);
+            list.ensureIndexIsVisible(list.getSelectedIndex());
         }
     }
 
@@ -113,6 +113,7 @@ public class AutoCompleter {
         int idx = list.getSelectedIndex();
         if (idx < list.getModel().getSize() - 1) {
             list.setSelectedIndex(idx + 1);
+            list.ensureIndexIsVisible(list.getSelectedIndex());
         }
     }
 
@@ -256,6 +257,10 @@ public class AutoCompleter {
                 case KeyEvent.VK_ENTER:
                     e.consume();
                     pressComplete();
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    e.consume();
+                    hidePopup();
                     break;
             }
         }

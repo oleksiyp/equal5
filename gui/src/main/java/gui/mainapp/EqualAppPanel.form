@@ -171,6 +171,7 @@
                             </constraints>
                             <properties>
                               <text value="coord. sys."/>
+                              <toolTipText value="Shows coordinate system"/>
                             </properties>
                           </component>
                           <component id="42ab3" class="javax.swing.JCheckBox" binding="gridCheckBox" default-binding="true">
@@ -180,6 +181,7 @@
                             </constraints>
                             <properties>
                               <text value="grid"/>
+                              <toolTipText value="Shows grid"/>
                             </properties>
                           </component>
                           <component id="d27bd" class="javax.swing.JCheckBox" binding="aspectRatioCheckBox" default-binding="true">
@@ -188,7 +190,9 @@
                               <gridbag weightx="0.0" weighty="0.0"/>
                             </constraints>
                             <properties>
+                              <label value="aspect ratio"/>
                               <text value="aspect ratio"/>
+                              <toolTipText value="Shows aspect ratio"/>
                             </properties>
                           </component>
                         </children>
