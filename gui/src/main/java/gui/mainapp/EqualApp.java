@@ -3,6 +3,7 @@ package gui.mainapp;
 import gui.mainapp.viewmodel.EqualViewModel;
 
 import javax.swing.*;
+import java.util.Arrays;
 
 /**
  * User: Oleksiy Pylypenko
@@ -25,6 +26,14 @@ public class EqualApp {
     }
 
     private void initGUI() {
+        frame.setIconImages(
+                Arrays.asList(
+                        new ImageIcon(getClass().getResource("icon16x16.png")).getImage(),
+                        new ImageIcon(getClass().getResource("icon32x32.png")).getImage(),
+                        new ImageIcon(getClass().getResource("icon64x64.png")).getImage(),
+                        new ImageIcon(getClass().getResource("icon256x256.png")).getImage()
+                        )
+        );
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
 

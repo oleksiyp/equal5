@@ -9,17 +9,19 @@ b+unknown variables are not warned
 +aspect ratio fixation
 +auto-complete
 +vector calculation engine #2
--pools of vectors
--128K vector computation
++icon
 b-resize shows for a second images without respect to aspect ratio
 b-F8 does not work
 a-coordinate system labels
 -equation systems
+-minimize library dependencies
 -maximum dependency injection
 -configuration file
 -drag/scroll viewport
 -color graphics
 -find interesting graphics
+-pools of vectors
+-128K vector computation
 -add menu
 -save image
 -save video

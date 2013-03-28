@@ -1,6 +1,5 @@
 package gui.mainapp.viewport;
 
-import engine.calculation.CalculationParameters;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import util.BeanControl;
@@ -164,9 +163,13 @@ public class CoordinateSystem {
                         line.drawTickAlongLine(
                                 coord() - options.getTickSize(),
                                 coord() + options.getTickSize());
+                        coord();
+                        putLabel(line.coord(), line.value);
                     }
                 }
             }
+
+            protected abstract void putLabel(int coord, double val);
 
             protected abstract void drawTickAlongLine(int c1, int c2);
 
@@ -180,6 +183,14 @@ public class CoordinateSystem {
         private class VerticalLine extends Line {
             private VerticalLine(double value, LineType type) {
                 super(value, type);
+            }
+
+            @Override
+            protected void putLabel(int y, double val) {
+                g.setColor(options.getLabelColor());
+                g.setFont(options.getLabelFont());
+                g.drawString(String.format("%.3g", val),
+                        c + 5, y + 5);
             }
 
             @Override
@@ -206,6 +217,14 @@ public class CoordinateSystem {
         private class HorizontalLine extends Line {
             private HorizontalLine(double value, LineType type) {
                 super(value, type);
+            }
+
+            @Override
+            protected void putLabel(int x, double val) {
+                g.setColor(options.getLabelColor());
+                g.setFont(options.getLabelFont());
+                g.drawString(String.format("%.3g", val),
+                        x - 15, c + 12);
             }
 
             @Override
@@ -258,6 +277,16 @@ public class CoordinateSystem {
         private int tickSize = 4;
         private boolean visible = true;
         private boolean showGrid;
+        private Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
+        private Color labelColor = Color.GRAY;
+
+        public Font getLabelFont() {
+            return labelFont;
+        }
+
+        public Color getLabelColor() {
+            return labelColor;
+        }
 
         public Color getZeroColor() {
             return zeroColor;
