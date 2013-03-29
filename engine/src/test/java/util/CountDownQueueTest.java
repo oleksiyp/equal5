@@ -1,15 +1,12 @@
 package util;
 
-import com.google.common.collect.Iterators;
 import util.CountDownQueue;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * User: Oleksiy Pylypenko
@@ -126,14 +123,12 @@ public class CountDownQueueTest {
     public void testIterator() throws Exception {
         queue.put("abc");
         Iterator<String> it = queue.iterator();
-        assertTrue(Arrays.equals(
-                new String[]{"abc"},
-                Iterators.toArray(it, String.class)));
+        assertTrue(it.hasNext());
+        assertEquals("abc", it.next());
+        assertFalse(it.hasNext());
         assertEquals("abc", queue.poll());
         it = queue.iterator();
-        assertTrue(Arrays.equals(
-                new String[]{},
-                Iterators.toArray(it, String.class)));
+        assertFalse(it.hasNext());
     }
 
     @Test
@@ -141,14 +136,12 @@ public class CountDownQueueTest {
         queue.put("def");
         queue.put("abc");
         Iterator<String> it = queue.iterator();
-        assertTrue(Arrays.equals(
-                new String[] { "abc" },
-                Iterators.toArray(it, String.class)));
+        assertTrue(it.hasNext());
+        assertEquals("abc", it.next());
+        assertFalse(it.hasNext());
         assertEquals("abc", queue.poll());
         it = queue.iterator();
-        assertTrue(Arrays.equals(
-                new String[] {},
-                Iterators.toArray(it, String.class)));
+        assertFalse(it.hasNext());
     }
 
     @Test

@@ -25,7 +25,10 @@
         <dependency>
             <groupId>equal5</groupId>
             <artifactId>equal5-engine</artifactId>
-            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>equal5</groupId>
+            <artifactId>equal5-parser-parboiled</artifactId>
         </dependency>
     </dependencies>
 

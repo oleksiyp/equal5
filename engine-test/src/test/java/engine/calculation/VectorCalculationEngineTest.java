@@ -43,9 +43,9 @@ public class VectorCalculationEngineTest {
         Equation eq1 = eq("y", "1-(x/2-0.5)*(x/2-0.5)");
         Equation eq2 = eq("(x-0.5)*(x-0.5)+(y-0.5)*(y-0.5)", "0.1");
         Equation eq3 = eq("(x-0.5)*(x-0.5)*2+(y-0.5)*(y-0.5)", "0.1");
-        draw("vector_machine1.png", eq1);
-        draw("vector_machine2.png", eq2);
-        draw("vector_machine3.png", eq3);
+        draw("vce1_1.png", eq1);
+        draw("vce1_2.png", eq2);
+        draw("vce1_3.png", eq3);
     }
 
 

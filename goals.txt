@@ -10,6 +10,7 @@ b+unknown variables are not warned
 +auto-complete
 +vector calculation engine #2
 +icon
+-AntLR migration
 b-resize shows for a second images without respect to aspect ratio
 b-F8 does not work
 a-coordinate system labels

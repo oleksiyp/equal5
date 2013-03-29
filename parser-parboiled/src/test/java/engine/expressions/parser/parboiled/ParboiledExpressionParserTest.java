@@ -62,12 +62,12 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testParseExpression3() throws Exception {
-        Assert.assertEquals(
+        assertEquals(
                 new Subtraction(
                     new Subtraction(new Constant(1), new Constant(2)),
                         new Constant(3))
                 , parse(ClauseType.EXPRESSION, "1-2-3"));
-        Assert.assertEquals(
+        assertEquals(
                 new Addition(
                     new Addition(new Constant(1), new Constant(2)),
                         new Constant(3))
@@ -221,11 +221,11 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testConstant() throws Exception {
-        Assert.assertEquals(123.0, parseConstant("123").getValue(), EPS);
-        Assert.assertEquals(1e6, parseConstant("1e6").getValue(), EPS);
-        Assert.assertEquals(1e6, parseConstant("1e+6").getValue(), EPS);
-        Assert.assertEquals(EPS, parseConstant("0.1e-5").getValue(), EPS);
-        Assert.assertEquals(25.25, parseConstant("2525e-2").getValue(), EPS);
+        assertEquals(123.0, parseConstant("123").getValue(), EPS);
+        assertEquals(1e6, parseConstant("1e6").getValue(), EPS);
+        assertEquals(1e6, parseConstant("1e+6").getValue(), EPS);
+        assertEquals(EPS, parseConstant("0.1e-5").getValue(), EPS);
+        assertEquals(25.25, parseConstant("2525e-2").getValue(), EPS);
     }
 
     @Test(expected = ParsingException.class)
@@ -263,11 +263,11 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testParents() throws Exception {
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(123)"), EPS);
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "((123))"), EPS);
-        Assert.assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(((123)))"), EPS);
-        Assert.assertEquals(11, evalExpr(ClauseType.PARENTHESES, "(((5+6)))"), EPS);
-        Assert.assertEquals(76, evalExpr(ClauseType.PARENTHESES, "(((5+6)+(3+2)*(8+5)))"), EPS);
+        assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(123)"), EPS);
+        assertEquals(123, evalExpr(ClauseType.PARENTHESES, "((123))"), EPS);
+        assertEquals(123, evalExpr(ClauseType.PARENTHESES, "(((123)))"), EPS);
+        assertEquals(11, evalExpr(ClauseType.PARENTHESES, "(((5+6)))"), EPS);
+        assertEquals(76, evalExpr(ClauseType.PARENTHESES, "(((5+6)+(3+2)*(8+5)))"), EPS);
     }
 
     @Test(expected = ParsingException.class)
@@ -297,9 +297,9 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testFactor() throws Exception {
-        Assert.assertEquals(2, evalExpr(ClauseType.FACTOR, "2"), EPS);
-        Assert.assertEquals(2, evalExpr(ClauseType.FACTOR, "(2)"), EPS);
-        Assert.assertEquals(1.0, evalExpr(ClauseType.FACTOR, "sign(5)"), EPS);
+        assertEquals(2, evalExpr(ClauseType.FACTOR, "2"), EPS);
+        assertEquals(2, evalExpr(ClauseType.FACTOR, "(2)"), EPS);
+        assertEquals(1.0, evalExpr(ClauseType.FACTOR, "sign(5)"), EPS);
     }
 
     @Test(expected = ParsingException.class)
@@ -313,16 +313,16 @@ public class ParboiledExpressionParserTest {
 
     @Test
     public void testTerm() throws Exception {
-        Assert.assertEquals(6, evalExpr(ClauseType.TERM, "2*3"), EPS);
-        Assert.assertEquals(60, evalExpr(ClauseType.TERM, "2*5*6"), EPS);
-        Assert.assertEquals(36*14, evalExpr(ClauseType.TERM, "2*3*6*(6+8)"), EPS);
-        Assert.assertEquals(6*42, evalExpr(ClauseType.TERM, "2*3*(42)"), EPS);
-        Assert.assertEquals(
+        assertEquals(6, evalExpr(ClauseType.TERM, "2*3"), EPS);
+        assertEquals(60, evalExpr(ClauseType.TERM, "2*5*6"), EPS);
+        assertEquals(36*14, evalExpr(ClauseType.TERM, "2*3*6*(6+8)"), EPS);
+        assertEquals(6*42, evalExpr(ClauseType.TERM, "2*3*(42)"), EPS);
+        assertEquals(
                 new Division(
                     new Division(new Constant(1), new Constant(2)),
                         new Constant(3))
                 , parse(ClauseType.TERM, "1/2/3"));
-        Assert.assertEquals(
+        assertEquals(
                 new Multiplication(
                     new Multiplication(new Constant(1), new Constant(2)),
                         new Constant(3))

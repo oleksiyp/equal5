@@ -1,6 +1,5 @@
 package engine.calculation.vector;
 
-import com.google.common.base.Stopwatch;
 import engine.calculation.Arguments;
 import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
@@ -8,8 +7,8 @@ import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
+import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,11 +97,11 @@ public class VectorMachineEvaluatorTest {
         ve.setSize(SIZE);
         ve.setFunctions(functions);
 
-        Stopwatch sw = new Stopwatch().start();
+        long time = System.currentTimeMillis();
         ve.prepare();
-        double prepTime = sw.stop().elapsedTime(TimeUnit.MICROSECONDS) / 1000.0;
+        long prepTime = System.currentTimeMillis() - time;
 
-        sw.reset().start();
+        time = System.currentTimeMillis();
         double[][] results;
         try {
             System.out.println("Expression: " + Arrays.toString(functions));
@@ -121,8 +120,8 @@ public class VectorMachineEvaluatorTest {
 
             results = ve.calculate(args);
         } finally {
-            double time = sw.stop().elapsedTime(TimeUnit.MICROSECONDS) / 1000.0;
-            System.out.printf("Total time is %.2f ms and preparation is %.2f ms%n", time, prepTime);
+            long t2 = System.currentTimeMillis() - time;
+            System.out.printf("Total time is %d ms and preparation is %d ms%n", t2, prepTime);
             System.out.println();
         }
 

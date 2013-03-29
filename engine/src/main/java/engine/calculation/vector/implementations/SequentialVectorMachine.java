@@ -1,13 +1,11 @@
 package engine.calculation.vector.implementations;
 
-import com.google.common.base.Stopwatch;
 import engine.calculation.vector.TimeReporter;
 import engine.calculation.vector.VectorMachine;
 import engine.calculation.vector.opeartions.VectorOperation;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * User: Oleksiy Pylypenko
@@ -94,15 +92,12 @@ public final class SequentialVectorMachine implements VectorMachine {
 
         @Override
         public void applyAndEstimateOperations(TimeReporter timeReporter) {
-            Stopwatch sw = new Stopwatch();
-
             for (VectorOperation operation : operations) {
-                sw.reset().start();
+                long time = System.currentTimeMillis();
 
                 operation.apply(size, vectors);
 
-                double time = sw.stop().elapsedTime(TimeUnit.MICROSECONDS);
-                time /= 1000;
+                time = System.currentTimeMillis() - time;
 
                 timeReporter.report(operation.toString(), size, time, 0);
             }

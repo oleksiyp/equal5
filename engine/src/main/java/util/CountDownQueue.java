@@ -1,11 +1,6 @@
 package util;
 
-import com.google.common.collect.Iterators;
-import engine.calculation.CalculationParameters;
-
-import java.util.AbstractQueue;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -180,9 +175,9 @@ public class CountDownQueue<E>
         try {
             long currentTime = System.currentTimeMillis();
             if (element != null && currentTime >= awakeTime) {
-                return Iterators.forArray(element);
+                return Collections.singletonList(element).iterator();
             }
-            return Iterators.emptyIterator();
+            return Collections.<E>emptyList().iterator();
         } finally {
             lock.unlock();
         }

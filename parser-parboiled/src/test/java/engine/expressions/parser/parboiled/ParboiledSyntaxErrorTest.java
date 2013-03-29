@@ -1,5 +1,8 @@
-package engine.expressions.parser;
+package engine.expressions.parser.parboiled;
 
+import engine.expressions.parser.ClauseType;
+import engine.expressions.parser.ParsingException;
+import engine.expressions.parser.SyntaxError;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +16,7 @@ import static org.junit.Assert.fail;
  * Date: 3/23/13
  * Time: 10:32 PM
  */
-public class SyntaxErrorTest {
+public class ParboiledSyntaxErrorTest {
     private ParboiledExpressionParser parser;
 
     @Before

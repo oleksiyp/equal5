@@ -1,6 +1,5 @@
-package engine;
+package engine.usecases;
 
-import com.google.common.base.Stopwatch;
 import engine.calculation.*;
 import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.evaluator.ImmediateFunctionEvaluator;
@@ -110,9 +109,9 @@ public class UseCasesTest {
 
     private long calculateAndWrite(CalculationParameters params, CalculationEngine engine, String filename) throws IOException {
         engine.calculate(params);
-        Stopwatch sw = new Stopwatch().start();
+        long time = System.currentTimeMillis();
         CalculationResults results = engine.calculate(params);
-        long time = sw.stop().elapsedTime(TimeUnit.MILLISECONDS);
+        time = System.currentTimeMillis() - time;
         RectRange range = RectRange.fromViewportSize(size);
         DrawToImage drawToImage = new DrawToImage(range);
         for (Drawable drawable : results.getDrawables()) {
