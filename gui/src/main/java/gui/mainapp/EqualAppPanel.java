@@ -7,7 +7,6 @@ import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.FrameListener;
-import javafx.scene.input.KeyCode;
 import util.ActionBeanControl;
 import util.BeanControl;
 import util.Bindings;

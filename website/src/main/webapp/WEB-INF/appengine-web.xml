@@ -7,4 +7,12 @@
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
+
+    <static-files>
+        <exclude path="/webstart/*" />
+    </static-files>
+
+    <resource-files>
+        <include path="/webstart/*" />
+    </resource-files>
 </appengine-web-app>

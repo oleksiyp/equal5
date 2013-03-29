@@ -18,6 +18,11 @@
         <appengine.app.version>1</appengine.app.version>
         <appengine.target.version>1.7.5</appengine.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>3.1.0.RELEASE</spring.version>
+        <cglib.version>2.2.2</cglib.version>
+        <jstl.version>1.1.2</jstl.version>
+        <urlrewritefilter.version>3.1.0</urlrewritefilter.version>
+        <sitemesh.version>2.4.2</sitemesh.version>
     </properties>
 
     <dependencies>
@@ -51,6 +56,47 @@
             <artifactId>appengine-api-stubs</artifactId>
             <version>${appengine.target.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <version>${urlrewritefilter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>${sitemesh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.mojo.webstart</groupId>
+            <artifactId>webstart-jnlp-servlet</artifactId>
+            <version>1.0-6.0.02_ea_b02.2</version>
         </dependency>
     </dependencies>
 
@@ -87,6 +133,60 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.target.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>webstart-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jnlp-download-servlet</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <templateDirectory>src/main/jnlp</templateDirectory>
+                    <jnlpFiles>
+                        <jnlpFile>
+                            <templateFilename>template.vm</templateFilename>
+                            <outputFilename>equal5.jnlp</outputFilename>
+                            <jarResources>
+                                <jarResource>
+                                    <groupId>equal5</groupId>
+                                    <artifactId>equal5-gui</artifactId>
+                                    <version>1.0.0</version>
+
+                                    <mainClass>gui.mainapp.EqualApp</mainClass>
+                                </jarResource>
+                            </jarResources>
+                        </jnlpFile>
+                    </jnlpFiles>
+                    <sign>
+                        <keystore>equal5-webstart</keystore>
+                        <keypass>${webstart.sign.key.pass}</keypass>
+                        <storepass>${webstart.sign.keystore.password}</storepass>
+                        <alias>equal5-webstart-key</alias>
+
+                        <dnameCn>Oleksiy Pylypenko</dnameCn>
+                        <dnameOu>Graphic Building</dnameOu>
+                        <dnameO>equal5.org</dnameO>
+                        <dnameL>Kyiv</dnameL>
+                        <dnameSt>Kyivska</dnameSt>
+                        <dnameC>UA</dnameC>
+
+                        <verify>true</verify>
+
+                        <keystoreConfig>
+                            <gen>true</gen>
+                        </keystoreConfig>
+                    </sign>
+
+                    <pack200>true</pack200>
+                    <gzip>true</gzip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
