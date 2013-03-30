@@ -1,4 +1,4 @@
-package engine.expressions.parser.parboiled;
+package engine.expressions.parser.antlr;
 
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
@@ -15,12 +15,12 @@ import static org.junit.Assert.fail;
  * Date: 3/23/13
  * Time: 10:32 PM
  */
-public class ParboiledSyntaxErrorTest {
-    private ParboiledExpressionParser parser;
+public class AntlrSyntaxErrorTest {
+    private AntlrExpressionParser parser;
 
     @Before
     public void setUp() throws Exception {
-        parser = new ParboiledExpressionParser();
+        parser = new AntlrExpressionParser();
     }
 
     public void showErrors(ClauseType clauseType,

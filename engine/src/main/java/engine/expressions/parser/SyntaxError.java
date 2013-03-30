@@ -13,10 +13,10 @@ public final class SyntaxError {
     private final int endIndex;
     private final String message;
 
-    public SyntaxError(boolean oneLiner, int line, int column,
+    public SyntaxError(int line, int column,
                        int startIndex, int endIndex,
                        String message) {
-        this.oneLiner = oneLiner;
+        this.oneLiner = false;
         this.line = line;
         this.column = column;
         this.startIndex = startIndex;

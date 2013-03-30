@@ -13,6 +13,13 @@ public class MathFunction extends AbstractFunction {
     private final Function[] arguments;
 
     public MathFunction(MathFunctionType type, Function... arguments) {
+        if (type == null) {
+            throw new IllegalArgumentException("type");
+        }
+        if (arguments == null) {
+            throw new IllegalArgumentException("arguments");
+        }
+
         this.type = type;
         this.arguments = arguments;
         if (type.getArgumentsCount() != arguments.length) {

@@ -11,6 +11,8 @@ public interface FunctionVisitor {
 
     void visit(Variable variable);
 
+    void visit(Negation negation);
+
     void visit(Addition addition);
 
     void visit(Subtraction subtraction);

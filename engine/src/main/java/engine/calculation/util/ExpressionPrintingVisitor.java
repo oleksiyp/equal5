@@ -12,6 +12,7 @@ import java.util.Stack;
  * Time: 11:49 PM
  */
 public class ExpressionPrintingVisitor implements FunctionVisitor {
+
     private final ExpressionWriter writer;
     private final Stack<Integer> priorities = new Stack<Integer>();
     private final Stack<Boolean> brackets = new Stack<Boolean>();
@@ -28,6 +29,14 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
     @Override
     public void visit(Variable variable) {
         writer.write(variable.getString());
+    }
+
+    @Override
+    public void visit(Negation negation) {
+        writer.write("-");
+        openBracket(Negation.OPERATOR_PRIORITY);
+        negation.getOperand().accept(this);
+        closeBracket(Negation.OPERATOR_PRIORITY);
     }
 
     @Override

@@ -15,13 +15,13 @@ public abstract class BinaryOperator extends AbstractFunction {
                    Function rightSide) {
         this.type = type;
         if (leftSide == null) {
-            throw new NullPointerException("leftSide");
+            throw new IllegalArgumentException("leftSide");
         }
         if (rightSide == null) {
-            throw new NullPointerException("rightSide");
+            throw new IllegalArgumentException("rightSide");
         }
         if (type == null) {
-            throw new NullPointerException("operator");
+            throw new IllegalArgumentException("operator");
         }
         this.leftSide = leftSide;
         this.rightSide = rightSide;

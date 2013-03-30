@@ -70,7 +70,7 @@ public class ExpressionPrintingVisitorTest {
     }
 
     private Object parse(String expression) throws ParsingException {
-        return new ParboiledExpressionParser().parse(ClauseType.EXPRESSION,
+        return new ParboiledExpressionParser().parse(ClauseType.ADDITIVE_EXPRESSION,
                 expression);
     }
 }

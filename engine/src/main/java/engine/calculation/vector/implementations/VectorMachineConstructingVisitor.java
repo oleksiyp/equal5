@@ -45,6 +45,17 @@ class VectorMachineConstructingVisitor implements FunctionVisitor {
     }
 
     @Override
+    public void visit(Negation negation) {
+        int opSlot = build(negation.getOperand());
+
+        int resultSlot = slotStack.peek();
+
+        operations.add(
+                new NegationVectorOperation(opSlot, resultSlot)
+        );
+    }
+
+    @Override
     public void visit(Addition addition) {
         int lSlot = build(addition.getLeftSide());
         int rSlot = build(addition.getRightSide());

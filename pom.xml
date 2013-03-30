@@ -12,6 +12,7 @@
         <module>website</module>
         <module>parser-parboiled</module>
         <module>engine-test</module>
+        <module>parser-antlr</module>
     </modules>
 
     <properties>
@@ -25,6 +26,13 @@
                 <groupId>equal5</groupId>
                 <artifactId>equal5-engine</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>equal5</groupId>
+                <artifactId>equal5-engine</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>equal5</groupId>
@@ -67,6 +75,11 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr-runtime</artifactId>
+                <version>3.5</version>
             </dependency>
             <dependency>
                 <groupId>com.intellij</groupId>

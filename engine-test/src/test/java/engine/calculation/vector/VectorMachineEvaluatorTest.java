@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -74,7 +73,7 @@ public class VectorMachineEvaluatorTest {
         try {
             for (int i = 0; i < expressions.length; i++) {
                 functions[i] = (Function) new ParboiledExpressionParser()
-                        .parse(ClauseType.EXPRESSION, expressions[i]);
+                        .parse(ClauseType.ADDITIVE_EXPRESSION, expressions[i]);
             }
         } catch (ParsingException e) {
             throw new RuntimeException(e);

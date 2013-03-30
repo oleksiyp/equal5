@@ -33,6 +33,12 @@ class EvaluatingVisitor implements FunctionVisitor {
     }
 
     @Override
+    public void visit(Negation negation) {
+        double value = calculate(negation.getOperand());
+        stack.push(-value);
+    }
+
+    @Override
     public void visit(Addition addition) {
         double left = calculate(addition.getLeftSide());
         double right = calculate(addition.getRightSide());

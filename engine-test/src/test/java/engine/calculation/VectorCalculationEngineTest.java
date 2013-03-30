@@ -71,8 +71,8 @@ public class VectorCalculationEngineTest {
     private Equation eq(String left, String right) {
         ParboiledExpressionParser ep = new ParboiledExpressionParser();
         try {
-            Function leftExpr = (Function) ep.parse(ClauseType.EXPRESSION, left);
-            Function rightExpr = (Function) ep.parse(ClauseType.EXPRESSION, right);
+            Function leftExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, left);
+            Function rightExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, right);
             return new Equation(leftExpr, Equation.Type.EQUAL, rightExpr);
         } catch (ParsingException e) {
             throw new RuntimeException(e);

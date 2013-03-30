@@ -5,7 +5,7 @@ package engine.expressions.parser.parboiled;
  * Date: 3/24/13
  * Time: 2:13 AM
  */
-class ParsingFailureException extends Throwable {
+class ParsingFailureException extends Exception {
     private final TreeNodeError error;
 
     public ParsingFailureException(TreeNodeError error) {

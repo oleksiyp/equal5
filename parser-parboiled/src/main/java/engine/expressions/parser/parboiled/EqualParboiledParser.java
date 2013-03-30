@@ -5,7 +5,6 @@ import org.parboiled.BaseParser;
 import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
-import org.parboiled.annotations.Label;
 import org.parboiled.annotations.SuppressSubnodes;
 
 import java.lang.reflect.Method;
@@ -68,7 +67,7 @@ class EqualParboiledParser extends BaseParser<Object> {
                 Expression());
     }
 
-    @Clause(ClauseType.EXPRESSION)
+    @Clause(ClauseType.ADDITIVE_EXPRESSION)
     public Rule Expression() {
         return Sequence(
                 Term(),
@@ -80,7 +79,7 @@ class EqualParboiledParser extends BaseParser<Object> {
                 ).label("Tail"));
     }
 
-    @Clause(ClauseType.TERM)
+    @Clause(ClauseType.MULTIPLICATIVE_EXPRESSION)
     public Rule Term() {
         return Sequence(
                 Factor(),
@@ -93,7 +92,7 @@ class EqualParboiledParser extends BaseParser<Object> {
                 ).label("Tail"));
     }
 
-    @Clause(ClauseType.FACTOR)
+    @Clause(ClauseType.PRIMARY_EXPRESSION)
     public Rule Factor() {
         return FirstOf(
                 Constant(),
@@ -165,11 +164,11 @@ class EqualParboiledParser extends BaseParser<Object> {
     @SuppressSubnodes
     public Rule Identifier() {
         return Sequence(
-                CharRange('a', 'z'),
+                Letter(),
                 ZeroOrMore(
                         FirstOf(
-                                CharRange('a', 'z'),
-                                CharRange('0', '9')
+                                Letter(),
+                                Digit()
                         )
                 )
         );
@@ -184,7 +183,6 @@ class EqualParboiledParser extends BaseParser<Object> {
     }
 
     @SuppressSubnodes
-    @Clause(ClauseType.DECIMAL_FLOAT)
     public Rule DecimalFloat() {
         return FirstOf(
                 Sequence(OneOrMore(Digit()),
@@ -196,16 +194,18 @@ class EqualParboiledParser extends BaseParser<Object> {
         );
     }
 
-    @Clause(ClauseType.EXPONENT)
     public Rule Exponent() {
         return Sequence(AnyOf("eE"),
                 Optional(AnyOf("+-")),
                 OneOrMore(Digit()));
     }
 
-    @Clause(ClauseType.DIGIT)
     public Rule Digit() {
         return CharRange('0', '9');
+    }
+
+    public Rule Letter() {
+        return CharRange('a', 'z');
     }
 
     Rule WhiteSpace() {

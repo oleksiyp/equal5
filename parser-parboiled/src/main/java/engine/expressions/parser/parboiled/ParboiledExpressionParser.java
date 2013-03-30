@@ -75,14 +75,14 @@ public class ParboiledExpressionParser implements ExpressionParser {
 
         ArrayList<ParseError> list = new ArrayList<ParseError>(result.parseErrors);
 
-        EqualExpressionBuilder builder = new EqualExpressionBuilder(result.inputBuffer);
+        EqualExpressionBuilder builder = new EqualExpressionBuilder(result);
 
         builder.setKnownConstants(knownConstants);
         builder.setVarList(varList);
 
         Object res = null;
         try {
-            res = builder.build(clause, result.parseTreeRoot);
+            res = builder.build(clause);
         } catch (ParsingFailureException e) {
             // skip
         } catch (RuntimeException e) {
@@ -132,7 +132,6 @@ public class ParboiledExpressionParser implements ExpressionParser {
         }
 
         return new SyntaxError(
-                oneLiner,
                 line,
                 col,
                 error.getStartIndex() - delta,
