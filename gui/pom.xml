@@ -28,6 +28,10 @@
         </dependency>
         <dependency>
             <groupId>equal5</groupId>
+            <artifactId>equal5-parser-antlr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>equal5</groupId>
             <artifactId>equal5-parser-parboiled</artifactId>
         </dependency>
     </dependencies>

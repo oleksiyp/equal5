@@ -43,11 +43,15 @@ public class AutoCompleter {
     }
 
     public void run() {
+        AutocompletionParser autocompletionParser = parser.createAutocompletionParser();
+        if (autocompletionParser == null) {
+            return;
+        }
+
         int position = equationPad.getCaretPosition();
 
         String text = equationPad.getText().substring(0, position);
 
-        AutocompletionParser autocompletionParser = parser.createAutocompletionParser();
         List<Completion> completions = autocompletionParser.completeExpression(
                 EqualViewport.TOP_CLAUSE,
                 text);

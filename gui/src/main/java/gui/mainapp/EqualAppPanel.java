@@ -1,8 +1,10 @@
 package gui.mainapp;
 
 import engine.calculation.ViewportSize;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
+import engine.expressions.parser.ExpressionParser;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import engine.expressions.parser.ParsingException;
+import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
@@ -66,7 +68,7 @@ public class EqualAppPanel {
         syntaxErrorDisplay = new SyntaxErrorDisplay(errorLabel, equationPad);
 
         // parser used for expression parsing
-        ParboiledExpressionParser parser = configureParser();
+        ExpressionParser parser = configureParser();
         equalViewport.setParser(parser);
 
         // autocompleter
@@ -171,8 +173,8 @@ public class EqualAppPanel {
         return action;
     }
 
-    private ParboiledExpressionParser configureParser() {
-        ParboiledExpressionParser parser = new ParboiledExpressionParser();
+    private ExpressionParser configureParser() {
+        ExpressionParser parser = new ParboiledExpressionParser();
 
         HashMap<String, Double> knownConstants = new HashMap<String, Double>();
         knownConstants.put("pi", Math.PI);

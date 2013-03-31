@@ -35,7 +35,7 @@ theEnd
     ;
 
 equations
-    : equation (WhiteSpace! equation)*
+    : equation+
     ;
 
 equation

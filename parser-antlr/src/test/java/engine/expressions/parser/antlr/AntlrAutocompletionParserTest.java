@@ -3,6 +3,7 @@ package engine.expressions.parser.antlr;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.auto_complete.Completion;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class AntlrAutocompletionParserTest {
         parser = new AntlrAutocompletionParser();
     }
 
+    @Ignore
     @Test
     public void testCompletionsManually() throws Exception {
         printCompletions("x * x+( pi/e+y ) *y<=pow(5,2)");

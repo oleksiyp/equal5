@@ -78,8 +78,8 @@ public class AntlrExpressionParser implements ExpressionParser {
     }
 
     @Override
-    public AutocompletionParser createAutocompletionParser() throws UnsupportedOperationException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public AutocompletionParser createAutocompletionParser() {
+        return null;
     }
 
     @Override

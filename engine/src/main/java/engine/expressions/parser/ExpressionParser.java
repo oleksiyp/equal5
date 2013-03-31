@@ -26,8 +26,7 @@ public interface ExpressionParser {
     Object parse(ClauseType clause,
                  String expression) throws ParsingException;
 
-    AutocompletionParser createAutocompletionParser()
-            throws UnsupportedOperationException;
+    AutocompletionParser createAutocompletionParser();
 
     void setKnownConstants(Map<String, Double> knownConstants);
 

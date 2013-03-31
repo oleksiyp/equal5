@@ -1,6 +1,7 @@
 package engine.expressions.parser.antlr;
 
 import engine.calculation.functions.*;
+import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ClauseTypeVisitor;
@@ -45,13 +46,36 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Object equations() {
-            return null;
+        public Equation[] equations() throws ExpressionBuilderFailure {
+            Tree tree = stack.pop();
+            int nChilds = tree.getChildCount();
+            if (nChilds < 1) {
+                throw runtimeException(tree, "equations(): child counts < 1");
+            }
+            pushChildrenReverse(tree);
+            Equation[] equations = new Equation[nChilds];
+            for (int i = 0; i < nChilds; i++) {
+                equations[i] = equation();
+            }
+            return equations;
         }
 
         @Override
-        public Object equation() {
-            return null;
+        public Equation equation() throws ExpressionBuilderFailure {
+            Tree tree = stack.pop();
+            if (tree.getChildCount() != 2) {
+                throw runtimeException(tree, "equation(): child counts != 2");
+            }
+            pushChildrenReverse(tree);
+            Function left = expression();
+            Function right = expression();
+
+            String typeStr = tree.getText();
+            Equation.Type type = Equation.Type.byOperator(typeStr);
+            if (type == null) {
+                throw runtimeException(tree, "bad equation type: " + typeStr);
+            }
+            return new Equation(left, type, right);
         }
 
         public Function expression() throws ExpressionBuilderFailure {

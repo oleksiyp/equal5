@@ -46,6 +46,11 @@
             </dependency>
             <dependency>
                 <groupId>equal5</groupId>
+                <artifactId>equal5-parser-antlr</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>equal5</groupId>
                 <artifactId>equal5-website</artifactId>
                 <version>${project.version}</version>
             </dependency>
