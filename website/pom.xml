@@ -165,8 +165,8 @@
                     </jnlpFiles>
                     <sign>
                         <keystore>equal5-webstart</keystore>
-                        <keypass>${webstart.sign.key.pass}</keypass>
-                        <storepass>${webstart.sign.keystore.password}</storepass>
+                        <keypass>Password1</keypass>
+                        <storepass>Password2</storepass>
                         <alias>equal5-webstart-key</alias>
 
                         <dnameCn>Oleksiy Pylypenko</dnameCn>
