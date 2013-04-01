@@ -1,8 +1,10 @@
-package engine.locus;
+package engine.calculation.drawables;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -87,7 +89,16 @@ public class DrawToImage implements RowDrawer, PixelDrawer {
     }
 
     public void draw(RectRange range, Drawable drawable) {
-        if (drawable instanceof RowDrawable) {
+        if (drawable instanceof PixelDataDrawable) {
+            WritableRaster raster = image.getRaster();
+            DataBufferInt dataBuffer = (DataBufferInt) raster.getDataBuffer();
+            int[] pixelData = dataBuffer.getData();
+            ((PixelDataDrawable)drawable).draw(range,
+                    pixelData,
+                    image.getWidth(),
+                    image.getHeight()
+            );
+        } else if (drawable instanceof RowDrawable) {
             ((RowDrawable)drawable).draw(range, this);
         } else if (drawable instanceof PixelDrawable) {
             ((PixelDrawable)drawable).draw(range, this);

@@ -1,4 +1,6 @@
-package engine.locus;
+package engine.calculation.drawables.locus;
+
+import engine.calculation.drawables.*;
 
 import java.util.Arrays;
 
@@ -6,7 +8,7 @@ import java.util.Arrays;
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:11 PM
  */
-public class DiscreteLocus implements PixelDrawable, RowDrawable {
+public class DiscreteLocus implements PixelDrawable, RowDrawable, PixelDataDrawable {
     private final int [][]rows;
     private final RectRange range;
 
@@ -72,4 +74,29 @@ public class DiscreteLocus implements PixelDrawable, RowDrawable {
 
     }
 
+    @Override
+    public void draw(RectRange drawRange, int[] pixelData, int pxlDataWidth, int pxlDataHeight) {
+        int offv = 0;
+
+        int minWidth = Math.min(drawRange.getWidth(), Math.min(pxlDataWidth, range.getWidth()));
+        int minHeight = Math.min(drawRange.getHeight(), Math.min(pxlDataHeight, range.getHeight()));
+
+        for (int j = 0; j < minHeight; j++) {
+            int y = j + range.getMinY();
+            int pos1 = Arrays.binarySearch(rows[y], range.getMinX());
+            if (pos1 < 0) {
+                pos1 = -(pos1+1);
+            }
+
+            int pos2 = Arrays.binarySearch(rows[y], range.getMinX() + minWidth);
+            if (pos2 < 0) {
+                pos2 = -(pos2+1);
+            }
+
+            for (int i = pos1; i < pos2; i++) {
+                pixelData[offv + rows[y][i]] = 0xFF000000;
+            }
+            offv += pxlDataWidth;
+        }
+    }
 }

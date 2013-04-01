@@ -1,5 +1,7 @@
 package engine.calculation;
 
+import engine.calculation.drawables.Drawable;
+import engine.calculation.drawables.matrix.MatrixDrawable;
 import engine.calculation.functions.MathFunction;
 import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
@@ -9,11 +11,11 @@ import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Equation;
 import engine.expressions.Function;
-import engine.locus.DiscreteLocus;
-import engine.locus.Drawable;
+import engine.calculation.drawables.locus.DiscreteLocus;
 import util.Cancelable;
 import util.CancellationRoutine;
-import util.VectorUtils;
+
+import java.util.Arrays;
 
 /**
  * User: Oleksiy Pylypenko
@@ -60,8 +62,6 @@ public class VectorCalculationEngine2 implements CalculationEngine, Cancelable {
 
         evaluator.prepare();
 
-        int [][][]locusData = new int[nEq][][];
-
         ViewportBounds bounds = parameters.getBounds();
 
         double t = parameters.getT();
@@ -79,6 +79,7 @@ public class VectorCalculationEngine2 implements CalculationEngine, Cancelable {
                 t);
 
         double[][] matrix = evaluator.calculate(args);
+        int [][][]locusData = new int[nEq][][];
 
         for (int i = 0; i < nEq; i++) {
             Equation.Type eqType = equations[i].getType();

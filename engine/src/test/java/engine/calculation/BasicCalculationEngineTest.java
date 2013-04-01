@@ -4,12 +4,7 @@ import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
 import engine.expressions.Equation;
-import engine.locus.DrawToImage;
-import engine.locus.PixelDrawable;
-import engine.locus.RectRange;
 import org.junit.Test;
-
-import java.io.File;
 
 /**
  * User: Oleksiy Pylypenko

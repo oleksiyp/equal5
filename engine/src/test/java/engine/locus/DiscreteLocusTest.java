@@ -1,8 +1,8 @@
 package engine.locus;
 
-import engine.locus.DiscreteLocus;
-import engine.locus.PixelDrawer;
-import engine.locus.RectRange;
+import engine.calculation.drawables.PixelDrawer;
+import engine.calculation.drawables.RectRange;
+import engine.calculation.drawables.locus.DiscreteLocus;
 import org.junit.Before;
 import org.junit.Test;
 

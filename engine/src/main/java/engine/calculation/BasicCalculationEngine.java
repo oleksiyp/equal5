@@ -1,13 +1,13 @@
 package engine.calculation;
 
+import engine.calculation.drawables.Drawable;
 import engine.calculation.evaluator.FunctionEvaluator;
 import engine.calculation.functions.MathFunction;
 import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
 import engine.expressions.Equation;
 import engine.expressions.Function;
-import engine.locus.DiscreteLocus;
-import engine.locus.Drawable;
+import engine.calculation.drawables.locus.DiscreteLocus;
 import util.Cancelable;
 import util.CancellationRoutine;
 
@@ -33,7 +33,7 @@ public class BasicCalculationEngine implements CalculationEngine, Cancelable {
     public CalculationResults calculate(CalculationParameters parameters) {
         Equation[] equations = parameters.getEquations();
 
-        Drawable []result = new Drawable[equations.length];
+        Drawable[]result = new Drawable[equations.length];
         for (int i = 0; i < equations.length; i++)
         {
             result[i] = buildDiscreteLocus(parameters, equations[i]);

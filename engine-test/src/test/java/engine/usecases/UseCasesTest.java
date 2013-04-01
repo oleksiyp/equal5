@@ -11,9 +11,9 @@ import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
-import engine.locus.DrawToImage;
-import engine.locus.Drawable;
-import engine.locus.RectRange;
+import engine.calculation.drawables.DrawToImage;
+import engine.calculation.drawables.Drawable;
+import engine.calculation.drawables.RectRange;
 import org.junit.BeforeClass;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -28,7 +28,6 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.fail;
 

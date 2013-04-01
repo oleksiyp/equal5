@@ -1,4 +1,4 @@
-package engine.locus;
+package engine.calculation.drawables;
 
 /**
  * User: Oleksiy Pylypenko

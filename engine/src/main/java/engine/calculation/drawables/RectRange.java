@@ -1,4 +1,4 @@
-package engine.locus;
+package engine.calculation.drawables;
 
 import engine.calculation.ViewportSize;
 

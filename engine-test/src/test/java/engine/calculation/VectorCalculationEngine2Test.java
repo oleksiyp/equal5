@@ -1,5 +1,6 @@
 package engine.calculation;
 
+import engine.calculation.drawables.Drawable;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.expressions.Equation;
@@ -7,9 +8,8 @@ import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
-import engine.locus.DrawToImage;
-import engine.locus.Drawable;
-import engine.locus.RectRange;
+import engine.calculation.drawables.DrawToImage;
+import engine.calculation.drawables.RectRange;
 import org.junit.Before;
 import org.junit.Test;
 

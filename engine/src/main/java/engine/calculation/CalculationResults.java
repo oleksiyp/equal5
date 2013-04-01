@@ -1,8 +1,6 @@
 package engine.calculation;
 
-import engine.locus.Drawable;
-import engine.locus.PixelDrawable;
-import engine.locus.RowDrawable;
+import engine.calculation.drawables.Drawable;
 
 /**
  * User: Oleksiy Pylypenko

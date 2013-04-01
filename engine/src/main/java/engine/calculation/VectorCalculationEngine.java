@@ -1,5 +1,6 @@
 package engine.calculation;
 
+import engine.calculation.drawables.Drawable;
 import engine.calculation.functions.MathFunction;
 import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
@@ -9,8 +10,7 @@ import engine.calculation.vector.fillers.LinearVectorFiller;
 import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Equation;
 import engine.expressions.Function;
-import engine.locus.DiscreteLocus;
-import engine.locus.Drawable;
+import engine.calculation.drawables.locus.DiscreteLocus;
 import util.Cancelable;
 import util.CancellationRoutine;
 import util.VectorUtils;
@@ -41,7 +41,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
         int nEq = equations.length;
 
-        Drawable []ret = new Drawable[nEq];
+        Drawable[]ret = new Drawable[nEq];
         Function[] multiFunction = new Function[nEq];
 
         for (int i = 0; i < nEq; i++)

@@ -4,12 +4,11 @@ import engine.calculation.*;
 import engine.calculation.tasks.*;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.VectorMachineEvaluator;
-import engine.locus.DrawToImage;
-import engine.locus.Drawable;
-import engine.locus.RectRange;
+import engine.calculation.drawables.DrawToImage;
+import engine.calculation.drawables.Drawable;
+import engine.calculation.drawables.RectRange;
 
 import javax.swing.*;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
