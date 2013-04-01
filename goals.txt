@@ -11,6 +11,7 @@ b+unknown variables are not warned
 +vector calculation engine #2
 +icon
 +negation operator
+-smooth player running(time delays between frames)
 -AntLR migration
 b-resize shows for a second images without respect to aspect ratio
 b-F8 does not work
