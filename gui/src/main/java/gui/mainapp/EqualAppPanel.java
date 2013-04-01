@@ -2,13 +2,12 @@ package gui.mainapp;
 
 import engine.calculation.ViewportSize;
 import engine.expressions.parser.ExpressionParser;
-import engine.expressions.parser.antlr.AntlrExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
-import gui.mainapp.viewport.FrameListener;
+import gui.mainapp.viewport.Player;
 import util.ActionBeanControl;
 import util.BeanControl;
 import util.Bindings;
@@ -75,7 +74,7 @@ public class EqualAppPanel {
         autoCompleter = new AutoCompleter(equationPad, parser);
 
         // player
-        player = new Player();
+        player = new Player(this);
 
         // listener connecting EqualAppPanel <-> EqualViewModel
         viewListener = new EqualAppPanelViewListener();
@@ -433,6 +432,18 @@ public class EqualAppPanel {
         return root;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public EqualViewport getEqualViewport() {
+        return equalViewport;
+    }
+
+    public EqualViewModel getEqualViewmodel() {
+        return viewModel;
+    }
+
     private class EquationUpdater implements DocumentListener, Runnable {
         private final EqualViewModel viewModel;
 
@@ -537,34 +548,6 @@ public class EqualAppPanel {
         @Override
         public void onPlayStateChange(PlayState state) {
             state.accept(player);
-        }
-    }
-
-    private class Player implements PlayStateVisitor, FrameListener {
-
-        @Override
-        public void play() {
-            equalViewport.addFrameListener(this);
-            equalViewport.setRecalculateEachSubmit(true);
-            equalViewport.setDelayedRecalculation(false);
-            viewModel.setT(0);
-        }
-
-        @Override
-        public void stop() {
-            equalViewport.setRecalculateEachSubmit(false);
-            equalViewport.setDelayedRecalculation(true);
-            equalViewport.removeFrameListener(this);
-        }
-
-        @Override
-        public void frameDone() {
-            int t = viewModel.getT();
-            if (t >= viewModel.getSteps()) {
-                viewModel.getPlayStateControl().stop();
-            } else {
-                viewModel.setT(t + 1);
-            }
         }
     }
 

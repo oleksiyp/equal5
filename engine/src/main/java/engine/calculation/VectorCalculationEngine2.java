@@ -128,14 +128,17 @@ public class VectorCalculationEngine2 implements CalculationEngine, Cancelable {
             public void fill(double[] vector) {
                 int xoff = 0;
 
-                double x = xStart;
-                for (int i = 0; i < vector.length; i++) {
+                double xs = xStart;
+                double xd = xDelta;
+                int len = vector.length;
+                int width = w;
+
+                for (int i = 0; i < len; i++) {
                     xoff++;
-                    if (xoff == w) {
+                    if (xoff == width) {
                         xoff = 0;
                     }
-                    x = xStart + xoff * xDelta;
-                    vector[i] = x;
+                    vector[i] = xs + xoff * xd;
                 }
             }
         }
@@ -145,13 +148,18 @@ public class VectorCalculationEngine2 implements CalculationEngine, Cancelable {
                 int yoff = 0;
                 int xoff = 0;
 
-                double y = yStart;
-                for (int i = 0; i < vector.length; i++) {
+                double ys = yStart;
+                double yd = yDelta;
+                int len = vector.length;
+                int width = w;
+
+                double y = ys;
+                for (int i = 0; i < len; i++) {
                     xoff++;
-                    if (xoff == w) {
+                    if (xoff == width) {
                         xoff = 0;
                         yoff++;
-                        y = yStart + yoff * yDelta;
+                        y = ys + yoff * yd;
                     }
                     vector[i] = y;
                 }
