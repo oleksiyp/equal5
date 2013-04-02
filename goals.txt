@@ -11,14 +11,15 @@ b+unknown variables are not warned
 +vector calculation engine #2
 +icon
 +negation operator
--smooth player running(time delays between frames)
--AntLR migration
++AntLR migration
 b-resize shows for a second images without respect to aspect ratio
 b-F8 does not work
+b-nan handling
 a-coordinate system labels
 -equation systems
 -minimize library dependencies
 -maximum dependency injection
+-smooth player running(time delays between frames)
 -configuration file
 -drag/scroll viewport
 -color graphics
