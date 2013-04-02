@@ -1,9 +1,6 @@
 package engine.expressions.parser.antlr;
 
-import engine.expressions.parser.ClauseType;
-import engine.expressions.parser.ExpressionParser;
-import engine.expressions.parser.ParsingException;
-import engine.expressions.parser.SyntaxError;
+import engine.expressions.parser.*;
 import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.RewriteEarlyExitException;
@@ -65,7 +62,7 @@ public class AntlrExpressionParser implements ExpressionParser {
                 newErrors.add(new SyntaxError(error.getLine(),
                         error.getColumn(), error.getStartIndex(),
                         error.getEndIndex(),
-                        "Correct the expression"));
+                        SyntaxErrorMessages.incorrectExpression()));
             }
             throw new ParsingException(newErrors);
         }

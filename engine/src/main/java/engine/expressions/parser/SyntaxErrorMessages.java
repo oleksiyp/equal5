@@ -8,6 +8,7 @@ import engine.expressions.Function;
  * Time: 6:03 PM
  */
 public class SyntaxErrorMessages {
+
     public static String unknownVariable(String name) {
         return "Unknown variable or known constant '" + name + "'";
     }
@@ -16,5 +17,9 @@ public class SyntaxErrorMessages {
         return "Unknown function '" + name
                 + "' with " + args.length +
                 " argument(s)";
+    }
+
+    public static String incorrectExpression() {
+        return "Incorrect expression";
     }
 }

@@ -1,9 +1,6 @@
 package engine.expressions.parser.parboiled;
 
-import engine.expressions.parser.ClauseType;
-import engine.expressions.parser.ExpressionParser;
-import engine.expressions.parser.ParsingException;
-import engine.expressions.parser.SyntaxError;
+import engine.expressions.parser.*;
 import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.parboiled.Rule;
 import org.parboiled.buffers.InputBuffer;
@@ -117,7 +114,7 @@ public class ParboiledExpressionParser implements ExpressionParser {
         if (error instanceof InvalidInputError) {
             InvalidInputError iiError = (InvalidInputError) error;
             List<MatcherPath> matchers = iiError.getFailedMatchers();
-            message = "Incorrect expression";
+            message = SyntaxErrorMessages.incorrectExpression();
         } else if (message == null) {
             String badExpr = nearChars(error, buf);
             message = "syntax error near \"" + badExpr + "\"";
