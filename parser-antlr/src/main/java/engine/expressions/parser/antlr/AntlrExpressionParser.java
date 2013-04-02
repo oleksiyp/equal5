@@ -8,6 +8,7 @@ import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.RewriteEarlyExitException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import java.util.Map;
  * Time: 10:39 AM
  */
 public class AntlrExpressionParser implements ExpressionParser {
+    private Map<String, Double> knownConstants = new HashMap<String, Double>();
+    private List<String> varList = null;
 
     @Override
     public Object parse(ClauseType clause, String expression) throws ParsingException {
@@ -62,7 +65,7 @@ public class AntlrExpressionParser implements ExpressionParser {
     }
 
     private Object builder(ClauseType clause, ParserRuleReturnScope ruleReturn) throws ParsingException {
-        AntlrExpressionBuilder builder = new AntlrExpressionBuilder();
+        AntlrExpressionBuilder builder = new AntlrExpressionBuilder(knownConstants, varList);
         Object result = null;
         try {
             result = builder.build(clause, ruleReturn);
@@ -84,21 +87,24 @@ public class AntlrExpressionParser implements ExpressionParser {
 
     @Override
     public void setKnownConstants(Map<String, Double> knownConstants) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (knownConstants == null) {
+            throw new IllegalArgumentException("knownConstants");
+        }
+        this.knownConstants = knownConstants;
     }
 
     @Override
     public void setVarList(List<String> varList) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.varList = varList;
     }
 
     @Override
     public Map<String, Double> getKnownConstants() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return knownConstants;
     }
 
     @Override
     public List<String> getVarList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return varList;
     }
 }

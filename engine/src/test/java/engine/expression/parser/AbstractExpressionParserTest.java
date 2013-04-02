@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -416,4 +417,21 @@ public abstract class AbstractExpressionParserTest<EP extends ExpressionParser> 
     }
 
 
+    @Test
+    public void testVarList() throws Exception {
+        parser.setVarList(Arrays.asList("x"));
+        parser.setKnownConstants(Collections.singletonMap("pi", 3.0));
+        assertEquals(new Addition(new Variable("x"), new Constant(3.0)),
+                parser.parse(ClauseType.ADDITIVE_EXPRESSION, "x+pi"));
+
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testVarListFail() throws Exception {
+        parser.setVarList(Arrays.asList("x"));
+        parser.setKnownConstants(Collections.singletonMap("pi", 3.0));
+        assertEquals(new Addition(new Variable("x"), new Constant(3.0)),
+                parser.parse(ClauseType.ADDITIVE_EXPRESSION, "y"));
+
+    }
 }

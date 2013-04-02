@@ -12,6 +12,7 @@ import org.antlr.runtime.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -21,6 +22,13 @@ import java.util.Stack;
  */
 public class AntlrExpressionBuilder {
     private final List<SyntaxError> errors = new ArrayList<SyntaxError>();
+    private final Map<String, Double> knownConstants;
+    private final List<String> varList;
+
+    public AntlrExpressionBuilder(Map<String, Double> knownConstants, List<String> varList) {
+        this.knownConstants = knownConstants;
+        this.varList = varList;
+    }
 
     public Object build(ClauseType clause, final ParserRuleReturnScope rule)
             throws ExpressionBuilderFailure {
@@ -211,20 +219,23 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Variable variable() {
+        public Function variable() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 1) {
                 throw runtimeException(tree, "variable(): child count != 1");
             }
-            Tree child = tree.getChild(0);
-            String name = child.getText();
+            Tree nameToken = tree.getChild(0);
+            String name = nameToken.getText();
+            if (knownConstants.containsKey(name)) {
+                return new Constant(knownConstants.get(name));
+            }
+            if (varList != null) {
+                if (!varList.contains(name)) {
+                    errors.add(errorByToken(nameToken, SyntaxErrorMessages.unknownVariable(name)));
+                    throw new ExpressionBuilderFailure();
+                }
+            }
             return new Variable(name);
-        }
-
-        public Double decimalFloat() {
-            Tree pop = stack.pop();
-            String text = pop.getText();
-            return Double.parseDouble(text);
         }
 
         @Override

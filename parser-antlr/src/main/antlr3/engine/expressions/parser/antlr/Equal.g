@@ -20,7 +20,7 @@ tokens {
     VARIABLE;
     CONSTANT;
     ARGUMENTS;
-
+    EQUATIONS;
 }
 
 @header {
@@ -35,7 +35,7 @@ theEnd
     ;
 
 equations
-    : equation+
+    : equation+ -> ^(EQUATIONS equation+)
     ;
 
 equation

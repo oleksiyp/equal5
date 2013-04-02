@@ -19,20 +19,19 @@ sourceSets.main.java.srcDir "$buildDir/generated-sources/antlr3"
 task runAntlr {
     description = "Generates Java sources from Antlr3 grammars."
 
-    ext.inputDir = file("src/main/antlr3")
+    ext.inputFile = file("src/main/antlr3/engine/expressions/parser/antlr/Equal.g")
     ext.outputDir = file("$buildDir/generated-sources/antlr3/engine/expressions/parser/antlr")
 
-    inputs.dir inputDir
+    inputs.dir inputFile
     outputs.dir outputDir
 } << {
     mkdir(outputDir)
 
-    def grammars = fileTree(inputDir).include("**/*.g")
-
     ant.java(classname: 'org.antlr.Tool',
-            classpath: "${configurations.antlr3.asPath}") {
+            classpath: "${configurations.antlr3.asPath}",
+            failonerror: true) {
         arg(line: "-o ${outputDir}")
-        arg(line: grammars.files.join(" "))
+        arg(line: inputFile)
     }
 }
 

@@ -3,6 +3,7 @@ package gui.mainapp;
 import engine.calculation.ViewportSize;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
@@ -170,7 +171,7 @@ public class EqualAppPanel {
     }
 
     private ExpressionParser configureParser() {
-        ExpressionParser parser = new ParboiledExpressionParser();
+        ExpressionParser parser = new AntlrExpressionParser();
 
         HashMap<String, Double> knownConstants = new HashMap<String, Double>();
         knownConstants.put("pi", Math.PI);
