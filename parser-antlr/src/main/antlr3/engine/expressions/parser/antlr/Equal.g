@@ -109,5 +109,5 @@ fragment LETTER
     ;
 
 WhiteSpace
-	: ('\t' | '\v' | '\f' | ' ' | '\u00A0')	{$channel=HIDDEN;}
+	: ('\n' | '\r' | '\t' | '\v' | '\f' | ' ' | '\u00A0')	{$channel=HIDDEN;}
 	;

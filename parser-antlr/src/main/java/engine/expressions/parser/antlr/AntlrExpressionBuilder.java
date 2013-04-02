@@ -7,7 +7,10 @@ import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ClauseTypeVisitor;
 import engine.expressions.parser.SyntaxError;
 import engine.expressions.parser.SyntaxErrorMessages;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.ParserRuleReturnScope;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 import java.util.ArrayList;
@@ -272,12 +275,26 @@ public class AntlrExpressionBuilder {
             return new MathFunction(type, args);
         }
 
-        private SyntaxError errorByToken(Tree nameToken, String message) {
+        private SyntaxError errorByToken(Tree tree, String message) {
+
+
+            int line = tree.getLine();
+            int column = tree.getCharPositionInLine();
+            int start = tree.getTokenStartIndex();
+            int end = start;
+            if (tree instanceof CommonTree) {
+                Token token = ((CommonTree) tree).getToken();
+                if (token instanceof CommonToken) {
+                    CommonToken ct = (CommonToken) token;
+                    start = ct.getStartIndex();
+                    end = ct.getStopIndex() + 1;
+                }
+            }
             return new SyntaxError(
-                    nameToken.getLine(),
-                    nameToken.getCharPositionInLine(),
-                    nameToken.getTokenStartIndex(),
-                    nameToken.getTokenStopIndex(),
+                    line,
+                    column,
+                    start,
+                    end,
                     message);
         }
 

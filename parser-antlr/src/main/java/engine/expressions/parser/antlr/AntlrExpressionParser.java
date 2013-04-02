@@ -8,6 +8,7 @@ import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.RewriteEarlyExitException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,14 @@ public class AntlrExpressionParser implements ExpressionParser {
         }
         List<SyntaxError> errors = parser.getSyntaxErrors();
         if (!errors.isEmpty()) {
-            throw new ParsingException(errors);
+            List<SyntaxError> newErrors = new ArrayList<SyntaxError>();
+            for (SyntaxError error : errors) {
+                newErrors.add(new SyntaxError(error.getLine(),
+                        error.getColumn(), error.getStartIndex(),
+                        error.getEndIndex(),
+                        "Correct the expression"));
+            }
+            throw new ParsingException(newErrors);
         }
         return ruleReturn;
     }
@@ -82,7 +90,7 @@ public class AntlrExpressionParser implements ExpressionParser {
 
     @Override
     public AutocompletionParser createAutocompletionParser() {
-        return null;
+        return new AntlrAutocompletionParser();
     }
 
     @Override
