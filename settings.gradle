@@ -1,14 +1,14 @@
 rootProject.name = 'equal5'
 include ':equal5-engine',
-        ':equal5-gui',
-        ':equal5-website',
+        ':equal5-parser-antlr',
         ':equal5-parser-parboiled',
         ':equal5-engine-test',
-        ':equal5-parser-antlr'
+        ':equal5-gui',
+        ':equal5-website'
 
 project(':equal5-engine').projectDir = "$rootDir/engine" as File
-project(':equal5-gui').projectDir = "$rootDir/gui" as File
-project(':equal5-website').projectDir = "$rootDir/website" as File
 project(':equal5-parser-parboiled').projectDir = "$rootDir/parser-parboiled" as File
-project(':equal5-engine-test').projectDir = "$rootDir/engine-test" as File
 project(':equal5-parser-antlr').projectDir = "$rootDir/parser-antlr" as File
+project(':equal5-engine-test').projectDir = "$rootDir/engine-test" as File
+project(':equal5-website').projectDir = "$rootDir/website" as File
+project(':equal5-gui').projectDir = "$rootDir/gui" as File
