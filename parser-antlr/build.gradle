@@ -16,7 +16,7 @@ dependencies {
 
 sourceSets.main.java.srcDir "$buildDir/generated-sources/antlr3"
 
-task generateGrammarSource {
+task runAntlr {
     description = "Generates Java sources from Antlr3 grammars."
 
     ext.inputDir = file("src/main/antlr3")
@@ -36,4 +36,4 @@ task generateGrammarSource {
     }
 }
 
-compileJava.dependsOn generateGrammarSource
+compileJava.dependsOn runAntlr

@@ -148,12 +148,7 @@ public class UseCasesTest {
 
     @BeforeClass
     public static void initUseCases() {
-        try {
-            useCases = EqualUseCase.read(UseCasesTest.class.getResource("use_cases.txt"));
-        } catch (RuntimeException ex) {
-            ex.printStackTrace();
-            throw new AssertionError("loading problem", ex);
-        }
+        useCases = EqualUseCase.read(UseCasesTest.class.getResource("use_cases.txt"));
     }
 
     private static class EqualUseCase {
