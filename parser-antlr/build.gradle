@@ -9,10 +9,12 @@ dependencies {
 
     compile 'org.antlr:antlr-runtime:3.5', { transitive = false }
 
-    testCompile project(':equal5-engine')
+    testCompile
+        files(this.project(':equal5-engine').sourceSets.test.classesDir)
 
     antlr3 "org.antlr:antlr:3.5"
 }
+
 
 sourceSets.main.java.srcDir "$buildDir/generated-sources/antlr3"
 
