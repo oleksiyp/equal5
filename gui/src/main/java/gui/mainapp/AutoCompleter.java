@@ -29,7 +29,7 @@ public class AutoCompleter {
     private final JTextArea equationPad;
     private final ExpressionParser parser;
     private JPopupMenu popup;
-    private JList<CompletionVariant> list;
+    private JList list;
     private KeyAdapter listener;
     private int editPosition;
     private CompleteDocumentListener documentListener;
@@ -99,8 +99,9 @@ public class AutoCompleter {
     private void pressComplete() {
         int idx = list.getSelectedIndex();
 
-        list.getModel()
-                .getElementAt(idx).complete(editPosition);
+        CompletionVariant element = (CompletionVariant) list.getModel()
+                .getElementAt(idx);
+        element.complete(editPosition);
 
         hidePopup();
     }
@@ -139,7 +140,7 @@ public class AutoCompleter {
         popupMenu.removeAll();
         popupMenu.setOpaque(false);
         popupMenu.setBorder(null);
-        JList<CompletionVariant> list = createSuggestionList(variants);
+        JList list = createSuggestionList(variants);
         JScrollPane pane = new JScrollPane(list);
         popupMenu.add(pane, BorderLayout.CENTER);
         popupMenu.show(equationPad,
@@ -150,8 +151,8 @@ public class AutoCompleter {
         return popupMenu;
     }
 
-    private JList<CompletionVariant> createSuggestionList(CompletionVariant[] variants) {
-        list = new JList<CompletionVariant>(variants);
+    private JList createSuggestionList(CompletionVariant[] variants) {
+        list = new JList(variants);
         list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);

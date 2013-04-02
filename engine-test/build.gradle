@@ -1,0 +1,8 @@
+
+
+description = ''
+
+dependencies {
+  compile project(':equal5-engine')
+  compile project(':equal5-parser-parboiled')
+  }

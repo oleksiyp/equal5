@@ -31,7 +31,6 @@ public class EqualAppPanel {
     private JTextArea equationPad;
     private JPanel root;
     private JPanel sidePanel;
-    private JButton refreshButton;
     private JSlider timeSlider;
     private JButton playButton;
     private JButton upButton;
@@ -103,8 +102,6 @@ public class EqualAppPanel {
         equalViewport.setDelayedRecalculation(true);
 
         timeSlider.addChangeListener(new TimeSliderUpdater());
-
-        PropertyChangeListener listener;
 
         Action coordSysAction = checkBoxAction(coordinateSystemCheckBox,
                 equalViewport
@@ -193,14 +190,6 @@ public class EqualAppPanel {
                 .putActionMap(root)
                 .bindKey(root, key)
                 .bind(button);
-    }
-
-    private void bindAction(EqualViewModel viewModel,
-                            KeyStroke key,
-                            ActionType actionType) {
-        new ViewModelAction(viewModel, actionType)
-                .putActionMap(root)
-                .bindKey(root, key);
     }
 
     public void createUIComponents() {

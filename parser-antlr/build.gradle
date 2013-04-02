@@ -1,0 +1,39 @@
+description = ''
+
+configurations {
+    antlr3
+}
+
+dependencies {
+    compile project(':equal5-engine')
+
+    compile 'org.antlr:antlr-runtime:3.5', { transitive = false }
+
+    testCompile project(':equal5-engine')
+
+    antlr3 "org.antlr:antlr:3.5"
+}
+
+sourceSets.main.java.srcDir "$buildDir/generated-sources/antlr3"
+
+task generateGrammarSource {
+    description = "Generates Java sources from Antlr3 grammars."
+
+    ext.inputDir = file("src/main/antlr3")
+    ext.outputDir = file("$buildDir/generated-sources/antlr3/engine/expressions/parser/antlr")
+
+    inputs.dir inputDir
+    outputs.dir outputDir
+} << {
+    mkdir(outputDir)
+
+    def grammars = fileTree(inputDir).include("**/*.g")
+
+    ant.java(classname: 'org.antlr.Tool',
+            classpath: "${configurations.antlr3.asPath}") {
+        arg(line: "-o ${outputDir}")
+        arg(line: grammars.files.join(" "))
+    }
+}
+
+compileJava.dependsOn generateGrammarSource

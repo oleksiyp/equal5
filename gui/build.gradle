@@ -1,0 +1,12 @@
+
+
+description = ''
+
+dependencies {
+    compile(group: 'com.intellij', name: 'forms_rt', version:'7.0.3') {
+exclude(module: 'asm-commons')
+}
+  compile project(':equal5-engine')
+  compile project(':equal5-parser-antlr')
+  compile project(':equal5-parser-parboiled')
+  }
