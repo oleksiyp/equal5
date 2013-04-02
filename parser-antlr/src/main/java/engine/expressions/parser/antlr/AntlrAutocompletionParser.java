@@ -28,6 +28,10 @@ public class AntlrAutocompletionParser implements AutocompletionParser {
             return Arrays.asList(
                     new Completion(CompletionType.VARIABLE_NAME, prefix),
                     new Completion(CompletionType.FUNCTION_NAME, prefix));
+        } else if (!expressionStart.trim().endsWith(")")) {
+            return Arrays.asList(
+                    new Completion(CompletionType.VARIABLE_NAME),
+                    new Completion(CompletionType.FUNCTION_NAME));
         }
         return Collections.emptyList();
     }
