@@ -1,4 +1,4 @@
-Inequality graphing tool.
+Equalities graphing tool.
 
 Look:
  - BUILD.txt for how to build it.
