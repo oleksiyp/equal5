@@ -1,10 +1,16 @@
+ext.description = 'equal5 core engine library'
 
-
-description = ''
-
-
-task packageTests(type: Jar) {
-  from sourceSets.test.output
-  classifier = 'tests'
+configurations {
+    testFixtures {
+        extendsFrom testRuntime
+    }
 }
-artifacts.archives packageTests
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+    classifier = 'tests'
+    from sourceSets.test.output.classesDir
+}
+
+artifacts {
+    testFixtures testsJar
+}
