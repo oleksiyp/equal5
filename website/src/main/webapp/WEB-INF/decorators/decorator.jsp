@@ -72,8 +72,7 @@
 
     <footer class="footer">
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>equal<sup>5</sup> - graphics builder</p>
-        <p>equal5.org 2013 &copy;</p>
+        <p><a href="http://www.equal5.org">www.equal5.org</a> 2013 &copy;</p>
     </footer>
 
 </div>
