@@ -1,4 +1,4 @@
-description = ''
+ext.description = 'equal5 http://antlr3.org parser'
 
 configurations {
     antlr3
@@ -9,7 +9,7 @@ dependencies {
 
     compile 'org.antlr:antlr-runtime:3.5', { transitive = false }
 
-    testCompile project(':equal5-engine')
+    testCompile project(path: ':equal5-engine', configuration: 'testFixtures')
 
     antlr3 "org.antlr:antlr:3.5"
 }
