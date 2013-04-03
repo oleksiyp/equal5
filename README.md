@@ -1,7 +1,7 @@
 Equalities graphing tool.
 
 Look:
- - [BUILD.md] for how to build it.
+ - [BUILD.md](BUILD.md) for how to build it.
  - [GOALS.md] for active tasks
  - [LICENSE.md] for active tasks
 
