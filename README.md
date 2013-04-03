@@ -1,5 +1,5 @@
-Equalities graphing tool
-========================
+equal5 - equalities graphing tool
+=================================
 
 Further
 -------
