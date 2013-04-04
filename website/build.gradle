@@ -1,9 +1,23 @@
-description = 'Packages a equal5 website application'
+ext.description = 'equal5 website application'
 
 apply plugin: 'war'
+apply plugin: 'gae'
+
+downloadSdk = true
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.8'
+    }
+}
 
 dependencies {
-    compile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version:'1.7.5'
+    gaeSdk 'com.google.appengine:appengine-java-sdk:1.7.6'
+
     compile group: 'jstl', name: 'jstl', version:'1.2'
     compile group: 'org.springframework', name: 'spring-webmvc', version:'3.1.0.RELEASE'
     compile group: 'cglib', name: 'cglib-nodep', version:'2.2.2'
@@ -15,4 +29,4 @@ dependencies {
     testCompile group: 'com.google.appengine', name: 'appengine-testing', version:'1.7.5'
     testCompile group: 'com.google.appengine', name: 'appengine-api-stubs', version:'1.7.5'
     providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
-  }
+}
