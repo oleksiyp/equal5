@@ -1,4 +1,4 @@
-description = ''
+ext.description = 'equal5 http://antlr3.org parser'
 
 configurations {
     antlr3
@@ -9,12 +9,10 @@ dependencies {
 
     compile 'org.antlr:antlr-runtime:3.5', { transitive = false }
 
-    testCompile
-        files(this.project(':equal5-engine').sourceSets.test.classesDir)
+    testCompile project(path: ':equal5-engine', configuration: 'testFixtures')
 
     antlr3 "org.antlr:antlr:3.5"
 }
-
 
 sourceSets.main.java.srcDir "$buildDir/generated-sources/antlr3"
 

@@ -5,13 +5,12 @@
 <section>
     <div class="row-fluid">
         <div class="span8">
-            <div class="page-header">
-                <h1>Run equal5</h1>
+            <div class="hero-unit">
+                <p>
+                    <a class="btn btn-large" href="/webstart/equal5.jnlp"><img src="/img/icon32x32.png"> run</a>
+                    as Java web-start application.
+                </p>
             </div>
-            <p class="m">
-                <a href="/webstart/equal5.jnlp"><img src="/img/icon64x64.png"></a>
-                run equal5 as web-start java application.
-            </p>
         </div>
     </div>
 </section>
