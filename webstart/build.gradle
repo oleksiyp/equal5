@@ -1,0 +1,75 @@
+description = 'equal5 webstart distribution'
+apply plugin: "base"
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+
+task copyFiles(type: Copy) {
+    from project(":equal5-gui").configurations.runtime.allArtifacts.files
+    from project(":equal5-gui").configurations.runtime
+    into("$buildDir/dependent_lib")
+    include('*.jar')
+}
+
+task makeDirs << {
+    file("$buildDir/dist").mkdirs()
+    file("$buildDir/dist").mkdirs()
+}
+
+task signAll(dependsOn: [copyFiles, makeDirs]) {
+    ext.outputDir = file("$buildDir/dist")
+    ext.inputDir = file("$buildDir/dependent_lib")
+    ext.inputFiles = files { file(inputDir).listFiles() }
+    ext.keystoreFile = 'src/jnlp/keys/equal5.keys'
+    ext.password = "abc123"
+    ext.alias = "equal5-webstart-key"
+
+    inputs.file inputFiles
+    outputs.dir outputDir
+
+    doLast {
+        inputFiles.each {
+            ant.signjar(
+                    destDir: outputDir,
+                    alias: alias,
+                    jar: it,
+                    keystore: keystoreFile,
+                    storepass: password,
+                    preservelastmodified: 'true')
+        }
+    }
+}
+
+task generateJnlp(dependsOn: [signAll]) {
+    ext.inputFile = file("src/jnlp/equal5.jnlp");
+    ext.outputDir = file("$buildDir/dist");
+    ext.jarsDir = file("$buildDir/dist/lib")
+    ext.jarFiles = files { file(jarsDir).listFiles() }
+
+    inputs.file inputFile
+    outputs.file "$outputDir/equal5.jnlp"
+
+    doLast {
+        def props = new Properties()
+        props.put("dependencies", jarFiles.collect {
+            str -> "<jar href=\"$str.name\" />"
+        }.join("\n\t"))
+
+        copy {
+            from inputFile
+            into outputDir
+            filter(ReplaceTokens, tokens: props)
+        }
+    }
+}
+
+task dist(type: Zip, dependsOn: [generateJnlp]) {
+    baseName = "equal5-" + project.version
+    destinationDir = buildDir
+    from "$buildDir/dist"
+}
+
+
+artifacts {
+    archives dist
+}

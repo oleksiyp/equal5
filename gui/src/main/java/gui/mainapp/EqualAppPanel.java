@@ -4,7 +4,6 @@ import engine.calculation.ViewportSize;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.antlr.AntlrExpressionParser;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import gui.mainapp.viewmodel.*;
 import gui.mainapp.viewport.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
@@ -20,7 +19,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 import java.util.*;
 
 /**
