@@ -1,4 +1,4 @@
-ext.description = 'equal5 http://parboiled.org based parser'
+description = 'equal5 http://parboiled.org based parser'
 
 dependencies {
     compile project(':equal5-engine')

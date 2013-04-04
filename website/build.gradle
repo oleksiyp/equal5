@@ -1,4 +1,4 @@
-ext.description = 'equal5 website application'
+description = 'equal5 website application'
 
 apply plugin: 'war'
 apply plugin: 'gae'

@@ -1,4 +1,4 @@
-ext.description = 'equal5 http://antlr3.org parser'
+description = 'equal5 http://antlr3.org parser'
 
 configurations {
     antlr3

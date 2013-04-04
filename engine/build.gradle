@@ -1,4 +1,4 @@
-ext.description = 'equal5 core engine library'
+description = 'equal5 core engine library'
 
 configurations {
     testFixtures {
