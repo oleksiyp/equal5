@@ -15,7 +15,7 @@ ext.javaProjects = [
 ]
 
 subprojects {
-    version = project.version
+    version = rootProject.version
 }
 
 configure(javaProjects) {
