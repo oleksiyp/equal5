@@ -5,7 +5,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 ext.dependentLib = file "$buildDir/dependent_lib";
 ext.signedLib = file "$buildDir/signed_lib";
-ext.dist = file "$buildDir/dist";
+ext.distDir = file "$buildDir/dist";
 ext.keystoreFile = 'src/jnlp/keys/equal5.keys'
 ext.alias = "equal5-webstart-key"
 
@@ -14,7 +14,7 @@ ext.env = System.getenv()
 task makeDirs << {
     file(dependentLib).mkdirs()
     file(signedLib).mkdirs()
-    file(dist).mkdirs()
+    file(distDir).mkdirs()
 }
 
 task copyDeps(type: Copy, dependsOn: makeDirs) {
@@ -54,13 +54,13 @@ if (env.containsKey("signingPassword")) {
 
 task copyToDist(type: Copy, dependsOn: signAll) {
     from signedLib
-    into dist
+    into distDir
 }
 
 task generateJnlp(dependsOn: copyToDist) {
     ext.inputFile = file("src/jnlp/equal5.jnlp");
-    ext.outputFile = file("$dist/equal5.jnlp");
-    ext.jarsDir = dist
+    ext.outputFile = file("$distDir/equal5.jnlp");
+    ext.jarsDir = distDir
     ext.jarFiles = files { file(jarsDir).listFiles() }
 
     inputs.file { inputFile }
@@ -83,9 +83,11 @@ task generateJnlp(dependsOn: copyToDist) {
 task dist(type: Zip, dependsOn: generateJnlp) {
     baseName = "equal5"
     appendix = "jnlp"
-    from dist
+    from distDir
 }
 
+
+task build(dependsOn: dist)
 
 artifacts {
     archives dist
