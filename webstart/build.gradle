@@ -5,53 +5,62 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 ext.dependentLib = file "$buildDir/dependent_lib";
 ext.signedLib = file "$buildDir/signed_lib";
-ext.standaloneDist = file "$buildDir/standaloneDist";
+ext.dist = file "$buildDir/dist";
 ext.keystoreFile = 'src/jnlp/keys/equal5.keys'
-ext.password = "abc123"
 ext.alias = "equal5-webstart-key"
+
+ext.env = System.getenv()
 
 task makeDirs << {
     file(dependentLib).mkdirs()
     file(signedLib).mkdirs()
-    file(standaloneDist).mkdirs()
+    file(dist).mkdirs()
 }
 
 task copyDeps(type: Copy, dependsOn: makeDirs) {
     from project(":equal5-gui").configurations.runtime.allArtifacts.files
     from project(":equal5-gui").configurations.runtime
-    into(dependentLib)
-    include('*.jar')
+    into dependentLib
+    include '*.jar'
 }
 
+if (env.containsKey("signingPassword")) {
+    task signAll(dependsOn: copyDeps) {
 
-task signAll(dependsOn: copyDeps) {
-    ext.inputJars = files { file(dependentLib).listFiles() }
+        ext.inputJars = files { file(dependentLib).listFiles() }
+        ext.password = env["signingPassword"]
 
-    inputs.file inputJars
-    outputs.dir signedLib
+        inputs.file inputJars
+        outputs.dir signedLib
 
-    doLast {
-        inputJars.each {
-            ant.signjar(
-                    destDir: signedLib,
-                    alias: alias,
-                    jar: it,
-                    keystore: keystoreFile,
-                    storepass: password,
-                    preservelastmodified: 'true')
+        doLast {
+            inputJars.each {
+                ant.signjar(
+                        destDir: signedLib,
+                        alias: alias,
+                        jar: it,
+                        keystore: keystoreFile,
+                        storepass: password,
+                        preservelastmodified: 'true')
+            }
         }
+    }
+} else {
+    task signAll(type: Copy, dependsOn: copyDeps) {
+        from dependentLib
+        into signedLib
     }
 }
 
-task copyToStandalone(type: Copy, dependsOn: signAll) {
+task copyToDist(type: Copy, dependsOn: signAll) {
     from signedLib
-    into standaloneDist
+    into dist
 }
 
-task generateJnlp(dependsOn: copyToStandalone) {
+task generateJnlp(dependsOn: copyToDist) {
     ext.inputFile = file("src/jnlp/equal5.jnlp");
-    ext.outputFile = file("$standaloneDist/equal5.jnlp");
-    ext.jarsDir = standaloneDist
+    ext.outputFile = file("$dist/equal5.jnlp");
+    ext.jarsDir = dist
     ext.jarFiles = files { file(jarsDir).listFiles() }
 
     inputs.file { inputFile }
@@ -71,16 +80,13 @@ task generateJnlp(dependsOn: copyToStandalone) {
     }
 }
 
-task standaloneDist(type: Zip, dependsOn: generateJnlp) {
+task dist(type: Zip, dependsOn: generateJnlp) {
     baseName = "equal5"
-    from standaloneDist
+    appendix = "jnlp"
+    from dist
 }
 
 
 artifacts {
-    archives standaloneDist
-}
-
-task showVersion << {
-    println
+    archives dist
 }
