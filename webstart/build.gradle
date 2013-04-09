@@ -3,34 +3,37 @@ apply plugin: "base"
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
+ext.dependentLib = file "$buildDir/dependent_lib";
+ext.signedLib = file "$buildDir/signed_lib";
+ext.standaloneDist = file "$buildDir/standaloneDist";
+ext.keystoreFile = 'src/jnlp/keys/equal5.keys'
+ext.password = "abc123"
+ext.alias = "equal5-webstart-key"
 
-task copyFiles(type: Copy) {
+task makeDirs << {
+    file(dependentLib).mkdirs()
+    file(signedLib).mkdirs()
+    file(standaloneDist).mkdirs()
+}
+
+task copyDeps(type: Copy, dependsOn: makeDirs) {
     from project(":equal5-gui").configurations.runtime.allArtifacts.files
     from project(":equal5-gui").configurations.runtime
-    into("$buildDir/dependent_lib")
+    into(dependentLib)
     include('*.jar')
 }
 
-task makeDirs << {
-    file("$buildDir/dist").mkdirs()
-    file("$buildDir/dist").mkdirs()
-}
 
-task signAll(dependsOn: [copyFiles, makeDirs]) {
-    ext.outputDir = file("$buildDir/dist")
-    ext.inputDir = file("$buildDir/dependent_lib")
-    ext.inputFiles = files { file(inputDir).listFiles() }
-    ext.keystoreFile = 'src/jnlp/keys/equal5.keys'
-    ext.password = "abc123"
-    ext.alias = "equal5-webstart-key"
+task signAll(dependsOn: copyDeps) {
+    ext.inputJars = files { file(dependentLib).listFiles() }
 
-    inputs.file inputFiles
-    outputs.dir outputDir
+    inputs.file inputJars
+    outputs.dir signedLib
 
     doLast {
-        inputFiles.each {
+        inputJars.each {
             ant.signjar(
-                    destDir: outputDir,
+                    destDir: signedLib,
                     alias: alias,
                     jar: it,
                     keystore: keystoreFile,
@@ -40,14 +43,19 @@ task signAll(dependsOn: [copyFiles, makeDirs]) {
     }
 }
 
-task generateJnlp(dependsOn: [signAll]) {
+task copyToStandalone(type: Copy, dependsOn: signAll) {
+    from signedLib
+    into standaloneDist
+}
+
+task generateJnlp(dependsOn: copyToStandalone) {
     ext.inputFile = file("src/jnlp/equal5.jnlp");
-    ext.outputDir = file("$buildDir/dist");
-    ext.jarsDir = file("$buildDir/dist/lib")
+    ext.outputFile = file("$standaloneDist/equal5.jnlp");
+    ext.jarsDir = standaloneDist
     ext.jarFiles = files { file(jarsDir).listFiles() }
 
-    inputs.file inputFile
-    outputs.file "$outputDir/equal5.jnlp"
+    inputs.file { inputFile }
+    outputs.file { outputFile }
 
     doLast {
         def props = new Properties()
@@ -57,19 +65,22 @@ task generateJnlp(dependsOn: [signAll]) {
 
         copy {
             from inputFile
-            into outputDir
+            into outputFile
             filter(ReplaceTokens, tokens: props)
         }
     }
 }
 
-task dist(type: Zip, dependsOn: [generateJnlp]) {
-    baseName = "equal5-" + project.version
-    destinationDir = buildDir
-    from "$buildDir/dist"
+task standaloneDist(type: Zip, dependsOn: generateJnlp) {
+    baseName = "equal5"
+    from standaloneDist
 }
 
 
 artifacts {
-    archives dist
+    archives standaloneDist
+}
+
+task showVersion << {
+    println
 }
