@@ -24,7 +24,7 @@
     <div class="navbar">
         <div class="navbar-inner">
             <div class="container">
-                <a class="brand" href="#">equal<sup>5</sup></a>
+                <a class="brand" href="#"><img src="/img/icon16x16.png"></a>
                 <ul class="nav">
                     <li class="active">
                         <a href="#">
@@ -40,30 +40,6 @@
                     </li>
                 </ul>
             </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#">
-                        <i class="icon-check"></i>
-                        Run
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-hand-right"></i>
-                        Standalone
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-wrench"></i>
-                        Develop
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
     <div style="min-height: 200px">
