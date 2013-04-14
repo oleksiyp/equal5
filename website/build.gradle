@@ -31,10 +31,10 @@ dependencies {
     providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
 }
 
-war {
-    ext.dist = project(':equal5-webstart')
-            .task("dist").archivePath
-    from zipTree(dist) {
-        into "abc"
-    }
-}
+//war {
+//    ext.dist = project(':equal5-webstart')
+//            .task("dist").archivePath
+//    from zipTree(dist) {
+//        into "abc"
+//    }
+//}

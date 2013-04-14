@@ -1,6 +1,5 @@
 package gui.mainapp.viewport;
 
-import engine.calculation.CalculationParameters;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import org.junit.Test;
