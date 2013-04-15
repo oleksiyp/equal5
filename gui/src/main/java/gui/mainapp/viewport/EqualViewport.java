@@ -1,18 +1,16 @@
 package gui.mainapp.viewport;
 
 import engine.calculation.CalculationParameters;
-import engine.calculation.CalculationResults;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import engine.expressions.Equation;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
+import gui.mainapp.viewport.cord_sys.CoordinateSystem;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.concurrent.ThreadFactory;
