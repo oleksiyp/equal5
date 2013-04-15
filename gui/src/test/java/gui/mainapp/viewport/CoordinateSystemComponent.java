@@ -2,6 +2,7 @@ package gui.mainapp.viewport;
 
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
+import gui.mainapp.viewport.cord_sys.CoordinateSystem;
 
 import javax.swing.*;
 import java.awt.*;
