@@ -1,7 +1,0 @@
-description = 'Module with tests that depends on engine itself and parser-* modules'
-
-dependencies {
-    compile project(':equal5-engine')
-    compile project(':equal5-parser-parboiled')
-    compile project(':equal5-parser-antlr')
-}

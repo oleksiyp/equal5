@@ -76,7 +76,7 @@ variable
     ;
 
 arguments
-    : (expression (',' expression)*)? -> ^(ARGUMENTS expression+)
+    : (expression (',' expression)*)? -> ^(ARGUMENTS expression*)
     ;
 
 parentheses

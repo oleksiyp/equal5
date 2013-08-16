@@ -6,10 +6,10 @@ import engine.calculation.vector.VectorMachineEvaluator;
 import engine.expressions.Equation;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.calculation.drawables.DrawToImage;
 import engine.calculation.drawables.RectRange;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class VectorCalculationEngineTest {
     }
 
     private Equation eq(String left, String right) {
-        ParboiledExpressionParser ep = new ParboiledExpressionParser();
+        AntlrExpressionParser ep = new AntlrExpressionParser();
         try {
             Function leftExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, left);
             Function rightExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, right);

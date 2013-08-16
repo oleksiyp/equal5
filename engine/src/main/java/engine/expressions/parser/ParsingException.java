@@ -8,11 +8,13 @@ import java.util.List;
  * Time: 11:17 AM
  */
 public class ParsingException extends Exception {
+    private String expression;
     private final List<SyntaxError> errors;
 
     public ParsingException(List<SyntaxError> errors) {
         super(asMessage(errors));
         this.errors = errors;
+        this.expression = null;
     }
 
     private static String asMessage(List<SyntaxError> errors) {
@@ -43,5 +45,23 @@ public class ParsingException extends Exception {
 
     public List<SyntaxError> getErrors() {
         return errors;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    @Override
+    public String getMessage() {
+        String msg = super.getMessage();
+        if (expression != null) {
+            msg += "\n";
+            msg += "Expr: " + expression;
+        }
+        return msg;
     }
 }

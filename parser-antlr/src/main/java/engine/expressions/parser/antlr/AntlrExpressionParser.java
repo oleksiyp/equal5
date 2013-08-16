@@ -21,9 +21,16 @@ public class AntlrExpressionParser implements ExpressionParser {
 
     @Override
     public Object parse(ClauseType clause, String expression) throws ParsingException {
-        CommonTokenStream tokens = lexer(expression);
-        ParserRuleReturnScope ruleReturn = parser(clause, tokens);
-        return builder(clause, ruleReturn);
+        try {
+            CommonTokenStream tokens = lexer(expression);
+            ParserRuleReturnScope ruleReturn = parser(clause, tokens);
+            return builder(clause, ruleReturn);
+        }catch (ParsingException ex) {
+            if (ex.getExpression() == null) {
+                ex.setExpression(expression);
+            }
+            throw ex;
+        }
     }
 
     private CommonTokenStream lexer(String expression) throws ParsingException {
@@ -48,12 +55,8 @@ public class AntlrExpressionParser implements ExpressionParser {
             if (parser.getSyntaxErrors().isEmpty()) {
                 throw new RuntimeException("parser failed but no errors recorded", e);
             }
-        } catch (RewriteEarlyExitException e) {
-            parser
-                    .getSyntaxErrors()
-                    .add(new SyntaxError(1, 1, 0, 1, "bad input"));
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("EqualParser problem" ,e);
         }
         List<SyntaxError> errors = parser.getSyntaxErrors();
         if (!errors.isEmpty()) {

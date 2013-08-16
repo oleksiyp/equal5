@@ -9,11 +9,11 @@ import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.expressions.Equation;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.calculation.drawables.DrawToImage;
 import engine.calculation.drawables.Drawable;
 import engine.calculation.drawables.RectRange;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import org.junit.BeforeClass;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -22,10 +22,7 @@ import org.junit.runner.RunWith;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -73,14 +70,8 @@ public class UseCasesTest {
 
         System.out.printf("%20s ", eqs);
 
-        ExpressionParser parser = new ParboiledExpressionParser();
-        Equation []equations;
-        try {
-            equations = (Equation[]) parser.parse(ClauseType.EQUATIONS, eqs);
-        } catch (ParsingException ex) {
-            fail("syntax error on '" + useCase.equations + "', exception: " + ex);
-            return;
-        }
+        ExpressionParser parser = new AntlrExpressionParser();
+        Equation []equations = (Equation[]) parser.parse(ClauseType.EQUATIONS, eqs);
 
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
                 equations);

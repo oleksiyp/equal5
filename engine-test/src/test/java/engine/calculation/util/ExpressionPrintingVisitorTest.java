@@ -6,7 +6,7 @@ import engine.calculation.functions.Multiplication;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import org.junit.Test;
 
 import java.io.PrintWriter;
@@ -70,7 +70,7 @@ public class ExpressionPrintingVisitorTest {
     }
 
     private Object parse(String expression) throws ParsingException {
-        return new ParboiledExpressionParser().parse(ClauseType.ADDITIVE_EXPRESSION,
+        return new AntlrExpressionParser().parse(ClauseType.ADDITIVE_EXPRESSION,
                 expression);
     }
 }
