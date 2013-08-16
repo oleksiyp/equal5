@@ -8,7 +8,7 @@ import engine.calculation.vector.fillers.VectorFiller;
 import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
-import engine.expressions.parser.parboiled.ParboiledExpressionParser;
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,7 +72,7 @@ public class VectorMachineEvaluatorTest {
         Function[]functions = new Function[expressions.length];
         try {
             for (int i = 0; i < expressions.length; i++) {
-                functions[i] = (Function) new ParboiledExpressionParser()
+                functions[i] = (Function) new AntlrExpressionParser()
                         .parse(ClauseType.ADDITIVE_EXPRESSION, expressions[i]);
             }
         } catch (ParsingException e) {
