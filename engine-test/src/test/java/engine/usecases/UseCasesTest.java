@@ -9,7 +9,6 @@ import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.expressions.Equation;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
-import engine.expressions.parser.ParsingException;
 import engine.calculation.drawables.DrawToImage;
 import engine.calculation.drawables.Drawable;
 import engine.calculation.drawables.RectRange;
@@ -37,7 +36,8 @@ import static org.junit.Assert.fail;
  */
 @RunWith(Theories.class)
 public class UseCasesTest {
-    private final static int MAX_CONCURRENCY = Runtime.getRuntime().availableProcessors();
+    public static final int PROCESSORS = Runtime.getRuntime().availableProcessors();
+    private final static int MAX_CONCURRENCY = PROCESSORS;
     private static final File DIR = new File("test_images");
     static {
         DIR.mkdirs();
@@ -48,12 +48,15 @@ public class UseCasesTest {
     static class Header {
         static {
             System.out.println("Look '" + DIR + "' directory for image results");
-            System.out.printf("%20s ", "EQUATION");
-            System.out.printf("%-8s", "BASIC");
-            System.out.printf("%-8s", "VECTOR");
-            System.out.printf("%-8s", "VECTOR2");
+            System.out.println("P - number of processors");
+            System.out.printf("%10s", "BASIC");
+            for (int c = 1; c <= PROCESSORS; c++) {
+                System.out.printf("%10s", String.format("V P=%d", c));
+                System.out.printf("%10s", String.format("V2 P=%d", c));
+            }
             System.out.println();
         }
+
     }
 
     @Theory
@@ -68,7 +71,7 @@ public class UseCasesTest {
 
         String eqs = useCase.equations.trim().replaceAll("\n\r?", ",");
 
-        System.out.printf("%20s ", eqs);
+        System.out.println(eqs);
 
         ExpressionParser parser = new AntlrExpressionParser();
         Equation []equations = (Equation[]) parser.parse(ClauseType.EQUATIONS, eqs);
@@ -76,25 +79,45 @@ public class UseCasesTest {
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
                 equations);
 
-        long time;
-        time = calculateAndWrite(params,
+        long []times = new long[1 + PROCESSORS * 2];
+        int i = 0;
+        times[i++] = calculateAndWrite(params,
                 createBasicEngine(),
                 String.format("test%03db.png",
                 useCase.number));
-        System.out.printf("%8s", time + " ms");
+        for (int c = 1; c <= PROCESSORS; c++) {
+            times[i++] = calculateAndWrite(params,
+                    createVectorEngine(c),
+                    String.format("test%03dv.png",
+                    useCase.number));
 
-        time = calculateAndWrite(params,
-                createVectorEngine(),
-                String.format("test%03dv.png",
-                useCase.number));
-        System.out.printf("%8s", time + " ms");
+            times[i++] = calculateAndWrite(params,
+                    createVectorEngine2(4),
+                    String.format("test%03dv2.png",
+                    useCase.number));
+        }
+        long min = Long.MAX_VALUE;
+        for (long t : times) {
+            if (t < min) {
+                min = t;
+            }
+        }
 
-        time = calculateAndWrite(params,
-                createVectorEngine2(),
-                String.format("test%03dv2.png",
-                useCase.number));
-        System.out.printf("%8s", time + " ms");
-        System.out.println("");
+        for (long t : times) {
+            String str = t + " ms";
+            if (t == min) {
+                str = "*" + str + "*";
+            }
+            System.out.printf("%10s", str);
+        }
+        System.out.println();
+        for (long t : times) {
+            double idx = min;
+            idx /= t;
+            idx *= 100;
+            System.out.printf("%9.1fp", idx);
+        }
+        System.out.println();
     }
 
     private long calculateAndWrite(CalculationParameters params, CalculationEngine engine, String filename) throws IOException {
@@ -116,16 +139,16 @@ public class UseCasesTest {
         return new BasicCalculationEngine(evaluator);
     }
 
-    private CalculationEngine createVectorEngine() {
+    private CalculationEngine createVectorEngine(int concurrency) {
         VectorMachineBuilder builder = new VectorMachineBuilder();
-        builder.setConcurrency(1, executor);
+        builder.setConcurrency(concurrency, executor);
         VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
         return new VectorCalculationEngine(evaluator);
     }
 
-    private CalculationEngine createVectorEngine2() {
+    private CalculationEngine createVectorEngine2(int concurrency) {
         VectorMachineBuilder builder = new VectorMachineBuilder();
-        builder.setConcurrency(1, executor);
+        builder.setConcurrency(concurrency, executor);
         VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
         return new VectorCalculationEngine2(evaluator);
     }
@@ -178,18 +201,12 @@ public class UseCasesTest {
 
                 List<EqualUseCase> useCaseList = new ArrayList<EqualUseCase>();
                 for (int i = 1; scanner.hasNext(); i++) {
-                    String str = scanner.next("\\d+[!\\.]");
                     boolean skip = false;
-                    if (str.substring(str.length() - 1).equals("!")) {
+                    String line = scanner.nextLine().trim();
+                    if (line.startsWith("!")) {
+                        line = line.substring(1);
                         skip = true;
                     }
-                    str = str.substring(0, str.length() - 1);
-                    int t = Integer.parseInt(str);
-                    if (i != t) {
-                        System.err.println("Mismatch in use-case numbering " + i + " " + t);
-                    }
-
-                    String line = scanner.nextLine();
                     line = line.replaceAll("^\\.", "");
                     line = line.trim();
                     String description = line;
