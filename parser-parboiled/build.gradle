@@ -1,9 +1,0 @@
-description = 'equal5 http://parboiled.org based parser'
-
-dependencies {
-    compile project(':equal5-engine')
-
-    compile group: 'org.parboiled', name: 'parboiled-java', version:'1.1.4'
-
-    testCompile project(path: ':equal5-engine', configuration: 'testFixtures')
-}
