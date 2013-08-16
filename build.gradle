@@ -1,17 +1,37 @@
 group = 'equal5'
 version = '1.0-SNAPSHOT'
+apply plugin: 'maven'
 
 ext {
     description = 'equal5 equalities graphic builder'
 }
 
+task createPom << {
+    pom {
+        project {
+            groupId 'org.example'
+            artifactId 'test'
+            version '1.0.0'
+
+            inceptionYear '2008'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
+}
 ext.javaProjects = [
         project(':equal5-engine'),
         project(':equal5-parser-antlr'),
         project(':equal5-parser-parboiled'),
         project(':equal5-engine-test'),
         project(':equal5-gui'),
-        project(':equal5-website')
+        project(':equal5-website'),
+        project(':equal5-jar-distribution')
 ]
 
 subprojects {
