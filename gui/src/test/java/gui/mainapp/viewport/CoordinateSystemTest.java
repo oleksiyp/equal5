@@ -3,6 +3,7 @@ package gui.mainapp.viewport;
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
 import gui.mainapp.viewport.cord_sys.CoordinateSystem;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -22,6 +23,7 @@ public class CoordinateSystemTest {
     }
 
     @Test
+    @Ignore("for manual run only")
     public void testDraw() throws Exception {
         ViewportBounds bounds = new ViewportBounds(-12, -12, 12, 12);
         ViewportSize size = new ViewportSize(500, 500);
