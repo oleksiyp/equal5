@@ -9,4 +9,4 @@ Look:
  - [GOALS.md](GOALS.md) for active tasks
  - [LICENSE.md](LICENSE.md) for licensing terms
 
-[![Build Status](https://drone.io/github.com/captain-protect/equal5/status.png)](https://drone.io/github.com/captain-protect/equal5/latest)
+[![Build Status](https://drone.io/github.com/oleksiyp/equal5/status.png)](https://drone.io/github.com/oleksiyp/equal5/latest)
