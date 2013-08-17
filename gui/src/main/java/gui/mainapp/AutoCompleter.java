@@ -29,7 +29,7 @@ public class AutoCompleter {
     private final JTextArea equationPad;
     private final ExpressionParser parser;
     private JPopupMenu popup;
-    private JList list;
+    private JList<CompletionVariant> list;
     private KeyAdapter listener;
     private int editPosition;
     private CompleteDocumentListener documentListener;
@@ -99,8 +99,7 @@ public class AutoCompleter {
     private void pressComplete() {
         int idx = list.getSelectedIndex();
 
-        CompletionVariant element = (CompletionVariant) list.getModel()
-                .getElementAt(idx);
+        CompletionVariant element = list.getModel().getElementAt(idx);
         element.complete(editPosition);
 
         hidePopup();
@@ -152,18 +151,10 @@ public class AutoCompleter {
     }
 
     private JList createSuggestionList(CompletionVariant[] variants) {
-        list = new JList(variants);
+        list = new JList<CompletionVariant>(variants);
         list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-
-                }
-            }
-        });
         return list;
     }
 
