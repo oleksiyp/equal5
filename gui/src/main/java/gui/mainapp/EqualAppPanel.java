@@ -5,7 +5,7 @@ import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.antlr.AntlrExpressionParser;
 import gui.mainapp.viewmodel.*;
-import gui.mainapp.viewport.CoordinateSystem;
+import gui.mainapp.viewport.cord_sys.CoordinateSystem;
 import gui.mainapp.viewport.EqualViewport;
 import gui.mainapp.viewport.Player;
 import util.ActionBeanControl;

@@ -1,4 +1,4 @@
-package gui.mainapp.viewport;
+package gui.mainapp.viewport.cord_sys;
 
 import engine.calculation.ViewportBounds;
 import engine.calculation.ViewportSize;
@@ -38,10 +38,15 @@ public class CoordinateSystem {
         ZERO
     }
 
-    class PaintInstance {
+
+    private class PaintInstance {
         private final Graphics g;
         private final ViewportBounds bounds;
         private final ViewportSize size;
+
+        private final Label mainCrossLabel = new Label();
+        private final List<Label> hLabels = new ArrayList<Label>();
+        private final List<Label> vLabels = new ArrayList<Label>();
 
         public PaintInstance(Graphics g, ViewportSize size, ViewportBounds bounds) {
             this.g = g;
@@ -115,7 +120,6 @@ public class CoordinateSystem {
                     new VerticalLine(val, type) :
                     new HorizontalLine(val, type);
         }
-
         private abstract class Line {
 
             protected final double value;
@@ -164,12 +168,12 @@ public class CoordinateSystem {
                                 coord() - options.getTickSize(),
                                 coord() + options.getTickSize());
                         coord();
-                        putLabel(line.coord(), line.value);
+                        putLabel(line);
                     }
                 }
             }
 
-            protected abstract void putLabel(int coord, double val);
+            protected abstract void putLabel(Line perpendicular);
 
             protected abstract void drawTickAlongLine(int c1, int c2);
 
@@ -186,7 +190,10 @@ public class CoordinateSystem {
             }
 
             @Override
-            protected void putLabel(int y, double val) {
+            protected void putLabel(Line perpendicular) {
+                double val = perpendicular.value;
+                int y = perpendicular.coord();
+
                 g.setColor(options.getLabelColor());
                 g.setFont(options.getLabelFont());
                 g.drawString(String.format("%.3g", val),
@@ -220,7 +227,10 @@ public class CoordinateSystem {
             }
 
             @Override
-            protected void putLabel(int x, double val) {
+            protected void putLabel(Line perpendicular) {
+                double val = perpendicular.value;
+                int x = perpendicular.coord();
+
                 g.setColor(options.getLabelColor());
                 g.setFont(options.getLabelFont());
                 g.drawString(String.format("%.3g", val),
