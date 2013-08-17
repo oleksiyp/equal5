@@ -6,7 +6,7 @@ import engine.calculation.drawables.locus.DiscreteLocus;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
 
 /**
