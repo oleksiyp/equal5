@@ -1,15 +1,7 @@
-package engine.expressions.parser.antlr;
+package engine.expression.parser.antlr;
 
+import engine.expressions.parser.antlr.AntlrAutocompletionParser;
 import engine.expression.parser.AbstractAutocompletionParserTest;
-import engine.expressions.parser.ClauseType;
-import engine.expressions.parser.auto_complete.Completion;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.fail;
 
