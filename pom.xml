@@ -26,10 +26,7 @@
 
     <modules>
         <module>engine</module>
-        <module>engine-test</module>
         <module>gui</module>
-        <module>parser-antlr</module>
-        <module>jar-builder</module>
     </modules>
 
     <dependencies>
@@ -51,11 +48,6 @@
             <dependency>
                 <groupId>org.equal5</groupId>
                 <artifactId>equal5-engine</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.equal5</groupId>
-                <artifactId>equal5-parser-antlr</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

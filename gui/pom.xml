@@ -18,9 +18,5 @@
             <groupId>org.equal5</groupId>
             <artifactId>equal5-engine</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.equal5</groupId>
-            <artifactId>equal5-parser-antlr</artifactId>
-        </dependency>
     </dependencies>
 </project>

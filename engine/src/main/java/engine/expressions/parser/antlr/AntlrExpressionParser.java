@@ -3,7 +3,6 @@ package engine.expressions.parser.antlr;
 import engine.expressions.parser.*;
 import engine.expressions.parser.auto_complete.AutocompletionParser;
 import org.antlr.runtime.*;
-import org.antlr.runtime.tree.RewriteEarlyExitException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +50,7 @@ public class AntlrExpressionParser implements ExpressionParser {
         try {
             ruleReturn = clause.accept(parser);
             parser.theEnd();
-        } catch (RecognitionException e) {
+        } catch (antlr.RecognitionException e) {
             if (parser.getSyntaxErrors().isEmpty()) {
                 throw new RuntimeException("parser failed but no errors recorded", e);
             }

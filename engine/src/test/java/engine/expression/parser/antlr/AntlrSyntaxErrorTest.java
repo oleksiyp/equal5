@@ -1,5 +1,6 @@
-package engine.expressions.parser.antlr;
+package engine.expression.parser.antlr;
 
+import engine.expressions.parser.antlr.AntlrExpressionParser;
 import engine.expression.parser.AbstractSyntaxErrorTest;
 
 /**
