@@ -15,8 +15,6 @@ public class EqualApp {
     private final JFrame frame = new JFrame("equal5");
 
     public static void main(String[] args) {
-        switchToNativeLAF();
-
         EqualApp app = new EqualApp();
         app.show();
     }
