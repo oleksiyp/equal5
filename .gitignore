@@ -8,6 +8,7 @@ classes/
 /var
 pom.xml.versionsBackup
 test-output/
+gui/dependency-reduced-pom.xml
 /atlassian-ide-plugin.xml
 .idea
 .DS_Store
