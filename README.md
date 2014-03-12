@@ -1,6 +1,10 @@
 equal5 - equalities graphing tool
 =================================
 
+Releases
+--------
+v1.0 https://github.com/oleksiyp/equal5/releases/tag/v1.0
+
 Further
 -------
 
