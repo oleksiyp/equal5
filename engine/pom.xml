@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.equal5</groupId>
         <artifactId>equal5-parent</artifactId>
-        <version>1.0</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>equal5-engine</artifactId>
