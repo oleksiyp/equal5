@@ -5,8 +5,13 @@ Releases
 --------
 v1.0 https://github.com/oleksiyp/equal5/releases/tag/v1.0
 
-Further
--------
+Screenshot
+----------
+![screenshot #1](/screenshots/1.png)
+
+
+Links
+-----
 
 Look:
  - [BUILD.md](BUILD.md) for how to build it.
