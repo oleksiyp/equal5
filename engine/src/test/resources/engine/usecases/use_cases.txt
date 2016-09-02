@@ -16,134 +16,134 @@ Dots
 -10 10 -10 10
 sin(y)*cos(x)=0.8
 
-Identity function
+Identity calculable
 -10 10 -10 10
 y=id(x)
 
-Sine function
+Sine calculable
 -10 10 -10 10
 y=sin(x)
 
-Cosine function
+Cosine calculable
 -10 10 -10 10
 y=cos(x)
 
-Tangent function
+Tangent calculable
 -10 10 -10 10
 y=tan(x)
 
-ArcSine function
+ArcSine calculable
 -10 10 -10 10
 y=asin(x)
 
-ArcCosine function
+ArcCosine calculable
 -10 10 -10 10
 y=acos(x)
 
-ArcTangent function
+ArcTangent calculable
 -10 10 -10 10
 y=atan(x)
 
-Exponent function
+Exponent calculable
 -10 10 -10 10
 y=exp(x)
 
-Log function
+Log calculable
 -10 10 -10 10
 y=log(x)
 
-Square root function
+Square root calculable
 -10 10 -10 10
 y=sqrt(x)
 
-Remainder function #1
+Remainder calculable #1
 -10 10 -10 10
 y=remainder(x, 5)
 
-Remainder function #2
+Remainder calculable #2
 -10 10 -10 10
 y=remainder(5, x)
 
-Ceil function
+Ceil calculable
 -10 10 -10 10
 y=ceil(x)
 
-Floor function
+Floor calculable
 -10 10 -10 10
 y=floor(x)
 
-ArcTangent coordinate function #1
+ArcTangent coordinate calculable #1
 -10 10 -10 10
 y=atan(x, 1)
 
-ArcTangent coordinate function #2
+ArcTangent coordinate calculable #2
 -10 10 -10 10
 y=atan(1, x)
 
-Power function #1
+Power calculable #1
 -10 10 -10 10
 y=pow(x, 2)
 
-Power function #2
+Power calculable #2
 -10 10 -10 10
 y=pow(2, x)
 
-Round function
+Round calculable
 -10 10 -10 10
 y=round(x)
 
-Round function
+Round calculable
 -10 10 -10 10
 y=random()
 
-Absolute function
+Absolute calculable
 -10 10 -10 10
 y=abs(x)
 
-Maximum function #1
+Maximum calculable #1
 -10 10 -10 10
 y=max(x, 5)
 
-Maximum function #2
+Maximum calculable #2
 -10 10 -10 10
 y=max(5, x)
 
-Minimum function #1
+Minimum calculable #1
 -10 10 -10 10
 y=min(x, 5)
 
-Minimum function #2
+Minimum calculable #2
 -10 10 -10 10
 y=min(5, x)
 
-Signum function
+Signum calculable
 -10 10 -10 10
 y=sign(x)
 
-Hyperbolic sine function
+Hyperbolic sine calculable
 -10 10 -10 10
 y=sinh(x)
 
-Hyperbolic cosine function
+Hyperbolic cosine calculable
 -10 10 -10 10
 y=cosh(x)
 
-Hyperbolic tangent function
+Hyperbolic tangent calculable
 -10 10 -10 10
 y=tanh(x)
 
-Hypot function #1
+Hypot calculable #1
 -10 10 -10 10
 y=hypot(x, 5)
 
-Hypot function
+Hypot calculable
 -10 10 -10 10
 y=hypot(5, x)
 
-expm1 function
+expm1 calculable
 -10 10 -10 10
 y=expm1(x)
 
-log1p function
+log1p calculable
 -10 10 -10 10
 y=log1p(x)

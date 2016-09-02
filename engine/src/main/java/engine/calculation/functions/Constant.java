@@ -4,7 +4,7 @@ package engine.calculation.functions;
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:48 PM
  */
-public class Constant extends AbstractFunction {
+public class Constant extends AbstractCalculable {
     private final double value;
 
     public Constant(double value) {

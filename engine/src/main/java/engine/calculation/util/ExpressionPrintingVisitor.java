@@ -2,7 +2,7 @@ package engine.calculation.util;
 
 import engine.calculation.functions.FunctionVisitor;
 import engine.calculation.functions.*;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.Stack;
 
@@ -65,12 +65,12 @@ public class ExpressionPrintingVisitor implements FunctionVisitor {
     }
 
     @Override
-    public void visit(final MathFunction mathFunction) {
+    public void visit(final MathCalculable mathFunction) {
         writer.write(mathFunction.getType().getInExpressionName());
         writeArguments(mathFunction.getArguments());
     }
 
-    private void writeArguments(Function[] arguments) {
+    private void writeArguments(Calculable[] arguments) {
         writer.write("(");
         for (int i = 0; i < arguments.length; i++) {
             arguments[i].accept(ExpressionPrintingVisitor.this);

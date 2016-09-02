@@ -1,8 +1,8 @@
 package engine.expressions.parser.antlr;
 
 import engine.calculation.functions.*;
+import engine.expressions.Calculable;
 import engine.expressions.Equation;
-import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ClauseTypeVisitor;
 import engine.expressions.parser.SyntaxError;
@@ -78,8 +78,8 @@ public class AntlrExpressionBuilder {
                 throw runtimeException(tree, "equation(): child counts != 2");
             }
             pushChildrenReverse(tree);
-            Function left = expression();
-            Function right = expression();
+            Calculable left = expression();
+            Calculable right = expression();
 
             String typeStr = tree.getText();
             Equation.Type type = Equation.Type.byOperator(typeStr);
@@ -89,7 +89,7 @@ public class AntlrExpressionBuilder {
             return new Equation(left, type, right);
         }
 
-        public Function expression() throws ExpressionBuilderFailure {
+        public Calculable expression() throws ExpressionBuilderFailure {
             Tree tree = stack.peek();
             switch (tree.getType()) {
                 case EqualParser.PLUS:
@@ -111,14 +111,14 @@ public class AntlrExpressionBuilder {
             throw runtimeException(tree, "expression(): unknown token type");
         }
 
-        public Function additive() throws ExpressionBuilderFailure {
+        public Calculable additive() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 2) {
                 throw runtimeException(tree, "additiveExpression(): child counts != 2");
             }
             pushChildrenReverse(tree);
-            Function left = expression();
-            Function right = expression();
+            Calculable left = expression();
+            Calculable right = expression();
             switch (tree.getType()) {
                 case EqualParser.PLUS:
                     return new Addition(left, right);
@@ -128,14 +128,14 @@ public class AntlrExpressionBuilder {
             throw runtimeException(tree, "additiveExpression(): unknown token type");
         }
 
-        public Function multiplicative() throws ExpressionBuilderFailure {
+        public Calculable multiplicative() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 2) {
                 throw runtimeException(tree, "multiplicativeExpression(): child counts != 2");
             }
             pushChildrenReverse(tree);
-            Function left = expression();
-            Function right = expression();
+            Calculable left = expression();
+            Calculable right = expression();
             switch (tree.getType()) {
                 case EqualParser.STAR:
                     return new Multiplication(left, right);
@@ -145,7 +145,7 @@ public class AntlrExpressionBuilder {
             throw runtimeException(tree, "multiplicativeExpression(): unknown token type");
         }
 
-        public Function unary() throws ExpressionBuilderFailure {
+        public Calculable unary() throws ExpressionBuilderFailure {
             Tree tree = stack.peek();
             if (tree.getChildCount() != 1) {
                 throw runtimeException(tree, "unaryExpression(): child counts != 1");
@@ -164,22 +164,22 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Function additiveExpression() throws ExpressionBuilderFailure {
+        public Calculable additiveExpression() throws ExpressionBuilderFailure {
             return expression();
         }
 
         @Override
-        public Function multiplicativeExpression() throws ExpressionBuilderFailure {
+        public Calculable multiplicativeExpression() throws ExpressionBuilderFailure {
             return  expression();
         }
 
 
-        private Function unaryExpression() throws ExpressionBuilderFailure {
+        private Calculable unaryExpression() throws ExpressionBuilderFailure {
             return expression();
         }
 
         @Override
-        public Function primaryExpression() throws ExpressionBuilderFailure {
+        public Calculable primaryExpression() throws ExpressionBuilderFailure {
             Tree tree = stack.peek();
             switch (tree.getType()) {
                 case EqualParser.MATH_FUNC:
@@ -196,7 +196,7 @@ public class AntlrExpressionBuilder {
 
 
         @Override
-        public Function parentheses() throws ExpressionBuilderFailure {
+        public Calculable parentheses() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 1) {
                 throw runtimeException(tree, "parentheses(): child count != 1");
@@ -222,7 +222,7 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Function variable() throws ExpressionBuilderFailure {
+        public Calculable variable() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 1) {
                 throw runtimeException(tree, "variable(): child count != 1");
@@ -242,11 +242,11 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Function []arguments() throws ExpressionBuilderFailure {
+        public Calculable[]arguments() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             pushChildrenReverse(tree);
             int nArgs = tree.getChildCount();
-            Function[] arguments = new Function[nArgs];
+            Calculable[] arguments = new Calculable[nArgs];
             for (int i = 0; i < nArgs; i++) {
                 arguments[i] = expression();
             }
@@ -254,7 +254,7 @@ public class AntlrExpressionBuilder {
         }
 
         @Override
-        public Function mathFunction() throws ExpressionBuilderFailure {
+        public Calculable mathFunction() throws ExpressionBuilderFailure {
             Tree tree = stack.pop();
             if (tree.getChildCount() != 2) {
                 throw runtimeException(tree, "mathFunction(): child count != 2");
@@ -264,7 +264,7 @@ public class AntlrExpressionBuilder {
             String name = nameToken.getText();
 
             stack.push(tree.getChild(1));
-            Function[] args = arguments();
+            Calculable[] args = arguments();
 
             MathFunctionType type = MathFunctionType.bySignature(name, args.length);
             if (type == null) {
@@ -272,7 +272,7 @@ public class AntlrExpressionBuilder {
                 throw new ExpressionBuilderFailure();
             }
 
-            return new MathFunction(type, args);
+            return new MathCalculable(type, args);
         }
 
         private SyntaxError errorByToken(Tree tree, String message) {

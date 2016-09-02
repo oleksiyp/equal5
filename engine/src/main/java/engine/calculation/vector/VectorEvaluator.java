@@ -1,13 +1,13 @@
 package engine.calculation.vector;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 3/12/13  6:28 PM
  */
 public interface VectorEvaluator {
-    void setFunctions(Function[] functions);
+    void setCalculables(Calculable[] calculables);
 
     void setSize(int size);
 

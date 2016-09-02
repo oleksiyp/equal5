@@ -1,18 +1,18 @@
 package engine.calculation.functions;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:49 PM
  */
-public abstract class BinaryOperator extends AbstractFunction {
+public abstract class BinaryOperator extends AbstractCalculable {
     protected final Type type;
-    protected final Function leftSide, rightSide;
+    protected final Calculable leftSide, rightSide;
 
-    BinaryOperator(Function leftSide,
+    BinaryOperator(Calculable leftSide,
                    Type type,
-                   Function rightSide) {
+                   Calculable rightSide) {
         this.type = type;
         if (leftSide == null) {
             throw new IllegalArgumentException("leftSide");
@@ -27,11 +27,11 @@ public abstract class BinaryOperator extends AbstractFunction {
         this.rightSide = rightSide;
     }
 
-    public Function getLeftSide() {
+    public Calculable getLeftSide() {
         return leftSide;
     }
 
-    public Function getRightSide() {
+    public Calculable getRightSide() {
         return rightSide;
     }
 

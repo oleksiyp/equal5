@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  * User: Oleksiy Pylypenko
  * At: 2/8/13  3:32 PM
  */
-public class ImmediateFunctionEvaluatorTest {
+public class ImmediateCalculableEvaluatorTest {
     private FunctionEvaluator asEvaluator;
 
     @Before

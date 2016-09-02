@@ -24,6 +24,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.fail;
 
@@ -49,10 +51,9 @@ public class UseCasesTest {
         static {
             System.out.println("Look '" + DIR + "' directory for image results");
             System.out.println("P - number of processors");
-            System.out.printf("%10s", "BASIC");
+            System.out.printf("%14s", "BASIC");
             for (int c = 1; c <= PROCESSORS; c++) {
-                System.out.printf("%10s", String.format("V P=%d", c));
-                System.out.printf("%10s", String.format("V2 P=%d", c));
+                System.out.printf("%14s", String.format("V P=%d", c));
             }
             System.out.println();
         }
@@ -79,59 +80,43 @@ public class UseCasesTest {
         CalculationParameters params = new CalculationParameters(bounds, size, 0.0,
                 equations);
 
-        long []times = new long[1 + PROCESSORS * 2];
-        int i = 0;
-        times[i++] = calculateAndWrite(params,
+        List<Double> times = new ArrayList<>();
+
+        times.add(calculateAndWrite(params,
                 createBasicEngine(),
                 String.format("test%03db.png",
-                useCase.number));
+                useCase.number)));
         for (int c = 1; c <= PROCESSORS; c++) {
-            times[i++] = calculateAndWrite(params,
+            times.add(calculateAndWrite(params,
                     createVectorEngine(c),
                     String.format("test%03dv.png",
-                    useCase.number));
+                    useCase.number)));
+        }
+        double min = times.stream()
+                .min(Comparator.naturalOrder())
+                .orElse(Double.MAX_VALUE);
 
-            times[i++] = calculateAndWrite(params,
-                    createVectorEngine2(4),
-                    String.format("test%03dv2.png",
-                    useCase.number));
-        }
-        long min = Long.MAX_VALUE;
-        for (long t : times) {
-            if (t < min) {
-                min = t;
-            }
-        }
-
-        for (long t : times) {
-            String str = t + " ms";
-            if (t == min) {
-                str = "*" + str + "*";
-            }
-            System.out.printf("%10s", str);
-        }
-        System.out.println();
-        for (long t : times) {
-            double idx = min;
-            idx /= t;
-            idx *= 100;
-            System.out.printf("%9.1fp", idx);
-        }
-        System.out.println();
+        System.out.println(times.stream()
+                .map(t -> {
+                    String str = String.format("%.1f", t) + " ms";
+                    str = t == min ? "*" + str + "*" : str;
+                    str = String.format("%14s", str);
+                    return str;
+                }).collect(Collectors.joining()));
     }
 
-    private long calculateAndWrite(CalculationParameters params, CalculationEngine engine, String filename) throws IOException {
+    private double calculateAndWrite(CalculationParameters params, CalculationEngine engine, String filename) throws IOException {
         engine.calculate(params);
-        long time = System.currentTimeMillis();
+        long time = System.nanoTime();
         CalculationResults results = engine.calculate(params);
-        time = System.currentTimeMillis() - time;
+        time = System.nanoTime() - time;
         RectRange range = RectRange.fromViewportSize(size);
         DrawToImage drawToImage = new DrawToImage(range);
         for (Drawable drawable : results.getDrawables()) {
             drawToImage.draw(range, drawable);
         }
         drawToImage.writePng(new File(DIR, filename), range);
-        return time;
+        return time / (double)TimeUnit.MILLISECONDS.toNanos(1);
     }
 
     private CalculationEngine createBasicEngine() {
@@ -144,13 +129,6 @@ public class UseCasesTest {
         builder.setConcurrency(concurrency, executor);
         VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
         return new VectorCalculationEngine(evaluator);
-    }
-
-    private CalculationEngine createVectorEngine2(int concurrency) {
-        VectorMachineBuilder builder = new VectorMachineBuilder();
-        builder.setConcurrency(concurrency, executor);
-        VectorEvaluator evaluator = new VectorMachineEvaluator(builder);
-        return new VectorCalculationEngine2(evaluator);
     }
 
     private static EqualUseCase []useCases;

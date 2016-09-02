@@ -4,7 +4,7 @@ package engine.calculation.functions;
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:47 PM
  */
-public class Variable extends AbstractFunction {
+public class Variable extends AbstractCalculable {
     private final String name;
 
     public Variable(String name) {

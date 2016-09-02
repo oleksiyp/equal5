@@ -4,7 +4,7 @@ import engine.calculation.Arguments;
 import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.util.ExpressionPrintingVisitor;
 import engine.calculation.util.ExpressionWriter;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -14,7 +14,7 @@ import java.io.StringWriter;
  * Date: 2/9/13
  * Time: 11:51 PM
  */
-public abstract class AbstractFunction implements Function {
+public abstract class AbstractCalculable implements Calculable {
     @Override
     public String toString() {
         return toString(this);
@@ -25,12 +25,12 @@ public abstract class AbstractFunction implements Function {
         return eval.calculate(this, arguments);
     }
 
-    private static String toString(Function function) {
+    private static String toString(Calculable calculable) {
         StringWriter strWriter = new StringWriter();
         PrintWriter prnWriter = new PrintWriter(strWriter);
         ExpressionWriter exprWriter = new ExpressionWriter(prnWriter);
         ExpressionPrintingVisitor visitor = new ExpressionPrintingVisitor(exprWriter);
-        function.accept(visitor);
+        calculable.accept(visitor);
         prnWriter.flush();
         return strWriter.toString();
 

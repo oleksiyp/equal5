@@ -5,7 +5,7 @@ import engine.calculation.evaluator.ImmediateFunctionEvaluator;
 import engine.calculation.functions.*;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.calculation.vector.fillers.VectorFiller;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.antlr.AntlrExpressionParser;
@@ -69,24 +69,24 @@ public class VectorMachineEvaluatorTest {
     }
 
     private void check(SomeKindOfArguments args, String ...expressions) {
-        Function[]functions = new Function[expressions.length];
+        Calculable[] calculables = new Calculable[expressions.length];
         try {
             for (int i = 0; i < expressions.length; i++) {
-                functions[i] = (Function) new AntlrExpressionParser()
+                calculables[i] = (Calculable) new AntlrExpressionParser()
                         .parse(ClauseType.ADDITIVE_EXPRESSION, expressions[i]);
             }
         } catch (ParsingException e) {
             throw new RuntimeException(e);
         }
-        check(args, functions);
+        check(args, calculables);
     }
 
-    private void check(SomeKindOfArguments args, Function ...functions) {
-        check(false, args, functions);
-        check(true, args, functions);
+    private void check(SomeKindOfArguments args, Calculable... calculables) {
+        check(false, args, calculables);
+        check(true, args, calculables);
     }
 
-    private void check(boolean concurrent, SomeKindOfArguments args, Function ...functions) {
+    private void check(boolean concurrent, SomeKindOfArguments args, Calculable... calculables) {
         if (Runtime.getRuntime().availableProcessors() == 1 && concurrent) {
             System.out.println("Skipping concurrent run on singe processor machine!");
             return;
@@ -94,7 +94,7 @@ public class VectorMachineEvaluatorTest {
         int concurrency = concurrent ? Runtime.getRuntime().availableProcessors() : 1;
 
         ve.setSize(SIZE);
-        ve.setFunctions(functions);
+        ve.setCalculables(calculables);
 
         long time = System.currentTimeMillis();
         ve.prepare();
@@ -103,7 +103,7 @@ public class VectorMachineEvaluatorTest {
         time = System.currentTimeMillis();
         double[][] results;
         try {
-            System.out.println("Expression: " + Arrays.toString(functions));
+            System.out.println("Expression: " + Arrays.toString(calculables));
             System.out.println("Processing operations:");
             System.out.println("Concurrency: " + concurrency);
             ve.setTimeReporter(new TimeReporter() {
@@ -131,12 +131,12 @@ public class VectorMachineEvaluatorTest {
 
             args.setOffset(nVal);
 
-            for (int j = 0; j < functions.length; j++)
+            for (int j = 0; j < calculables.length; j++)
             {
                 double actual = results[j][nVal];
-                double expected = evaluator.calculate(functions[j], args);
+                double expected = evaluator.calculate(calculables[j], args);
 
-                assertEquals("Sample #" + nVal + " in vector calculation of '" + functions[j] + "'",
+                assertEquals("Sample #" + nVal + " in vector calculation of '" + calculables[j] + "'",
                         expected, actual, EPSILON);
             }
         }

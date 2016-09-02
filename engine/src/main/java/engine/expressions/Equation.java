@@ -49,9 +49,9 @@ public class Equation {
 
     private final Type type;
 
-    private final Function leftPart, rightPart;
+    private final Calculable leftPart, rightPart;
 
-    public Equation(Function leftPart, Type type, Function rightPart) {
+    public Equation(Calculable leftPart, Type type, Calculable rightPart) {
         if (leftPart == null) {
             throw new IllegalArgumentException("leftPart");
         }
@@ -71,11 +71,11 @@ public class Equation {
         return type;
     }
 
-    public Function getLeftPart() {
+    public Calculable getLeftPart() {
         return leftPart;
     }
 
-    public Function getRightPart() {
+    public Calculable getRightPart() {
         return rightPart;
     }
 

@@ -1,6 +1,6 @@
 package engine.expressions.parser;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
@@ -13,7 +13,7 @@ public class SyntaxErrorMessages {
         return "Unknown variable or known constant '" + name + "'";
     }
 
-    public static String unknownFunction(String name, Function[] args) {
+    public static String unknownFunction(String name, Calculable[] args) {
         return "Unknown function '" + name
                 + "' with " + args.length +
                 " argument(s)";

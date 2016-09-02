@@ -3,7 +3,7 @@ package engine.calculation.vector.implementations;
 import engine.calculation.vector.VectorMachineFactory;
 import engine.calculation.vector.VectorMachine;
 import engine.calculation.vector.opeartions.*;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -40,11 +40,11 @@ public class VectorMachineBuilder implements VectorMachineFactory {
     }
 
     @Override
-    public VectorMachine create(Function[] functions) {
+    public VectorMachine create(Calculable[] calculables) {
         VectorMachineConstructingVisitor visitor = new VectorMachineConstructingVisitor();
-        int []resultSlots = new int[functions.length];
-        for (int i = 0; i < functions.length; i++) {
-            resultSlots[i] = visitor.build(functions[i]);
+        int []resultSlots = new int[calculables.length];
+        for (int i = 0; i < calculables.length; i++) {
+            resultSlots[i] = visitor.build(calculables[i]);
         }
 
         List<VectorOperation> op = visitor.getOperations();

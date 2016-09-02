@@ -51,7 +51,7 @@ class ViewportUpdater {
 
         vmBuilder = new VectorMachineBuilder();
         VectorMachineEvaluator evaluator = new VectorMachineEvaluator(vmBuilder);
-        CalculationEngine engine = new VectorCalculationEngine2(evaluator);
+        CalculationEngine engine = new VectorCalculationEngine(evaluator);
 
         EngineCalculationTask engineCalcTask = new EngineCalculationTask(engine, new DoneCalculationHandler());
         delayedCalcTask = new DelayedCalculationTask(engineCalcTask, DELAY);

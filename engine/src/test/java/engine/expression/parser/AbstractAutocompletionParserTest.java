@@ -57,7 +57,7 @@ public abstract class AbstractAutocompletionParserTest<AP extends Autocompletion
         badCompletions.addAll(variants);
         badCompletions.removeAll(Arrays.asList(completion));
         if (!badCompletions.isEmpty()) {
-            fail("Function name completion " + badCompletions + " not matched '" +
+            fail("Calculable name completion " + badCompletions + " not matched '" +
                     expr + "'");
         }
     }

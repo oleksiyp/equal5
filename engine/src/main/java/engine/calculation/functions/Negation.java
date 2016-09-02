@@ -1,23 +1,22 @@
 package engine.calculation.functions;
 
-import engine.calculation.Arguments;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * Date: 3/30/13
  * Time: 2:57 PM
  */
-public class Negation extends AbstractFunction {
+public class Negation extends AbstractCalculable {
     public static final int OPERATOR_PRIORITY = 0;
 
-    private final Function operand;
+    private final Calculable operand;
 
-    public Negation(Function operand) {
+    public Negation(Calculable operand) {
         this.operand = operand;
     }
 
-    public Function getOperand() {
+    public Calculable getOperand() {
         return operand;
     }
 

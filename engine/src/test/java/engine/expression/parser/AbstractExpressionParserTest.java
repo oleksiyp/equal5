@@ -2,8 +2,8 @@ package engine.expression.parser;
 
 import engine.calculation.Arguments;
 import engine.calculation.functions.*;
+import engine.expressions.Calculable;
 import engine.expressions.Equation;
-import engine.expressions.Function;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ExpressionParser;
 import engine.expressions.parser.ParsingException;
@@ -46,18 +46,18 @@ public abstract class AbstractExpressionParserTest<EP extends ExpressionParser> 
 
     @Test
     public void testParseExpression1() throws Exception {
-        Function parsed = (Function) parse(ClauseType.ADDITIVE_EXPRESSION, "2*(1+x+a+3)");
+        Calculable parsed = (Calculable) parse(ClauseType.ADDITIVE_EXPRESSION, "2*(1+x+a+3)");
 
-        Function inParents = Addition.sequence(one, xVar, aVar, three);
+        Calculable inParents = Addition.sequence(one, xVar, aVar, three);
         Multiplication expected = new Multiplication(two, inParents);
         assertEquals(expected, parsed);
     }
 
     @Test
     public void testParseExpression2() throws Exception {
-        Function parsed = (Function) parse(ClauseType.ADDITIVE_EXPRESSION, "2*(1+x+a+3-5)");
+        Calculable parsed = (Calculable) parse(ClauseType.ADDITIVE_EXPRESSION, "2*(1+x+a+3-5)");
 
-        Function inParents = Addition.sequence(one, xVar, aVar, three);
+        Calculable inParents = Addition.sequence(one, xVar, aVar, three);
         inParents = new Subtraction(inParents, five);
         Multiplication expected = new Multiplication(two, inParents);
 
@@ -102,7 +102,7 @@ public abstract class AbstractExpressionParserTest<EP extends ExpressionParser> 
     private Object parse(ClauseType type, String string) throws ParsingException {
         Object obj = parser.parse(type, string);
         if (type == ClauseType.ARGUMENTS) {
-            Function []args = (Function[]) obj;
+            Calculable[]args = (Calculable[]) obj;
             return Arrays.asList(args);
         } else if (type == ClauseType.EQUATIONS) {
             Equation []args = (Equation[]) obj;
@@ -250,7 +250,7 @@ public abstract class AbstractExpressionParserTest<EP extends ExpressionParser> 
     }
 
     private double evalExpr(ClauseType type, String expr) throws ParsingException {
-        return ((Function) parse(type, expr)).eval(Arguments.EMPTY);
+        return ((Calculable) parse(type, expr)).eval(Arguments.EMPTY);
     }
 
     @Test
@@ -345,13 +345,13 @@ public abstract class AbstractExpressionParserTest<EP extends ExpressionParser> 
 
     @Test
     public void testMathFunction() throws Exception {
-        assertEquals(new MathFunction(MathFunctionType.SIN, new Variable("x")),
+        assertEquals(new MathCalculable(MathFunctionType.SIN, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "sin(x)"));
-        assertEquals(new MathFunction(MathFunctionType.COS, new Variable("x")),
+        assertEquals(new MathCalculable(MathFunctionType.COS, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "cos(x)"));
-        assertEquals(new MathFunction(MathFunctionType.SIGNUM, new Variable("x")),
+        assertEquals(new MathCalculable(MathFunctionType.SIGNUM, new Variable("x")),
                 parse(ClauseType.MATH_FUNCTION, "sign(x)"));
-        assertEquals(new MathFunction(MathFunctionType.SIGNUM,
+        assertEquals(new MathCalculable(MathFunctionType.SIGNUM,
                 new Addition(new Variable("x"), new Variable("y"))),
                 parse(ClauseType.MATH_FUNCTION, "sign(x+y)"));
     }

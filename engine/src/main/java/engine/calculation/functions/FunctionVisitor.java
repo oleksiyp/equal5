@@ -1,7 +1,5 @@
 package engine.calculation.functions;
 
-import engine.calculation.functions.*;
-
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  3:19 PM
@@ -23,5 +21,5 @@ public interface FunctionVisitor {
 
     void visit(Power power);
 
-    void visit(MathFunction mathFunction);
+    void visit(MathCalculable mathFunction);
 }

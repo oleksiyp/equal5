@@ -1,13 +1,13 @@
 package engine.calculation.functions;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:51 PM
  */
 public class Multiplication extends BinaryOperator {
-    public Multiplication(Function leftSide, Function rightSide) {
+    public Multiplication(Calculable leftSide, Calculable rightSide) {
         super(leftSide, Type.MULTIPLICATION, rightSide);
     }
 

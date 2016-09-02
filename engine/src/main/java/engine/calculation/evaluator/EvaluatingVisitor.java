@@ -3,7 +3,7 @@ package engine.calculation.evaluator;
 import engine.calculation.Arguments;
 import engine.calculation.functions.FunctionVisitor;
 import engine.calculation.functions.*;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.Stack;
 
@@ -15,8 +15,8 @@ class EvaluatingVisitor implements FunctionVisitor {
         this.arguments = arguments;
     }
 
-    public double calculate(Function function) {
-        function.accept(this);
+    public double calculate(Calculable calculable) {
+        calculable.accept(this);
         return stack.pop();
     }
 
@@ -81,17 +81,17 @@ class EvaluatingVisitor implements FunctionVisitor {
     }
 
     @Override
-    public void visit(MathFunction mathFunction) {
-        final Function[] args = mathFunction.getArguments();
+    public void visit(MathCalculable mathFunction) {
+        final Calculable[] args = mathFunction.getArguments();
         mathFunction
                 .getType()
                 .accept(new MathCalcVisitor(args));
     }
 
     private class MathCalcVisitor implements MathFunctionTypeVisitor {
-        private final Function[] args;
+        private final Calculable[] args;
 
-        public MathCalcVisitor(Function[] args) {
+        public MathCalcVisitor(Calculable[] args) {
             this.args = args;
         }
 

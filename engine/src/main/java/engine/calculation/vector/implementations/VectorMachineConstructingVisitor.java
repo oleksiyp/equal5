@@ -2,7 +2,7 @@ package engine.calculation.vector.implementations;
 
 import engine.calculation.functions.*;
 import engine.calculation.vector.opeartions.*;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.*;
 
@@ -14,22 +14,22 @@ class VectorMachineConstructingVisitor implements FunctionVisitor {
     private final Stack<Integer> slotStack = new Stack<Integer>();
     private final List<VectorOperation> operations = new ArrayList<VectorOperation>();
 
-    private final Map<Function, Integer> slotFunctions = new HashMap<Function, Integer>();
+    private final Map<Calculable, Integer> slotFunctions = new HashMap<Calculable, Integer>();
 
     private final Map<Integer, Double> constants = new HashMap<Integer, Double>();
     private final Map<String, Integer> variables = new HashMap<String, Integer>();
 
     private int nSlots = 0;
 
-    public int build(Function function) {
-        Integer slot = slotFunctions.get(function);
+    public int build(Calculable calculable) {
+        Integer slot = slotFunctions.get(calculable);
         if (slot != null) {
             return slot;
         }
         slotStack.push(nSlots++);
-        function.accept(this);
+        calculable.accept(this);
         Integer resultSlot = slotStack.pop();
-        slotFunctions.put(function, resultSlot);
+        slotFunctions.put(calculable, resultSlot);
 
         return resultSlot;
     }
@@ -116,8 +116,8 @@ class VectorMachineConstructingVisitor implements FunctionVisitor {
     }
 
     @Override
-    public void visit(MathFunction mathFunction) {
-        Function[] arguments = mathFunction.getArguments();
+    public void visit(MathCalculable mathFunction) {
+        Calculable[] arguments = mathFunction.getArguments();
         int nArgs = arguments.length;
         int []slots = new int[nArgs];
         for (int i = 0; i < nArgs; i++) {

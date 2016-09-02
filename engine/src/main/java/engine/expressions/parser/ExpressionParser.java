@@ -1,8 +1,5 @@
 package engine.expressions.parser;
 
-import engine.expressions.Equation;
-import engine.expressions.Function;
-import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.auto_complete.AutocompletionParser;
 
 import java.util.List;
@@ -11,12 +8,13 @@ import java.util.Map;
 /**
  * Syntax passed to this methods should be following:
  *
- * Number <- Constant | Variable
- * Parentheses <- '(' Expression ')'
- * Factor <- Number | Parentheses
- * Term <- Factor ( ('*' | '/') Factor ) *
- * Expression <- Term ( ('+' | '-') Term ) *
- * Equation <- Expression ( '=' | '<' | '>' ) Expression
+ *
+ * Number &lt;- Constant | Variable
+ * Parentheses &lt;- '(' Expression ')'
+ * Factor &lt;- Number | Parentheses
+ * Term &lt;- Factor ( ('*' | '/') Factor ) *
+ * Expression &lt;- Term ( ('+' | '-') Term ) *
+ * Equation &lt;- Expression ( '=' | '&lt;' | '&gt;' ) Expression
  *
  * User: Oleksiy Pylypenko
  * Date: 2/9/13

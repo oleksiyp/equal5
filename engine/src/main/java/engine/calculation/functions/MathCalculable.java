@@ -1,6 +1,6 @@
 package engine.calculation.functions;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.Arrays;
 
@@ -8,11 +8,11 @@ import java.util.Arrays;
  * User: Oleksiy Pylypenko
  * At: 3/13/13  4:24 PM
  */
-public class MathFunction extends AbstractFunction {
+public class MathCalculable extends AbstractCalculable {
     private final MathFunctionType type;
-    private final Function[] arguments;
+    private final Calculable[] arguments;
 
-    public MathFunction(MathFunctionType type, Function... arguments) {
+    public MathCalculable(MathFunctionType type, Calculable... arguments) {
         if (type == null) {
             throw new IllegalArgumentException("type");
         }
@@ -27,7 +27,7 @@ public class MathFunction extends AbstractFunction {
         }
     }
 
-    public Function[] getArguments() {
+    public Calculable[] getArguments() {
         return arguments;
     }
 
@@ -43,9 +43,9 @@ public class MathFunction extends AbstractFunction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MathFunction)) return false;
+        if (!(o instanceof MathCalculable)) return false;
 
-        MathFunction that = (MathFunction) o;
+        MathCalculable that = (MathCalculable) o;
 
         if (type.isWithSideEffects()) return false;
         if (that.type.isWithSideEffects()) return false;

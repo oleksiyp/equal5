@@ -1,8 +1,8 @@
 package engine.calculation;
 
 import engine.calculation.functions.*;
+import engine.expressions.Calculable;
 import engine.expressions.Equation;
-import engine.expressions.Function;
 
 /**
  * User: Oleksiy Pylypenko
@@ -16,19 +16,19 @@ public class ExprBuilders {
     public static Variable v(String n) {
         return new Variable(n);
     }
-    public static Multiplication m(Function a, Function b) {
+    public static Multiplication m(Calculable a, Calculable b) {
         return new Multiplication(a, b);
     }
-    public static Subtraction s(Function a, Function b) {
+    public static Subtraction s(Calculable a, Calculable b) {
         return new Subtraction(a, b);
     }
-    public static Addition a(Function a, Function b) {
+    public static Addition a(Calculable a, Calculable b) {
         return new Addition(a, b);
     }
-    public static Division d(Function a, Function b) {
+    public static Division d(Calculable a, Calculable b) {
         return new Division(a, b);
     }
-    public static Equation eq(Function leftExpr, Function rightExpr) {
+    public static Equation eq(Calculable leftExpr, Calculable rightExpr) {
         return new Equation(leftExpr, Equation.Type.EQUAL, rightExpr);
     }
 }

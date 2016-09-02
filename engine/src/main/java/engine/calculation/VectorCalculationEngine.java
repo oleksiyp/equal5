@@ -1,15 +1,15 @@
 package engine.calculation;
 
 import engine.calculation.drawables.Drawable;
-import engine.calculation.functions.MathFunction;
+import engine.calculation.functions.MathCalculable;
 import engine.calculation.functions.MathFunctionType;
 import engine.calculation.functions.Subtraction;
 import engine.calculation.vector.*;
 import engine.calculation.vector.fillers.ConstantVectorFiller;
 import engine.calculation.vector.fillers.LinearVectorFiller;
 import engine.calculation.vector.fillers.VectorFiller;
+import engine.expressions.Calculable;
 import engine.expressions.Equation;
-import engine.expressions.Function;
 import engine.calculation.drawables.locus.DiscreteLocus;
 import util.Cancelable;
 import util.CancellationRoutine;
@@ -42,12 +42,12 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
         int nEq = equations.length;
 
         Drawable[]ret = new Drawable[nEq];
-        Function[] multiFunction = new Function[nEq];
+        Calculable[] multiCalculable = new Calculable[nEq];
 
         for (int i = 0; i < nEq; i++)
         {
             Equation equation = equations[i];
-            multiFunction[i] = new MathFunction(
+            multiCalculable[i] = new MathCalculable(
                     MathFunctionType.SIGNUM,
                     new Subtraction(
                             equation.getLeftPart(),
@@ -56,7 +56,7 @@ public class VectorCalculationEngine implements CalculationEngine, Cancelable {
 
 
         evaluator.setSize(width + 1);
-        evaluator.setFunctions(multiFunction);
+        evaluator.setCalculables(multiCalculable);
 
         evaluator.prepare();
 

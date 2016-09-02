@@ -1,7 +1,7 @@
 package engine.calculation.vector;
 
 import engine.calculation.vector.fillers.VectorFiller;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 import java.util.Arrays;
 
@@ -16,7 +16,7 @@ public class VectorMachineEvaluator implements VectorEvaluator {
 
     private int size;
     private TimeReporter timeReporter;
-    private Function[] functions;
+    private Calculable[] calculables;
     {
         clear();
     }
@@ -25,13 +25,12 @@ public class VectorMachineEvaluator implements VectorEvaluator {
         this.machineFactory = machineFactory;
     }
 
-    @Override
-    public void setFunctions(Function []functions) {
-        if (functions == null) {
+    public void setCalculables(Calculable[] calculables) {
+        if (calculables == null) {
             throw new IllegalArgumentException("function");
         }
-        if (!Arrays.equals(functions, this.functions)) {
-            this.functions = functions;
+        if (!Arrays.equals(calculables, this.calculables)) {
+            this.calculables = calculables;
             this.machine = null;
             this.state = null;
         }
@@ -56,7 +55,7 @@ public class VectorMachineEvaluator implements VectorEvaluator {
     @Override
     public void prepare() {
         if (machine == null) {
-            machine = machineFactory.create(functions);
+            machine = machineFactory.create(calculables);
         }
 
         if (state == null) {
@@ -108,6 +107,6 @@ public class VectorMachineEvaluator implements VectorEvaluator {
         state = null;
         size = 1;
         timeReporter = null;
-        functions = new Function[0];
+        calculables = new Calculable[0];
     }
 }

@@ -1,13 +1,13 @@
 package engine.calculation.functions;
 
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 2/8/13  1:49 PM
  */
 public class Addition extends BinaryOperator {
-    public Addition(Function leftSide, Function rightSide) {
+    public Addition(Calculable leftSide, Calculable rightSide) {
         super(leftSide, Type.ADDITION, rightSide);
     }
 
@@ -22,7 +22,7 @@ public class Addition extends BinaryOperator {
 
     }
 
-    public static Addition sequence(Function ...addends) {
+    public static Addition sequence(Calculable...addends) {
         if (addends.length < 2) {
             throw new IllegalArgumentException("addends");
         }

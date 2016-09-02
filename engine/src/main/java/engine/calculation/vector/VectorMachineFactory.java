@@ -1,12 +1,11 @@
 package engine.calculation.vector;
 
-import engine.calculation.vector.VectorMachine;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 
 /**
  * User: Oleksiy Pylypenko
  * At: 3/22/13  1:47 PM
  */
 public interface VectorMachineFactory {
-    VectorMachine create(Function[] functions);
+    VectorMachine create(Calculable[] calculables);
 }

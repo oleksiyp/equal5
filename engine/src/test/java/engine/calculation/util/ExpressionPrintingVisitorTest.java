@@ -3,7 +3,7 @@ package engine.calculation.util;
 import engine.calculation.functions.Addition;
 import engine.calculation.functions.Constant;
 import engine.calculation.functions.Multiplication;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.antlr.AntlrExpressionParser;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class ExpressionPrintingVisitorTest {
 
-    private String printUsingVisitor(Function func) {
+    private String printUsingVisitor(Calculable func) {
         StringWriter sWriter = new StringWriter();
         PrintWriter pWriter = new PrintWriter(sWriter);
         ExpressionWriter eWriter = new ExpressionWriter(pWriter);
@@ -64,7 +64,7 @@ public class ExpressionPrintingVisitorTest {
 
     @Test
     public void testCase3() throws Exception {
-        Function func = (Function) parse("(x+1)*(x+1)+(y+1)*(y+1)-25");
+        Calculable func = (Calculable) parse("(x+1)*(x+1)+(y+1)*(y+1)-25");
 
         assertEquals("(x+1.0)*(x+1.0)+(y+1.0)*(y+1.0)-25.0", printUsingVisitor(func));
     }
