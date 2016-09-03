@@ -4,7 +4,7 @@ import engine.calculation.drawables.Drawable;
 import engine.calculation.vector.VectorMachineEvaluator;
 import engine.calculation.vector.implementations.VectorMachineBuilder;
 import engine.expressions.Equation;
-import engine.expressions.Function;
+import engine.expressions.Calculable;
 import engine.expressions.parser.ClauseType;
 import engine.expressions.parser.ParsingException;
 import engine.expressions.parser.antlr.AntlrExpressionParser;
@@ -72,8 +72,8 @@ public class VectorCalculationEngine2Test {
     private Equation eq(String left, String right) {
         AntlrExpressionParser ep = new AntlrExpressionParser();
         try {
-            Function leftExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, left);
-            Function rightExpr = (Function) ep.parse(ClauseType.ADDITIVE_EXPRESSION, right);
+            Calculable leftExpr = (Calculable) ep.parse(ClauseType.ADDITIVE_EXPRESSION, left);
+            Calculable rightExpr = (Calculable) ep.parse(ClauseType.ADDITIVE_EXPRESSION, right);
             return new Equation(leftExpr, Equation.Type.EQUAL, rightExpr);
         } catch (ParsingException e) {
             throw new RuntimeException(e);
